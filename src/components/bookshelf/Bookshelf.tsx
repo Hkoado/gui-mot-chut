@@ -3,16 +3,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { PointerEvent } from 'react';
 import type { TemplateRecord } from '../../data/templates';
+import type { TopicRecord } from '../../data/topics';
 import Book from './Book';
 import TemplateDialog from './TemplateDialog';
 import { useLanguage } from '../LanguageProvider';
 import './bookshelf.css';
 
-export default function Bookshelf({ books }: { books: TemplateRecord[] }) {
+export default function Bookshelf({ books, templates }: { books: TopicRecord[]; templates: TemplateRecord[] }) {
   const { language, t } = useLanguage();
   const cycleLength = Math.max(1, books.length);
-  const [position, setPosition] = useState({ active: Math.min(2, Math.max(0, books.length - 1)), activeIndex: Math.min(2, Math.max(0, books.length - 1)) });
-  const { active, activeIndex } = position;
+  const [active, setActive] = useState(0);
+  const [radius, setRadius] = useState(2);
+  const [selected, setSelected] = useState<TemplateRecord | null>(null);
+  const collection = useRef<HTMLDivElement>(null);
+  const activeIndex = ((active % cycleLength) + cycleLength) % cycleLength;
   const [origin, setOrigin] = useState<DOMRect | null>(null);
   const shelf = useRef<HTMLDivElement>(null);
   const caption = useRef<HTMLDivElement>(null);
@@ -20,10 +24,21 @@ export default function Bookshelf({ books }: { books: TemplateRecord[] }) {
   const suppressClick = useRef(false);
   const drag = useRef<{ id: number; x: number; y: number; lastX: number; moved: boolean } | null>(null);
   const select = (index: number) => {
-    const nextIndex = ((index % cycleLength) + cycleLength) % cycleLength;
-    direction.current = nextIndex === activeIndex ? (index >= active ? 1 : -1) : ((nextIndex - activeIndex + cycleLength) % cycleLength <= cycleLength / 2 ? 1 : -1);
-    setPosition({ active: index, activeIndex: nextIndex });
+    direction.current = index >= active ? 1 : -1;
+    setActive(index);
   };
+  useEffect(() => {
+    const element = shelf.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => {
+      const sample = element.querySelector('.book');
+      if (!sample) return;
+      const width = parseFloat(getComputedStyle(sample).width);
+      setRadius(Math.max(2, Math.ceil(element.clientWidth / (2 * width * cycleLength)) + 1));
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [cycleLength]);
   useEffect(() => {
     if (!caption.current || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const style = getComputedStyle(caption.current);
@@ -34,10 +49,10 @@ export default function Bookshelf({ books }: { books: TemplateRecord[] }) {
     return () => animations.forEach(animation => animation.cancel());
   }, [active, language]);
   const open = () => {
-    const cover = shelf.current?.querySelector('.is-active .book-front');
-    if (cover) setOrigin(cover.getBoundingClientRect());
+    collection.current?.focus({ preventScroll: true });
+    collection.current?.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
-  const close = useCallback(() => setOrigin(null), []);
+  const close = useCallback(() => { setOrigin(null); setSelected(null); }, []);
   const move = (event: PointerEvent<HTMLDivElement>) => {
     const current = drag.current;
     if (current && current.id === event.pointerId) {
@@ -62,18 +77,21 @@ export default function Bookshelf({ books }: { books: TemplateRecord[] }) {
     drag.current = null;
   };
   const book = books[activeIndex] ?? books[0];
+  const cycle = Math.floor(active / cycleLength);
   const bookInstances = books.flatMap((item, index) => {
     const activeCopy = Math.round((active - index) / cycleLength);
-    return [-1, 0, 1].map(lap => ({
+    // Recycle only the distant cycle. Visible books retain their DOM identity
+    // and move one slot, including across the first/last design boundary.
+    return Array.from({ length: radius * 2 + 1 }, (_, i) => cycle - radius + i).map(lap => ({
       item,
       sequenceIndex: index + lap * cycleLength,
       offset: index + lap * cycleLength - active,
       duplicate: lap !== activeCopy,
     }));
   });
+  if (!book) return null;
   return <div className="bookshelf-wrap">
-    <div className="shelf-category" aria-hidden="true">{t('CÂU CHUYỆN SỐ', 'STORY NO.')} {String(activeIndex + 1).padStart(2, '0')} / {book.occasion}</div>
-    <div className="bookshelf" ref={shelf} tabIndex={0} role="group" aria-label={t('Kệ 5 mẫu. Phím trái phải để chọn, Enter để mở.', 'Five designs. Use left and right arrows to choose, Enter to open.')}
+    <div className="bookshelf" ref={shelf} tabIndex={0} role="group" aria-label={t('Kệ chủ đề. Phím trái phải để chọn, Enter để xem các mẫu.', 'Topic shelf. Use arrow keys to choose, Enter to browse templates.')}
       onKeyDown={event => {
         if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); select(active + (event.key === 'ArrowRight' ? 1 : -1)); }
         if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); open(); }
@@ -86,10 +104,17 @@ export default function Bookshelf({ books }: { books: TemplateRecord[] }) {
         offset === 0 ? open() : select(sequenceIndex);
       }} />)}</div>
     </div>
-    <div className="shelf-controls"><button type="button" onClick={() => select(active - 1)} aria-label={t('Mẫu trước', 'Previous design')}>←</button><span>{String(activeIndex + 1).padStart(2, '0')} / {String(books.length).padStart(2, '0')}</span><button type="button" onClick={() => select(active + 1)} aria-label={t('Mẫu sau', 'Next design')}>→</button></div>
-    <div ref={caption} className="shelf-caption" aria-live="polite" aria-atomic="true"><div className="caption-line"><p className="eyebrow">{book.occasion}</p></div><div className="caption-line"><h2>{book.title}</h2></div><div className="caption-line"><p>{book.description}</p></div></div>
-    <div className="caption-actions"><button type="button" className="button" onClick={open}>{t('Xem mẫu & chi tiết', 'Preview & details')} ↗</button>{book.demoUrl ? <a className="button button--quiet" href={book.demoUrl} target="_blank" rel="noopener noreferrer">{t('Mở trang demo', 'Visit page')} ↗</a> : <span className="muted">{t('Video & demo đang được chuẩn bị', 'Video & demo not available yet')}</span>}</div>
+    <div ref={caption} className="shelf-caption" aria-live="polite" aria-atomic="true"><div className="caption-line"><p className="eyebrow">{book.occasion}</p></div><div className="caption-line"><h2>{book.title}</h2></div></div>
+    <div className="shelf-controls"><button type="button" onClick={() => select(active - 1)} aria-label={t('Chủ đề trước', 'Previous topic')}>←</button><span>{String(activeIndex + 1).padStart(2, '0')} / {String(books.length).padStart(2, '0')}</span><button type="button" onClick={() => select(active + 1)} aria-label={t('Chủ đề sau', 'Next topic')}>→</button></div>
     <p className="drag-hint">{t('Kéo để chọn · Chạm bìa để mở', 'Drag to browse · Tap the cover to open')}</p>
-    {origin && <TemplateDialog book={book} origin={origin} onClose={close} />}
+    <div className="topic-templates" ref={collection} tabIndex={-1} aria-label={book.title}>
+      <h3>{t('Các mẫu trong chủ đề', 'Templates in this collection')}</h3>
+      {templates.filter(item => book.templateIds.includes(item.id) && item.enabled).map(item => <article key={item.id}>
+        <div><h4>{item.title}</h4><p>{item.description}</p></div>
+        <button className="button" type="button" onClick={event => { setSelected(item); setOrigin(event.currentTarget.getBoundingClientRect()); }}>{t('Xem mẫu & chi tiết', 'Preview & details')} ↗</button>
+      </article>)}
+      {!templates.some(item => book.templateIds.includes(item.id) && item.enabled) && <p className="muted">{t('Các mẫu thuộc chủ đề này đang được chuẩn bị. Chưa có video hoặc demo để xem.', 'Templates in this collection are being prepared. No preview video or demo is available yet.')}</p>}
+    </div>
+    {origin && selected && <TemplateDialog book={selected} origin={origin} onClose={close} />}
   </div>;
 }

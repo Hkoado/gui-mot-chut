@@ -1,12 +1,15 @@
 /* Physical geometry is local; shared visual values come from theme.css. */
 .bookshelf-wrap{text-align:center;max-width:100%;}
 .shelf-category{font-size:var(--type-small);color:var(--accent);margin-block:var(--space-6);letter-spacing:.1em;}
-.bookshelf{--h:var(--shelf-height);--spine:calc(var(--h)*.169);--cover:calc(var(--h)*.527);--gap:calc(var(--h)*.045);position:relative;height:calc(var(--h)*1.4);perspective:2200px;touch-action:pan-y;user-select:none;overflow:clip;cursor:default;}
+.bookshelf{--h:var(--shelf-height);--spine:calc(var(--h)*.169);--cover:calc(var(--h)*.527);--gap:calc(var(--h)*.065);position:relative;height:calc(var(--h)*1.4);perspective:var(--shelf-perspective);touch-action:pan-y;user-select:none;overflow:clip;cursor:grab;}
 .bookshelf::before{content:'';position:absolute;left:50%;bottom:var(--space-1);width:var(--shelf-ground-width);height:var(--shelf-ground-height);transform:translateX(-50%);background:var(--shelf-ground);pointer-events:none;}
 .bookshelf-stage{position:absolute;left:50%;top:53%;width:0;height:0;transform-style:preserve-3d;}
 .book{position:absolute;width:var(--spine);height:var(--h);left:calc(var(--spine)*-.5);top:calc(var(--h)*-.5);padding:0;border:0;background:transparent;color:var(--book-ink);transform-style:preserve-3d;cursor:default;transform:translate3d(calc(var(--offset)*(var(--spine) + var(--gap)) + var(--side)*(var(--cover) - var(--spine) + var(--gap)*1.6)*.5),0,0);transition:transform var(--duration-shelf) var(--ease-editorial);}
-.book.is-active{transform:translate3d(0,calc(var(--h)*-.025),calc(var(--h)*.2)) rotateZ(-4.5deg) rotateX(var(--tilt-x,0deg)) rotateY(calc(-90deg + var(--tilt-y,0deg)));}
-.book:not(.is-active):hover{transform:translate3d(calc(var(--offset)*(var(--spine) + var(--gap)) + var(--side)*(var(--cover) - var(--spine) + var(--gap)*1.6)*.5),calc(var(--h)*-.045),0);}
+.book.is-active{transform:translate3d(0,calc(var(--h)*-.025),calc(var(--h)*.2)) rotateZ(-4.5deg) rotateY(-90deg);}
+/* Pointer tilt has its own layer so it never retargets shelf navigation. */
+.book-tilt{position:absolute;inset:0;display:block;transform-style:preserve-3d;transform:rotateX(0deg) rotateY(0deg);transition:transform var(--duration-tilt) var(--ease-editorial);}
+.book.is-active .book-tilt{transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));}
+.book:not(.is-active):hover .book-tilt{transform:translateY(calc(var(--h)*-.025));}
 .book-spine,.book-front,.book-pages{position:absolute;top:0;height:var(--h);backface-visibility:hidden;border:var(--border-width) solid var(--border-default);border-radius:var(--radius-small);overflow:hidden;}
 .book-spine{left:0;width:var(--spine);transform:translateZ(calc(var(--cover)*.5));background:var(--book-spine-light),var(--book-cloth),var(--book-paper);color:var(--book-ink);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-block:var(--space-3);box-shadow:var(--shadow-book);}
 .spine-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
@@ -14,6 +17,24 @@
 .book-spine>span{font-size:var(--type-xs);writing-mode:vertical-rl;}
 .book-front{left:calc((var(--spine) - var(--cover))*.5);width:var(--cover);transform:rotateY(90deg) translateZ(calc(var(--spine)*.5));background:var(--book-paper);box-shadow:var(--shadow-book);}
 .book-pages{left:0;width:var(--spine);background:repeating-linear-gradient(90deg,var(--surface-raised) 0 2px,var(--border-default) 2px 3px);transform:rotateY(180deg) translateZ(calc(var(--cover)*.5));}
+/* Complete the cuboid in the same local coordinate system as front and spine.
+   Face shadows caused translucent-looking seams; ground supplies elevation. */
+.book .book-front,.book .book-spine{box-shadow:none;}
+/* The button is a 3D pivot behind the faces, not the visible book surface.
+   Replace its floating outline with an inset ring on the physical faces.
+   Pointer focus stays unpainted; keyboard focus remains visible while turning. */
+.bookshelf .book:focus{outline:none;}
+.bookshelf .book:focus-visible .book-front::after,
+.bookshelf .book:focus-visible .book-spine::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:var(--book-focus-ring);}
+.book-back{position:absolute;top:0;left:calc((var(--spine) - var(--cover))*.5);width:var(--cover);height:var(--h);background:var(--book-paper);transform:rotateY(-90deg) translateZ(calc(var(--spine)*.5));backface-visibility:hidden;border:var(--border-width) solid var(--border-default);}
+.book-top,.book-bottom{position:absolute;left:0;top:calc((var(--h) - var(--cover))*.5);width:var(--spine);height:var(--cover);background:var(--book-edge);backface-visibility:hidden;}
+.book-top{transform:rotateX(90deg) translateZ(calc(var(--h)*.5));}
+.book-bottom{transform:rotateX(-90deg) translateZ(calc(var(--h)*.5));}
+.topic-templates{width:min(100% - 2 * var(--page-gutter),var(--reading-width));margin:var(--space-8) auto;text-align:left;border-top:var(--border-width) solid var(--border-default);padding-top:var(--space-6);}
+.topic-templates h3{font-size:var(--type-lead);}
+.topic-templates article{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4);padding-block:var(--space-4);}
+.topic-templates article>div{flex:1;min-width:50%;}.topic-templates h4{margin:0 0 var(--space-2);font-family:var(--font-heading);font-size:var(--type-lead);}.topic-templates p{margin:0;}
+.bookshelf-wrap .shelf-caption{min-height:0;padding-inline:var(--space-4);margin:var(--space-2) auto var(--space-4);}
 .cover-art{display:flex;position:relative;flex-direction:column;justify-content:space-between;gap:var(--space-2);width:100%;height:100%;padding:var(--space-4);text-align:left;overflow:hidden;color:var(--book-ink);background:var(--book-cloth),var(--book-paper);box-shadow:var(--book-print-inset);}
 .cover-art::after{content:'';position:absolute;inset:0;pointer-events:none;background:var(--book-cover-light);}
 .cover-label,.cover-footer{font-size:var(--type-xs);line-height:1.35;letter-spacing:.06em;}

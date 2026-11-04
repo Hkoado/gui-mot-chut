@@ -1,5 +1,33 @@
 # Tham chiếu Leon Vasari → Gửi Một Chút
 
+## Viền focus trên sách 3D
+
+Viền `:focus-visible` toàn cục từng vẽ trên pivot `.book` phía sau các mặt sách,
+tạo khung đỏ mận lệch khỏi gáy. Override chỉ trong `.bookshelf .book` bỏ outline
+ở pivot và dùng `--book-focus-ring` trên mặt gáy/bìa khi focus bằng bàn phím.
+Không bỏ dấu hiệu focus toàn trang. Cả sáu mặt nằm trong `.book-tilt` để nghiêng
+cùng nhau. Browser regression kiểm tra focus-visible, blur và cấu trúc lớp này.
+
+## Cập nhật kệ chủ đề — 2026-11-04
+
+Yêu cầu mới thay kệ template bằng 10 chủ đề: sinh nhật, cưới, Date, private party,
+Women's Day, Giáng sinh, Custom, tỏ tình, năm mới và kỉ yếu. Noel/Giáng sinh đã được
+gộp theo xác nhận của người dùng. Những mô tả kệ 5 mẫu bên dưới là lịch sử triển khai.
+
+- `src/data/topics.ts` lưu chủ đề và quan hệ `templateIds`; vẫn giữ nguyên 5 record
+  sản phẩm hiện có. Sinh nhật, Date và tỏ tình liên kết tới mẫu phù hợp. Hai mẫu
+  kỷ niệm/bạn thân chưa gán vào danh mục mới, không bị xóa hoặc tự đổi nội dung.
+- Các chủ đề chưa có template có trạng thái đang chuẩn bị; không thêm demo giả.
+- Kệ phủ chiều ngang vùng tài liệu, không dùng `100vw` gây tràn do scrollbar.
+  ResizeObserver tính số chu kỳ dự phòng theo bề rộng; chỉ recycle ngoài viewport.
+- Tên chủ đề nằm ngay dưới sách trung tâm, rồi đến điều khiển và danh sách mẫu.
+- Bổ sung bìa sau, cạnh trên/dưới của khối sách; hover dùng lớp con thay vì ghi đè
+  transform điều hướng. Bỏ shadow riêng trên mặt bìa/gáy để giảm đường nối giả.
+- SVG chủ đề là minh họa danh mục, không phải ảnh chụp các template đã hoàn thiện.
+- Lặp vô hạn ở đây là điều hướng liên tục hai chiều, không tự động chạy khi đứng yên.
+- Còn cần kiểm tra motion trên thiết bị thật; ảnh tĩnh/test DOM không chứng minh
+  không có dropped frame hoặc artefact GPU trên mọi trình duyệt.
+
 Nguồn: prompt chi tiết do chủ dự án cung cấp trong hội thoại; hai URL tham chiếu:
 - https://motionsites.ai/?prompt=vasari-vhs-hero
 - https://motionsites.ai/?prompt=folio-books-hero
@@ -36,7 +64,13 @@ Công cụ đọc web chỉ nhận trang danh mục chung, chưa xem được mo
 
 ## Giới hạn motion còn lại
 
-Chưa có kệ vô hạn/scrub spring qua từng mẫu trung gian, caption cũ trượt ra đồng thời caption mới trượt vào, hay poster ink-blot. Dialog đang dùng transform theo rect bìa, chưa có clip-path blank-sheet và text stagger như bản gốc. Không tuyên bố sao chép motion chính xác.
+### Sửa hồi quy hero — 2026-11-04
+
+- Vùng render gồm ba chu kỳ chạy theo vị trí hiện tại, không cố định ở chu kỳ ban đầu. Các sách gần trung tâm giữ key theo vị trí tuyệt đối để không remount khi qua đầu/cuối.
+- Tách `.book-tilt` khỏi transform điều hướng trên `.book`; thời gian đáp ứng con trỏ dùng `--duration-tilt` trong theme, không thay đích chuyển mẫu.
+- Smoke test kiểm tra bốn vòng liên tiếp mỗi chiều, giữ sách active trong viewport, DOM liên tục và đúng năm mẫu truy cập được. Đây là kiểm tra hành vi, không thay thế đánh giá độ mượt bằng mắt trên thiết bị thật.
+
+Kệ đã lặp vòng bằng CSS transition nhưng chưa có scrub spring liên tục qua từng mẫu trung gian, caption cũ trượt ra đồng thời caption mới trượt vào, hay poster ink-blot. Dialog đang dùng transform theo rect bìa, chưa có clip-path blank-sheet và text stagger như bản gốc. Không tuyên bố sao chép motion chính xác.
 
 ## Dịch vụ custom
 

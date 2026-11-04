@@ -16,6 +16,10 @@
   --surface-backdrop: #28231f99; /* Modal scrim. */
   --shelf-height: clamp(15rem, 29vw, 22rem); /* Responsive physical book height. */
   --duration-caption: 650ms; /* Masked caption travel. */
+  --duration-tilt: 180ms; /* Pointer response, independent of shelf travel. */
+  --book-edge: repeating-linear-gradient(0deg, var(--surface-raised) 0 2px, var(--border-default) 2px 3px);
+  --shelf-perspective: 3000px;
+  --book-focus-ring: inset 0 0 0 3px var(--focus-color);
   --type-cover-small: .625rem; /* Decorative print on small book faces only. */
   --ease-paper: cubic-bezier(.76,0,.18,1); /* Expanding paper sheet. */
   /* Primitive palette: warm paper, readable ink, restrained wine accent. */
@@ -49,4 +53,4 @@
 [data-book-theme='sage'] { --book-paper: var(--palette-sage); --book-accent: var(--palette-wine); }
 [data-book-theme='yellow'] { --book-paper: var(--palette-yellow); --book-accent: var(--palette-wine); }
 [data-book-theme='default'] { --book-paper: var(--surface-raised); --book-accent: var(--accent); }
-@media (prefers-reduced-motion: reduce) { :root { --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; } }
+@media (prefers-reduced-motion: reduce) { :root { --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; } }

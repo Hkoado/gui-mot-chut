@@ -6,6 +6,7 @@ import { useLanguage } from '../components/LanguageProvider';
 import { pricing } from '../config/pricing';
 import { templates } from '../data/templates';
 import { translateTemplate } from '../data/template-translations';
+import { getTopics } from '../data/topics';
 
 export default function HomePage() {
   const { language, t } = useLanguage();
@@ -22,10 +23,10 @@ export default function HomePage() {
     [t('Thời gian làm và duy trì link thế nào?', 'What about delivery and link availability?'), t('Thời gian thực hiện, thời hạn duy trì link và các chính sách liên quan cần được xác nhận trước khi đặt.', 'Delivery time, link availability and related policies need to be confirmed before you order.')],
   ];
   return <main>
-    <section className="hero container" id="xem-mau" aria-labelledby="hero-title">
-      <div className="shelf-intro"><h1 id="hero-title" className="eyebrow">{t('KỆ NHỮNG ĐIỀU MUỐN GỬI', 'A SHELF OF LITTLE STORIES')}</h1><span>{t('05 mẫu · một người đặc biệt', '05 designs · someone special')}</span></div>
-      <Bookshelf books={templates.map(book => translateTemplate(book, language))} />
-      <div className="hero-price"><p>{t('Một website quà tặng, mang câu chuyện của bạn.', 'A gift website with your story at heart.')} <span>{t('Giá niêm yết từ', 'Standard packages from')} <strong>{pricing.standard.priceVnd.toLocaleString('vi-VN')}đ</strong></span></p><Link href="/bang-gia/">{priceLink} ↗</Link></div>
+    <section className="hero" id="xem-mau" aria-labelledby="hero-title">
+      <div className="shelf-intro container"><h1 id="hero-title" className="eyebrow">{t('KỆ NHỮNG ĐIỀU MUỐN GỬI', 'A SHELF OF LITTLE STORIES')}</h1><span>{t('10 chủ đề · một người đặc biệt', '10 collections · someone special')}</span></div>
+      <Bookshelf books={getTopics(language)} templates={templates.map(book => translateTemplate(book, language))} />
+      <div className="hero-price container"><p>{t('Một website quà tặng, mang câu chuyện của bạn.', 'A gift website with your story at heart.')} <span>{t('Giá niêm yết từ', 'Standard packages from')} <strong>{pricing.standard.priceVnd.toLocaleString('vi-VN')}đ</strong></span></p><Link href="/bang-gia/">{priceLink} ↗</Link></div>
     </section>
     <section className="section container" id="cach-dat" aria-labelledby="steps-title"><div className="section-heading"><p className="eyebrow">{t('TỪ CHỌN MẪU ĐẾN GỬI TẶNG', 'FROM THE SHELF TO THEIR SCREEN')}</p><h2 id="steps-title">{t('Ba bước, một món quà rất riêng.', 'Three steps. Something truly personal.')}</h2></div><div className="steps">{steps.map(([title, description], index) => <article key={index}><span>0{index + 1}</span><h3>{title}</h3><p>{description}</p></article>)}</div><Link className="text-link" href="/bang-gia/">{priceLink} ↗</Link></section>
     <div className="container"><BespokeOffer /></div>
