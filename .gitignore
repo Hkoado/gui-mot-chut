@@ -1,0 +1,19 @@
+node_modules/
+.next/
+.astro/
+dist/
+out/
+coverage/
+
+# Local browser automation profiles and caches
+.browser-test/
+.chrome-loop-verified/
+.edge-test/
+
+# Local build, type-check, and browser logs/screenshots
+*.log
+*.png
+*.tsbuildinfo
+
+# Local framework-generated files
+next-env.d.ts

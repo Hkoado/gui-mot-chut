@@ -1,0 +1,2 @@
+// Provisional business scope: manual eligibility check; five customers total, not per-customer.
+export const campaign = { enabled:true, eligiblePackage:'standard', freeCustomerLimit:5, laterFirstOrderPriceVnd:43000, eligibilityVerification:'manual', remainingFreeSlots:null as number | null, endsAt:null as string | null };

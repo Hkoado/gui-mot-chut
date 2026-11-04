@@ -1,0 +1,52 @@
+/* Design tokens: breakpoints are 768px (mobile/tablet) and 1200px (wide). */
+:root {
+  /* Shelf-first editorial UI: shared material, navigation and print tokens. */
+  --header-height: 4.5rem; --header-blur: 8px;
+  --hero-top: clamp(1rem, 3vw, 2rem); --shelf-caption-height: 8rem;
+  --type-step: 1.35rem; --tracking-print: .08em;
+  --book-cloth: repeating-linear-gradient(0deg, transparent 0 2px, #28231f05 2px 3px);
+  --book-spine-light: linear-gradient(90deg, #28231f26, transparent 18%, #fffdf94d 42%, transparent 72%, #28231f1c);
+  --book-cover-light: linear-gradient(110deg, #28231f24, transparent 12%, #fffdf933 54%, #28231f0d);
+  --book-print-inset: inset 0 0 0 1px #fffdf959, inset 5px 0 9px #28231f14;
+  --shelf-ground: radial-gradient(ellipse, #28231f26, transparent 68%);
+  --shelf-ground-height: 2rem; --shelf-ground-width: 70%;
+  --switch-radius: 2rem; --switch-padding: .2rem;
+  --bespoke-paper: var(--palette-sage); /* Commission stationery surface. */
+  --bespoke-ink: var(--text-primary); /* Commission lettering. */
+  --surface-backdrop: #28231f99; /* Modal scrim. */
+  --shelf-height: clamp(15rem, 29vw, 22rem); /* Responsive physical book height. */
+  --duration-caption: 650ms; /* Masked caption travel. */
+  --type-cover-small: .625rem; /* Decorative print on small book faces only. */
+  --ease-paper: cubic-bezier(.76,0,.18,1); /* Expanding paper sheet. */
+  /* Primitive palette: warm paper, readable ink, restrained wine accent. */
+  --palette-paper: #f3efe7; --palette-sheet: #faf7f1; --palette-ink: #28231f; --palette-muted: #6a6059;
+  --palette-wine: #963e47; --palette-wine-hover: #79303a; --palette-rose: #ead0d1;
+  --palette-sage: #c9d3cd; --palette-yellow: #efe0b6; --palette-line: #d4c9bd; --palette-white: #fffdf9;
+  /* Semantic surface, content, interaction, and focus roles. */
+  --surface-page: var(--palette-paper); --surface-raised: var(--palette-sheet); --surface-strong: var(--palette-white);
+  --text-primary: var(--palette-ink); --text-secondary: var(--palette-muted); --accent: var(--palette-wine);
+  --accent-hover: var(--palette-wine-hover); --border-default: var(--palette-line); --focus-color: var(--accent);
+  --button-bg: var(--accent); --button-text: var(--palette-white);
+  /* Shared type families, scale, and reading rhythm. */
+  --font-heading: 'Lora', Georgia, serif; --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
+  --type-xs: .8125rem; --type-small: .875rem; --type-body: 1rem; --type-lead: 1.125rem;
+  --type-subtitle: clamp(1.75rem, 3vw, 2.6rem); --type-title: clamp(2.4rem, 6vw, 5.25rem); --line-body: 1.7;
+  /* Spacing, content widths, and minimum interactive target. */
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-6: 1.5rem;
+  --space-8: 2rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem;
+  --section-gap: clamp(4rem, 9vw, 8rem); --page-gutter: clamp(1rem, 5vw, 4rem);
+  --container-width: 78rem; --reading-width: 43rem; --control-min: 2.75rem;
+  /* Geometry, elevation, and a single editorial motion curve. */
+  --radius-small: .25rem; --radius-panel: .5rem; --border-width: 1px;
+  --shadow-book: 0 1.1rem 2.4rem #28231f2b; --shadow-panel: 0 1rem 3rem #28231f1c;
+  --ease-editorial: cubic-bezier(.2,.8,.2,1); --duration-fast: 180ms; --duration-shelf: 650ms; --duration-dialog: 420ms;
+  /* Layer order: sticky navigation above document, modal above navigation. */
+  --z-header: 20; --z-dialog: 60;
+  /* Component aliases: book presets inherit shared semantic design values. */
+  --book-paper: var(--surface-raised); --book-ink: var(--text-primary); --book-accent: var(--accent);
+}
+[data-book-theme='rose'] { --book-paper: var(--palette-rose); --book-accent: var(--palette-wine); }
+[data-book-theme='sage'] { --book-paper: var(--palette-sage); --book-accent: var(--palette-wine); }
+[data-book-theme='yellow'] { --book-paper: var(--palette-yellow); --book-accent: var(--palette-wine); }
+[data-book-theme='default'] { --book-paper: var(--surface-raised); --book-accent: var(--accent); }
+@media (prefers-reduced-motion: reduce) { :root { --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; } }
