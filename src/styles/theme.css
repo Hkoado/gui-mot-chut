@@ -47,7 +47,11 @@
   --hero-top: clamp(1rem, 3vw, 2rem); --shelf-caption-height: 8rem;
   --type-step: 1.35rem; --tracking-print: .08em;
   --book-cloth: repeating-linear-gradient(0deg, transparent 0 2px, color-mix(in srgb, var(--palette-forest) 2%, transparent) 2px 3px);
-  --book-spine-light: linear-gradient(90deg, color-mix(in srgb, var(--palette-forest) 15%, transparent), transparent 18%, #f8f6f04d 42%, transparent 72%, color-mix(in srgb, var(--palette-forest) 11%, transparent));
+  --book-spine-light: linear-gradient(90deg, color-mix(in srgb, var(--palette-forest) 18%, transparent), transparent 18%, #f8f6f04d 42%, transparent 72%, color-mix(in srgb, var(--palette-forest) 11%, transparent));
+  --book-spine-top-light: inset 0 1px 0 #f8f6f059;
+  --shadow-spine-ground: 0 .125rem .25rem #0b3c1b24, 0 .5rem .75rem #0b3c1b12;
+  --spine-paper: var(--book-paper);
+  --spine-ink: color-mix(in srgb, var(--palette-forest) 80%, var(--spine-paper));
   --book-cover-light: linear-gradient(110deg, color-mix(in srgb, var(--palette-forest) 14%, transparent), transparent 12%, #f8f6f033 54%, color-mix(in srgb, var(--palette-forest) 5%, transparent));
   --book-print-inset: inset 0 0 0 1px #f8f6f059, inset 5px 0 9px color-mix(in srgb, var(--palette-forest) 8%, transparent);
   /* Compact responsive elevation fits inside the shelf on touch viewports too. */
@@ -135,16 +139,16 @@
 [data-book-theme='default'] { --book-paper: var(--surface-raised); --book-accent: var(--accent); }
 /* Album-only print palettes from the supplied swatches. These aliases also flow
    into AlbumDialog's poster; page surfaces, controls and legacy template presets stay unchanged. */
-[data-book-theme='birthday'] { --book-paper: #fff1b8; --book-ink: #d6246e; --book-accent: var(--book-ink); }
-[data-book-theme='boys-day'] { --book-paper: #2f5da8; --book-ink: #ffb347; --book-accent: var(--book-ink); }
-[data-book-theme='wedding'] { --book-paper: #f5ebdd; --book-ink: #8a5a0b; --book-accent: var(--book-ink); }
-[data-book-theme='date'] { --book-paper: #f7b6b0; --book-ink: #8b1a33; --book-accent: var(--book-ink); }
-[data-book-theme='party'] { --book-paper: #1c1c1e; --book-ink: #e8c872; --book-accent: var(--book-ink); }
-[data-book-theme='womens-day'] { --book-paper: #f2a7c3; --book-ink: #5e1259; --book-accent: var(--book-ink); }
-[data-book-theme='christmas'] { --book-paper: #124a2c; --book-ink: #ff7a6b; --book-accent: var(--book-ink); }
-[data-book-theme='custom'] { --book-paper: #ffffff; --book-ink: #1f2a5c; --book-accent: var(--book-ink); }
-[data-book-theme='love'] { --book-paper: #d6404b; --book-ink: #fff1ee; --book-accent: var(--book-ink); }
-[data-book-theme='new-year'] { --book-paper: #b8232b; --book-ink: #ffd772; --book-accent: var(--book-ink); }
-[data-book-theme='yearbook'] { --book-paper: #3e4a5c; --book-ink: #f5cc6e; --book-accent: var(--book-ink); }
+[data-book-theme='birthday'] { --spine-paper: #f1e8c0; --book-paper: #fff1b8; --book-ink: #d6246e; --book-accent: var(--book-ink); }
+[data-book-theme='boys-day'] { --spine-paper: #c9d5e6; --book-paper: #2f5da8; --book-ink: #ffb347; --book-accent: var(--book-ink); }
+[data-book-theme='wedding'] { --spine-paper: #f1ebe0; --book-paper: #f5ebdd; --book-ink: #8a5a0b; --book-accent: var(--book-ink); }
+[data-book-theme='date'] { --spine-paper: #ebcfca; --book-paper: #f7b6b0; --book-ink: #8b1a33; --book-accent: var(--book-ink); }
+[data-book-theme='party'] { --spine-paper: #c9c9c7; --book-paper: #1c1c1e; --book-ink: #e8c872; --book-accent: var(--book-ink); }
+[data-book-theme='womens-day'] { --spine-paper: #e8cbd8; --book-paper: #f2a7c3; --book-ink: #5e1259; --book-accent: var(--book-ink); }
+[data-book-theme='christmas'] { --spine-paper: #c7d8cc; --book-paper: #124a2c; --book-ink: #ff7a6b; --book-accent: var(--book-ink); }
+[data-book-theme='custom'] { --spine-paper: #f6f5f0; --book-paper: #ffffff; --book-ink: #1f2a5c; --book-accent: var(--book-ink); }
+[data-book-theme='love'] { --spine-paper: #e8c6c9; --book-paper: #d6404b; --book-ink: #fff1ee; --book-accent: var(--book-ink); }
+[data-book-theme='new-year'] { --spine-paper: #ebd2bc; --book-paper: #b8232b; --book-ink: #ffd772; --book-accent: var(--book-ink); }
+[data-book-theme='yearbook'] { --spine-paper: #c8cfd8; --book-paper: #3e4a5c; --book-ink: #f5cc6e; --book-accent: var(--book-ink); }
 @media(max-width:767px){:root{--shelf-height:clamp(12.6rem,36svh,21.6rem);--header-height:9rem;--shelf-mist-clear:14%;--shelf-mist-hidden:2%;}}
 @media (prefers-reduced-motion: reduce) { :root { --duration-nav: 1ms; --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; --duration-sheet-open: 1ms; --duration-sheet-close: 1ms; --duration-sheet-text: 1ms; } }

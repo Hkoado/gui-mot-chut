@@ -18,7 +18,7 @@
 /* rAF owns travel/lift/tilt; avoid stacking CSS easing on time-based smoothing. */
 .bookshelf[data-motion='continuous'] .book,.bookshelf[data-motion='continuous'] .book-tilt{transition:none;}
 .book-spine,.book-front,.book-pages{position:absolute;top:0;height:var(--h);backface-visibility:hidden;border:var(--border-width) solid var(--border-default);border-radius:var(--radius-small);overflow:hidden;}
-.book-spine{left:0;width:var(--spine);transform:translateZ(calc(var(--cover)*.5));background:var(--book-spine-light),var(--book-cloth),var(--book-paper);color:var(--book-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-block:var(--space-3);box-shadow:var(--shadow-book);}
+.book-spine{left:0;width:var(--spine);transform:translateZ(calc(var(--cover)*.5));background:var(--book-spine-light),var(--book-cloth),var(--spine-paper);color:var(--spine-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-block:var(--space-3);box-shadow:var(--shadow-book);}
 .spine-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 /* Rasterize one horizontal Vietnamese label, then rotate in the face's 2D plane.
    Avoid vertical glyph layout + 180deg transforms inside the 3D cuboid. */
@@ -29,6 +29,9 @@
 /* Complete the cuboid in the same local coordinate system as front and spine.
    Only the active cover supplies elevation; edge-on faces stay unshadowed. */
 .book .book-front,.book .book-spine{box-shadow:none;}
+/* Pale shelf-only stock retains a top glint and local contact/soft ground shadows.
+   Do not apply these face effects to the preserve-3d pivot or album poster. */
+.book .book-spine{--spine-ink:color-mix(in srgb,var(--palette-forest) 80%,var(--spine-paper));box-shadow:var(--book-spine-top-light),var(--shadow-spine-ground);}
 /* Edge-on print must not bleed into adjacent spines. Keep all physical faces
    during the turn, but cull the perpendicular face once travel settles. */
 .book:not(.is-active):not([data-pose]) .book-front,
