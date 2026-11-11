@@ -163,4 +163,10 @@
   --duration-sheet-text: 180ms; --delay-sheet-text: 0ms; --delay-sheet-line: 0ms;
   --shelf-spring-rate: 18; --shelf-drag-rate: 24;
 }
+/* Header currently has a literal blur in site.css. Scope this exception to the
+   gallery header; changing --header-blur alone does not disable that filter. */
+:root[data-perf='lite'] .site-header[data-ui='album-gallery'] {
+  backdrop-filter: none;
+  background: var(--surface-page);
+}
 @media (prefers-reduced-motion: reduce) { :root, :root[data-perf] { --duration-nav: 1ms; --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; --duration-sheet-open: 1ms; --duration-sheet-close: 1ms; --duration-sheet-text: 1ms; } }

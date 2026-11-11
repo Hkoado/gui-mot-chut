@@ -79,6 +79,7 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const fine = matchMedia('(hover: hover) and (pointer: fine)');
     const nodes = [...element.querySelectorAll<HTMLElement>('.book')];
+    const tiltNodes = nodes.map(node => node.querySelector<HTMLElement>('.book-tilt'));
     const lifts = nodes.map(() => 0);
     let hovered = -1, frame = 0, previous = 0;
     let sampleStart = 0, sampleFrames = 0, sampled = lite;
@@ -149,13 +150,14 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       const available = !lite && state.pointer && !detailOpen.current && !drag.current?.moved;
       const onCover = available && Math.abs(state.mx - innerWidth / 2) < .55 * d
         && Math.abs(state.my - cy) < .55 * h && Math.abs(state.target - state.position) < .3;
-      element.dataset.cursorOpen = String(onCover);
+      const cursorOpen = String(onCover);
+      if (element.dataset.cursorOpen !== cursorOpen) element.dataset.cursorOpen = cursorOpen;
       const ty = !reduced.matches && available ? onCover ? (state.mx - innerWidth / 2) / (.55 * d) * 9 : (state.mx - innerWidth / 2) / innerWidth * 5 : 0;
       const tx = !reduced.matches && onCover ? -(state.my - cy) / (h / 2) * 6 : 0;
       state.tiltX += (tx - state.tiltX) * ease(number('--shelf-tilt-rate'));
       state.tiltY += (ty - state.tiltY) * ease(number('--shelf-tilt-rate'));
-      element.style.setProperty('--tilt-x', `${state.tiltX}deg`);
-      element.style.setProperty('--tilt-y', `${state.tiltY}deg`);
+      if (Math.abs(tx - state.tiltX) < .001) state.tiltX = tx;
+      if (Math.abs(ty - state.tiltY) < .001) state.tiltY = ty;
       let unsettled = Math.abs(state.target - state.position) > .001
         || Math.abs(tx - state.tiltX) > .001 || Math.abs(ty - state.tiltY) > .001;
       nodes.forEach((node, index) => {
@@ -171,13 +173,21 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
         const hidden = Math.abs(x) > bounds.width / 2 + d;
         if (node.hidden !== hidden) node.hidden = hidden;
         if (hidden) { lifts[index] = 0; return; }
+        // Tilt belongs to the single 2D pivot, not an inherited variable on
+        // the whole shelf (which invalidated every cuboid and print descendant).
+        const tilt = tiltNodes[index];
+        const tiltTransform = node.classList.contains('is-active')
+          ? `rotateX(${state.tiltX}deg) rotateY(${state.tiltY}deg)`
+          : 'rotateX(0deg) rotateY(0deg)';
+        if (tilt && tilt.style.transform !== tiltTransform) tilt.style.transform = tiltTransform;
         // A small CSS-controlled left yaw fades out into the central cover turn.
         const leftTurn = Math.min(1, Math.max(0, -r));
         const lift = available && hovered === index && a > .5 ? 1 : 0;
         lifts[index] += (lift - lifts[index]) * ease(number('--shelf-lift-rate'));
         if (Math.abs(lift - lifts[index]) < .001) lifts[index] = lift;
         else unsettled = true;
-        node.style.transform = `translate3d(${x}px,${-o * .025 * h - lifts[index] * number('--shelf-lift-ratio') * h}px,${o * .2 * h}px) rotateZ(${-o * 4.5}deg) rotateY(calc(var(--book-left-yaw) * ${leftTurn} - ${o * 90}deg))`;
+        const transform = `translate3d(${x}px,${-o * .025 * h - lifts[index] * number('--shelf-lift-ratio') * h}px,${o * .2 * h}px) rotateZ(${-o * 4.5}deg) rotateY(calc(var(--book-left-yaw) * ${leftTurn} - ${o * 90}deg))`;
+        if (node.style.transform !== transform) node.style.transform = transform;
       });
       if (unsettled || !sampled) wake();
       else previous = 0;
