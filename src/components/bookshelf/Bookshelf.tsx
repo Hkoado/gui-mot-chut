@@ -91,12 +91,13 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
     wakeMotion.current = wake;
     let wheelTimer: ReturnType<typeof setTimeout> | undefined;
     const handlers = nodes.map((node, index) => {
-      const enter = (event: globalThis.PointerEvent) => { if (event.pointerType === 'mouse') { hovered = index; wake(); } };
+      const enter = (event: globalThis.PointerEvent) => { if (!lite && fine.matches && event.pointerType === 'mouse') { hovered = index; wake(); } };
       const leave = () => { if (hovered === index) { hovered = -1; wake(); } };
       node.addEventListener('pointerenter', enter); node.addEventListener('pointerleave', leave);
       return () => { node.removeEventListener('pointerenter', enter); node.removeEventListener('pointerleave', leave); };
     });
     const track = (event: globalThis.PointerEvent) => {
+      if (lite || !fine.matches || event.pointerType !== 'mouse') return;
       const state = motion.current;
       state.mx = event.clientX; state.my = event.clientY;
       state.pointer = !lite && fine.matches && event.pointerType === 'mouse';
