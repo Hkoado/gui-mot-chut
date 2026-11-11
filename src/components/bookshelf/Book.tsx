@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { BookVisual } from '../../data/topics';
-import { useLanguage } from '../LanguageProvider';
+import { site } from '../../config/site';
 
 export function CoverArt({ book }: { book: BookVisual }) {
-  const { t } = useLanguage();
   const [imageFailed, setImageFailed] = useState(false);
   if (book.coverSrc && !imageFailed) return <img className="cover-image" src={book.coverSrc} alt="" draggable={false} onError={() => setImageFailed(true)} />;
+  if (book.coverTitle) return <span className="cover-art cover-art--temporary"><strong className="cover-title">{book.coverTitle}</strong></span>;
   return <span className="cover-art">
-    <span className="cover-label">GỬI MỘT CHÚT / {book.occasion}</span>
+    <span className="cover-label">{site.brand.toUpperCase()} / {book.occasion}</span>
     <strong className="cover-title">{book.title}</strong>
     <svg className="cover-drawing" viewBox="0 0 180 180" fill="none" aria-hidden="true">
       {['birthday','wedding','date','party','womens-day','christmas','custom','love','new-year','yearbook'].includes(book.id) && <>
@@ -28,18 +28,17 @@ export function CoverArt({ book }: { book: BookVisual }) {
       {book.id === 'ho-so-hoi-ban' && <><path d="M20 45h55l12 12h73v93H20ZM38 82h85M38 98h65M38 114h45"/><circle cx="131" cy="125" r="25"/><path d="m117 125 10 9 18-21"/></>}
       {book.id === 'co-dieu-muon-noi' && <><path d="M15 45h150v100H15ZM15 45l75 62 75-62M15 145l55-55M165 145l-55-55"/><circle cx="90" cy="106" r="10"/></>}
     </svg>
-    <span className="cover-footer">{t('MỘT CÂU CHUYỆN NHỎ', 'A LITTLE STORY')}<br/>{t('DÀNH RIÊNG CHO MỘT NGƯỜI', 'FOR SOMEONE SPECIAL')}</span>
+    <span className="cover-footer">{'MỘT CÂU CHUYỆN NHỎ'}<br/>{'DÀNH RIÊNG CHO MỘT NGƯỜI'}</span>
   </span>;
 }
 
-export default function Book({ book, offset, duplicate = false, onChoose }: { book: BookVisual; offset: number; duplicate?: boolean; onChoose: () => void }) {
-  const { t } = useLanguage();
+export default function Book({ book, offset, sequence, duplicate = false, onChoose }: { book: BookVisual; offset: number; sequence: number; duplicate?: boolean; onChoose: () => void }) {
   const [spineFailed, setSpineFailed] = useState(false);
-  return <button type="button" className={`book${offset === 0 ? ' is-active' : ''}`} data-book-theme={book.themeKey} data-topic-id={book.id}
-    style={{ '--offset': offset, '--side': Math.sign(offset) } as CSSProperties}
+  return <button type="button" className={`book${offset === 0 ? ' is-active' : ''}`} data-sequence={sequence} data-book-theme={book.themeKey} data-topic-id={book.id}
     aria-hidden={duplicate || undefined} tabIndex={duplicate ? -1 : undefined}
-    aria-label={`${book.title} — ${offset === 0 ? t('Xem các mẫu', 'Browse templates') : t('Chọn chủ đề', 'Select topic')}`} aria-pressed={!duplicate && offset === 0} onClick={onChoose}>
-    <span className="book-tilt"><span className="book-spine">{book.spineSrc && !spineFailed ? <img className="spine-image" src={book.spineSrc} alt="" draggable={false} onError={() => setSpineFailed(true)} /> : <><span>{book.occasion}</span><strong>{book.title}</strong><span>GỬI MỘT CHÚT</span></>}</span>
+    style={{ '--offset': offset, '--side': Math.sign(offset) } as CSSProperties}
+    aria-label={`${book.title} — ${offset === 0 ? 'Xem các mẫu' : 'Chọn chủ đề'}`} aria-pressed={offset === 0} onClick={onChoose}>
+    <span className="book-tilt"><span className="book-spine">{book.spineSrc && !spineFailed ? <img className="spine-image" src={book.spineSrc} alt="" draggable={false} onError={() => setSpineFailed(true)} /> : <strong>{book.spineTitle ?? book.title}</strong>}</span>
     <span className="book-front"><CoverArt book={book} /></span>
     <span className="book-pages" aria-hidden="true" />
     <span className="book-back" aria-hidden="true" />

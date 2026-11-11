@@ -2,10 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { TemplateRecord } from '../../data/templates';
 import { pricing } from '../../config/pricing';
 import { CoverArt } from './Book';
-import { useLanguage } from '../LanguageProvider';
 
 export default function TemplateDialog({ book, origin, onClose }: { book: TemplateRecord; origin: DOMRect; onClose: () => void }) {
-  const { t } = useLanguage();
   const ref = useRef<HTMLDialogElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const closing = useRef(false);
@@ -33,9 +31,9 @@ export default function TemplateDialog({ book, origin, onClose }: { book: Templa
     animation.finished.then(onClose, onClose);
   };
   return <dialog ref={ref} className="template-dialog" aria-labelledby="dialog-title" onCancel={event => { event.preventDefault(); close(); }}>
-    <button type="button" className="dialog-close" onClick={close} autoFocus>{t('Đóng', 'Close')} ×</button>
+    <button type="button" className="dialog-close" onClick={close} autoFocus>{'Đóng'} ×</button>
     <div className="dialog-grid"><div className="dialog-preview" data-book-theme={book.themeKey}>
-      {book.previewVideoUrl && !failed ? <video ref={video} controls playsInline preload="metadata" poster={book.previewPoster ?? undefined} src={book.previewVideoUrl} onError={() => setFailed(true)} /> : <><div className="dialog-poster"><CoverArt book={book} /></div><p className="muted">{failed ? t('Không tải được video. Vui lòng thử lại sau.', 'The video could not load. Please try again later.') : t('Video xem trước sẽ được bổ sung', 'Preview video coming when available')}</p></>}
-    </div><div className="dialog-copy"><p className="eyebrow">{book.occasion}</p><h2 id="dialog-title">{book.title}</h2><p>{book.description}</p><h3>{t('Nội dung có thể cá nhân hóa', 'Make it your own')}</h3><ul>{book.features.map(feature => <li key={feature}>{feature}</li>)}</ul><p>{t('Giá niêm yết từ', 'Standard packages from')} <strong>{pricing.standard.priceVnd.toLocaleString('vi-VN')}đ</strong></p><a className="button" href={`/bang-gia/?templateId=${encodeURIComponent(book.id)}&packageId=standard`}>{t('Chọn mẫu này', 'Choose this design · pricing in Vietnamese')}</a><p>{book.demoUrl ? <a href={book.demoUrl} target="_blank" rel="noopener noreferrer">{t('Mở trang demo', 'Visit page')} ↗</a> : t('Demo độc lập sẽ được bổ sung.', 'An independent demo is not available yet.')}</p></div></div>
+      {book.previewVideoUrl && !failed ? <video ref={video} controls playsInline preload="metadata" poster={book.previewPoster ?? undefined} src={book.previewVideoUrl} onError={() => setFailed(true)} /> : <><div className="dialog-poster"><CoverArt book={book} /></div><p className="muted">{failed ? 'Không tải được video. Vui lòng thử lại sau.' : 'Video xem trước sẽ được bổ sung'}</p></>}
+    </div><div className="dialog-copy"><p className="eyebrow">{book.occasion}</p><h2 id="dialog-title">{book.title}</h2><p>{book.description}</p><h3>{'Nội dung có thể cá nhân hóa'}</h3><ul>{book.features.map(feature => <li key={feature}>{feature}</li>)}</ul><p>{'Giá niêm yết từ'} <strong>{pricing.standard.priceVnd.toLocaleString('vi-VN')}đ</strong></p><a className="button" href={`/bang-gia/?templateId=${encodeURIComponent(book.id)}&packageId=standard`}>{'Chọn mẫu này'}</a><p>{book.demoUrl ? <a href={book.demoUrl} target="_blank" rel="noopener noreferrer">{'Mở trang demo'} ↗</a> : 'Demo độc lập sẽ được bổ sung.'}</p></div></div>
   </dialog>;
 }

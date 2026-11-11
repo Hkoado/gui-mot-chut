@@ -1,39 +1,119 @@
 /* Design tokens: breakpoints are 768px (mobile/tablet) and 1200px (wide). */
 :root {
+  /* Brand source tokens -> semantic roles -> component consumers.
+     Keep forest green for primary actions; electric purple is a restrained highlight. */
+  --palette-electric-purple: #7800ff;
+  --highlight: var(--palette-electric-purple);
+  --highlight-soft: color-mix(in srgb, var(--highlight) 20%, transparent);
+  --highlight-faint: color-mix(in srgb, var(--highlight) 5%, transparent);
+  --font-brand: 'Ribel Noise', var(--font-heading);
+  --brand-size: clamp(2.75rem, 5vw, 3.5rem); --brand-weight: 400;
+  --brand-leading: 1.1; --brand-tracking: 0em;
+  --palette-brand-forest: #0f3d1f;
+  --brand-color: var(--palette-brand-forest);
+  --brand-glow: none;
+  /* One broad overhead light, symmetric across the paper canvas. */
+  --page-glow: radial-gradient(ellipse 85% 70% at 50% 0%, var(--highlight-soft), var(--highlight-faint) 48%, transparent 85%);
+  /* Minimal navigation: a single measured underline, never a filled tab. */
+  --nav-ink: var(--text-primary); --nav-hover-ink: var(--text-secondary);
+  --nav-underline: var(--accent); --nav-underline-height: 2px;
+  --nav-type-size: calc(var(--type-body) * 1.3);
+  --nav-gap: clamp(1rem, 3vw, 2.5rem); --nav-mobile-gap: var(--space-4);
+  --duration-nav: 420ms; --nav-hover-opacity: .75;
+  --search-width: 43rem; --search-icon-size: 1.5rem;
+  --search-offset: var(--space-2); --search-travel: var(--space-2);
+  --radius-control: var(--radius-small);
+  /* Gallery arrows: soft purple interaction glow with forest-green icons. */
+  --shelf-arrow-radius: var(--radius-small);
+  --shelf-arrow-highlight: var(--highlight-soft);
+  --shelf-arrow-highlight-ink: var(--text-primary);
+  --shelf-arrow-glow: radial-gradient(ellipse at center, var(--shelf-arrow-highlight), var(--highlight-faint) 45%, transparent 72%);
+  --shelf-arrow-glow-outset: var(--space-4);
+  --shelf-arrow-glow-idle: 0; --shelf-arrow-glow-active: 1;
+  /* Fine-pointer interaction follows the shared forest theme. */
+  --cursor-size: 58px; --cursor-half: -29px; --cursor-dot-size: 6px;
+  --cursor-border: 1.5px; --cursor-radius: 50%; --cursor-ink: var(--text-primary);
+  --cursor-open: var(--accent); --cursor-label: var(--button-text); --cursor-font: var(--font-body);
+  --cursor-label-size: 12px;
+  --cursor-label-leading: 1.4; --cursor-label-tracking: .1em;
+  --cursor-spine-scale: .72; --cursor-button-scale: .55; --cursor-open-scale: 1.2;
+  --cursor-ring-duration: .5s; --cursor-color-duration: .4s;
+  --cursor-dot-duration: .4s; --cursor-label-duration: .45s;
+  --cursor-follow-rate: 16; --shelf-lift-rate: 12; --shelf-tilt-rate: 7;
+  --shelf-spring-rate: 12; --shelf-drag-rate: 18; --shelf-wheel-delay: 160;
+  --shelf-lift-ratio: .045; --z-cursor: 100;
   /* Shelf-first editorial UI: shared material, navigation and print tokens. */
-  --header-height: 4.5rem; --header-blur: 8px;
+  --header-height: 8rem; --header-blur: 8px;
   --hero-top: clamp(1rem, 3vw, 2rem); --shelf-caption-height: 8rem;
   --type-step: 1.35rem; --tracking-print: .08em;
-  --book-cloth: repeating-linear-gradient(0deg, transparent 0 2px, #28231f05 2px 3px);
-  --book-spine-light: linear-gradient(90deg, #28231f26, transparent 18%, #fffdf94d 42%, transparent 72%, #28231f1c);
-  --book-cover-light: linear-gradient(110deg, #28231f24, transparent 12%, #fffdf933 54%, #28231f0d);
-  --book-print-inset: inset 0 0 0 1px #fffdf959, inset 5px 0 9px #28231f14;
-  --shelf-ground: radial-gradient(ellipse, #28231f26, transparent 68%);
-  --shelf-ground-height: 2rem; --shelf-ground-width: 70%;
-  --switch-radius: 2rem; --switch-padding: .2rem;
+  --book-cloth: repeating-linear-gradient(0deg, transparent 0 2px, color-mix(in srgb, var(--palette-forest) 2%, transparent) 2px 3px);
+  --book-spine-light: linear-gradient(90deg, color-mix(in srgb, var(--palette-forest) 15%, transparent), transparent 18%, #f8f6f04d 42%, transparent 72%, color-mix(in srgb, var(--palette-forest) 11%, transparent));
+  --book-cover-light: linear-gradient(110deg, color-mix(in srgb, var(--palette-forest) 14%, transparent), transparent 12%, #f8f6f033 54%, color-mix(in srgb, var(--palette-forest) 5%, transparent));
+  --book-print-inset: inset 0 0 0 1px #f8f6f059, inset 5px 0 9px color-mix(in srgb, var(--palette-forest) 8%, transparent);
+  /* Compact responsive elevation fits inside the shelf on touch viewports too. */
+  --shadow-book-active: 0 clamp(.25rem,.65vw,.6rem) clamp(.4rem,1vw,.9rem) color-mix(in srgb, var(--palette-forest) 24%, transparent), 0 .125rem .25rem color-mix(in srgb, var(--palette-forest) 14%, transparent);
   --bespoke-paper: var(--palette-sage); /* Commission stationery surface. */
   --bespoke-ink: var(--text-primary); /* Commission lettering. */
-  --surface-backdrop: #28231f99; /* Modal scrim. */
-  --shelf-height: clamp(15rem, 29vw, 22rem); /* Responsive physical book height. */
+  --surface-backdrop: color-mix(in srgb, var(--palette-forest) 60%, transparent); /* Forest-tinted modal scrim. */
+  --shelf-height: clamp(14.4rem, 41.4svh, 30.6rem); /* Slightly smaller albums preserve the shelf while opening up the row. */
+  --shelf-stage-ratio: 1.28;
+  /* Looping album row: slim spines, breathing room, inset mist curtain. */
+  --book-spine-ratio: .09; --book-cover-ratio: .527; --book-gap-ratio: .075;
+  --book-left-yaw: 9deg; /* Gentle left-side back-cover turn; right side unchanged. */
+  --shelf-mist-clear: 24%; --shelf-mist-hidden: 7%;
+  --shelf-mist-mask: linear-gradient(90deg, transparent var(--shelf-mist-hidden), #000 var(--shelf-mist-clear), #000 calc(100% - var(--shelf-mist-clear)), transparent calc(100% - var(--shelf-mist-hidden)));
+  --book-placeholder-size: clamp(1rem, 2vw, 1.75rem);
+  --shelf-min-scale: .78; --shelf-fit-clearance: .35;
+  --album-title-size: clamp(1.35rem, 2.2vw, 2rem);
+  --album-nav-size: .75rem;
+  /* Shelf album CTA: outlined at rest, filled on hover or keyboard focus. */
+  --shelf-cta-bg: transparent; --shelf-cta-ink: var(--accent);
+  --shelf-cta-border: var(--accent); --shelf-cta-active-bg: var(--accent-hover);
+  --shelf-cta-active-ink: var(--button-text);
+  --shelf-cta-type-size: var(--type-body); --shelf-cta-tracking: .08em;
+  --shelf-cta-weight: 400; --shelf-cta-radius: 0;
+  /* Compact frame: 15% less padding, preserving the shared minimum hit target. */
+  --shelf-cta-padding-inline: calc(var(--space-6) * .85);
+  --shelf-cta-padding-block: calc(.7rem * .85);
+  --album-dialog-width: 43rem;
+  --album-screen-height: calc(100svh - var(--header-height));
+  --album-nav-gap: clamp(.5rem, 2vw, 2rem);
   --duration-caption: 650ms; /* Masked caption travel. */
   --duration-tilt: 180ms; /* Pointer response, independent of shelf travel. */
   --book-edge: repeating-linear-gradient(0deg, var(--surface-raised) 0 2px, var(--border-default) 2px 3px);
-  --shelf-perspective: 3000px;
+  --shelf-perspective: 3000px; /* Shared centred perspective; smaller = stronger depth. */
   --book-focus-ring: inset 0 0 0 3px var(--focus-color);
   --type-cover-small: .625rem; /* Decorative print on small book faces only. */
   --ease-paper: cubic-bezier(.76,0,.18,1); /* Expanding paper sheet. */
-  /* Primitive palette: warm paper, readable ink, restrained wine accent. */
-  --palette-paper: #f3efe7; --palette-sheet: #faf7f1; --palette-ink: #28231f; --palette-muted: #6a6059;
-  --palette-wine: #963e47; --palette-wine-hover: #79303a; --palette-rose: #ead0d1;
-  --palette-sage: #c9d3cd; --palette-yellow: #efe0b6; --palette-line: #d4c9bd; --palette-white: #fffdf9;
+  /* Album paper-sheet reveal: timings are milliseconds for WAAPI/rAF consumers. */
+  --duration-sheet-open: 1050ms; --duration-sheet-close: 850ms;
+  --duration-sheet-text: 900ms; --delay-sheet-text: 620ms; --delay-sheet-line: 75ms;
+  --delay-sheet-ink: 520ms; --duration-sheet-ink: 1250ms; --duration-sheet-loop: 2400ms;
+  --detail-sheet: var(--surface-page); --detail-gap: 4vw;
+  --detail-padding: 110px 6vw 56px 7vw;
+  --detail-brand-height: 84px; --detail-close-top: 31px; --detail-close-left: 32px;
+  --detail-copy-width: 520px; --detail-copy-gap: 18px;
+  --detail-title-size: clamp(44px, 5.4vw, 84px);
+  --detail-title-leading: 1; --detail-title-tracking: -.025em;
+  --detail-description-size: 17px; --detail-description-leading: 1.5;
+  --detail-credit-size: 15px; --detail-description-width: 42ch;
+  --detail-poster-height: 78svh; --detail-button-padding: 20px;
+  --detail-button-gap: 10px; --detail-cover-size: 28px;
+  --detail-cover-padding: 32px; --detail-cover-label: 20px; --detail-cover-title: 38px;
+  /* Paper Cream + Forest Green. One parent green drives ink, actions and material tint. */
+  --palette-forest: #0b3c1b;
+  --palette-paper: #f8f6f0; --palette-sheet: #eeeee4; --palette-ink: var(--palette-forest); --palette-muted: #626e5b;
+  --palette-matcha: var(--palette-forest); --palette-matcha-hover: color-mix(in srgb, var(--palette-forest) 85%, black); --palette-rose: #e7d8cf;
+  --palette-sage: #d4ddcb; --palette-yellow: #eae1c5; --palette-line: #ccd2c2;
   /* Semantic surface, content, interaction, and focus roles. */
-  --surface-page: var(--palette-paper); --surface-raised: var(--palette-sheet); --surface-strong: var(--palette-white);
-  --text-primary: var(--palette-ink); --text-secondary: var(--palette-muted); --accent: var(--palette-wine);
-  --accent-hover: var(--palette-wine-hover); --border-default: var(--palette-line); --focus-color: var(--accent);
-  --button-bg: var(--accent); --button-text: var(--palette-white);
+  --surface-page: var(--palette-paper); --surface-raised: var(--palette-sheet); --surface-strong: var(--palette-paper);
+  --text-primary: var(--palette-ink); --text-secondary: var(--palette-muted); --accent: var(--palette-matcha);
+  --accent-hover: var(--palette-matcha-hover); --border-default: var(--palette-line); --focus-color: var(--highlight);
+  --button-bg: var(--accent); --button-text: var(--palette-paper);
   /* Shared type families, scale, and reading rhythm. */
-  --font-heading: 'Lora', Georgia, serif; --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-heading: 'Hina Mincho', Georgia, serif; --font-body: 'Hina Mincho', Georgia, serif;
   --type-xs: .8125rem; --type-small: .875rem; --type-body: 1rem; --type-lead: 1.125rem;
+  --book-spine-type-size: calc(var(--type-body) * 1.1);
   --type-subtitle: clamp(1.75rem, 3vw, 2.6rem); --type-title: clamp(2.4rem, 6vw, 5.25rem); --line-body: 1.7;
   /* Spacing, content widths, and minimum interactive target. */
   --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-6: 1.5rem;
@@ -41,16 +121,30 @@
   --section-gap: clamp(4rem, 9vw, 8rem); --page-gutter: clamp(1rem, 5vw, 4rem);
   --container-width: 78rem; --reading-width: 43rem; --control-min: 2.75rem;
   /* Geometry, elevation, and a single editorial motion curve. */
-  --radius-small: .25rem; --radius-panel: .5rem; --border-width: 1px;
-  --shadow-book: 0 1.1rem 2.4rem #28231f2b; --shadow-panel: 0 1rem 3rem #28231f1c;
+  --radius-small: .25rem; --radius-panel: .5rem; --radius-pill: 999px; --border-width: 1px;
+  --shadow-book: 0 1.1rem 2.4rem color-mix(in srgb, var(--palette-forest) 17%, transparent); --shadow-panel: 0 1rem 3rem color-mix(in srgb, var(--palette-forest) 11%, transparent);
   --ease-editorial: cubic-bezier(.2,.8,.2,1); --duration-fast: 180ms; --duration-shelf: 650ms; --duration-dialog: 420ms;
   /* Layer order: sticky navigation above document, modal above navigation. */
   --z-header: 20; --z-dialog: 60;
   /* Component aliases: book presets inherit shared semantic design values. */
-  --book-paper: var(--surface-raised); --book-ink: var(--text-primary); --book-accent: var(--accent);
+  --book-paper: var(--palette-sheet); --book-ink: var(--palette-ink); --book-accent: var(--accent);
 }
-[data-book-theme='rose'] { --book-paper: var(--palette-rose); --book-accent: var(--palette-wine); }
-[data-book-theme='sage'] { --book-paper: var(--palette-sage); --book-accent: var(--palette-wine); }
-[data-book-theme='yellow'] { --book-paper: var(--palette-yellow); --book-accent: var(--palette-wine); }
+[data-book-theme='rose'] { --book-paper: var(--palette-rose); --book-accent: var(--accent); }
+[data-book-theme='sage'] { --book-paper: var(--palette-sage); --book-accent: var(--accent); }
+[data-book-theme='yellow'] { --book-paper: var(--palette-yellow); --book-accent: var(--accent); }
 [data-book-theme='default'] { --book-paper: var(--surface-raised); --book-accent: var(--accent); }
-@media (prefers-reduced-motion: reduce) { :root { --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; } }
+/* Album-only print palettes from the supplied swatches. These aliases also flow
+   into AlbumDialog's poster; page surfaces, controls and legacy template presets stay unchanged. */
+[data-book-theme='birthday'] { --book-paper: #fff1b8; --book-ink: #d6246e; --book-accent: var(--book-ink); }
+[data-book-theme='boys-day'] { --book-paper: #2f5da8; --book-ink: #ffb347; --book-accent: var(--book-ink); }
+[data-book-theme='wedding'] { --book-paper: #f5ebdd; --book-ink: #8a5a0b; --book-accent: var(--book-ink); }
+[data-book-theme='date'] { --book-paper: #f7b6b0; --book-ink: #8b1a33; --book-accent: var(--book-ink); }
+[data-book-theme='party'] { --book-paper: #1c1c1e; --book-ink: #e8c872; --book-accent: var(--book-ink); }
+[data-book-theme='womens-day'] { --book-paper: #f2a7c3; --book-ink: #5e1259; --book-accent: var(--book-ink); }
+[data-book-theme='christmas'] { --book-paper: #124a2c; --book-ink: #ff7a6b; --book-accent: var(--book-ink); }
+[data-book-theme='custom'] { --book-paper: #ffffff; --book-ink: #1f2a5c; --book-accent: var(--book-ink); }
+[data-book-theme='love'] { --book-paper: #d6404b; --book-ink: #fff1ee; --book-accent: var(--book-ink); }
+[data-book-theme='new-year'] { --book-paper: #b8232b; --book-ink: #ffd772; --book-accent: var(--book-ink); }
+[data-book-theme='yearbook'] { --book-paper: #3e4a5c; --book-ink: #f5cc6e; --book-accent: var(--book-ink); }
+@media(max-width:767px){:root{--shelf-height:clamp(12.6rem,36svh,21.6rem);--header-height:9rem;--shelf-mist-clear:14%;--shelf-mist-hidden:2%;}}
+@media (prefers-reduced-motion: reduce) { :root { --duration-nav: 1ms; --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; --duration-sheet-open: 1ms; --duration-sheet-close: 1ms; --duration-sheet-text: 1ms; } }

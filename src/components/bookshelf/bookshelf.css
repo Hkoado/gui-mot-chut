@@ -1,25 +1,43 @@
 /* Physical geometry is local; shared visual values come from theme.css. */
-.bookshelf-wrap{text-align:center;max-width:100%;}
+.bookshelf .book{cursor:pointer;}
+.shelf-caption .caption-line h1{font-size:var(--type-subtitle);margin:0;padding-block:var(--space-1);}
+.bookshelf-wrap{--shelf-base-height:var(--shelf-height);--shelf-display-height:var(--shelf-fitted-height,var(--shelf-height));text-align:center;max-width:100%;}
 .shelf-category{font-size:var(--type-small);color:var(--accent);margin-block:var(--space-6);letter-spacing:.1em;}
-.bookshelf{--h:var(--shelf-height);--spine:calc(var(--h)*.169);--cover:calc(var(--h)*.527);--gap:calc(var(--h)*.065);position:relative;height:calc(var(--h)*1.4);perspective:var(--shelf-perspective);touch-action:pan-y;user-select:none;overflow:clip;cursor:grab;}
-.bookshelf::before{content:'';position:absolute;left:50%;bottom:var(--space-1);width:var(--shelf-ground-width);height:var(--shelf-ground-height);transform:translateX(-50%);background:var(--shelf-ground);pointer-events:none;}
-.bookshelf-stage{position:absolute;left:50%;top:53%;width:0;height:0;transform-style:preserve-3d;}
+.bookshelf{--h:var(--shelf-display-height);--spine:calc(var(--h)*var(--book-spine-ratio));--cover:calc(var(--h)*var(--book-cover-ratio));--gap:calc(var(--h)*var(--book-gap-ratio));position:relative;height:calc(var(--h)*var(--shelf-stage-ratio));perspective:var(--shelf-perspective);touch-action:pan-y;user-select:none;overflow:clip;cursor:grab;}
+/* No shelf-wide ground strip: it read as a shadow rule above the album title.
+   Stage clearance leaves the active cover's own shadow room to fade naturally. */
+/* Mask the viewport, not the 3D stage: preserve cuboid depth and native hit testing. */
+.bookshelf{mask-image:var(--shelf-mist-mask);-webkit-mask-image:var(--shelf-mist-mask);}
+.bookshelf-stage{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;}
+.shelf-measure{position:absolute;height:var(--shelf-base-height);width:0;visibility:hidden;pointer-events:none;}
 .book{position:absolute;width:var(--spine);height:var(--h);left:calc(var(--spine)*-.5);top:calc(var(--h)*-.5);padding:0;border:0;background:transparent;color:var(--book-ink);transform-style:preserve-3d;cursor:default;transform:translate3d(calc(var(--offset)*(var(--spine) + var(--gap)) + var(--side)*(var(--cover) - var(--spine) + var(--gap)*1.6)*.5),0,0);transition:transform var(--duration-shelf) var(--ease-editorial);}
 .book.is-active{transform:translate3d(0,calc(var(--h)*-.025),calc(var(--h)*.2)) rotateZ(-4.5deg) rotateY(-90deg);}
 /* Pointer tilt has its own layer so it never retargets shelf navigation. */
 .book-tilt{position:absolute;inset:0;display:block;transform-style:preserve-3d;transform:rotateX(0deg) rotateY(0deg);transition:transform var(--duration-tilt) var(--ease-editorial);}
 .book.is-active .book-tilt{transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));}
-.book:not(.is-active):hover .book-tilt{transform:translateY(calc(var(--h)*-.025));}
+/* rAF owns travel/lift/tilt; avoid stacking CSS easing on time-based smoothing. */
+.bookshelf[data-motion='continuous'] .book,.bookshelf[data-motion='continuous'] .book-tilt{transition:none;}
 .book-spine,.book-front,.book-pages{position:absolute;top:0;height:var(--h);backface-visibility:hidden;border:var(--border-width) solid var(--border-default);border-radius:var(--radius-small);overflow:hidden;}
-.book-spine{left:0;width:var(--spine);transform:translateZ(calc(var(--cover)*.5));background:var(--book-spine-light),var(--book-cloth),var(--book-paper);color:var(--book-ink);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding-block:var(--space-3);box-shadow:var(--shadow-book);}
+.book-spine{left:0;width:var(--spine);transform:translateZ(calc(var(--cover)*.5));background:var(--book-spine-light),var(--book-cloth),var(--book-paper);color:var(--book-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-block:var(--space-3);box-shadow:var(--shadow-book);}
 .spine-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.book-spine strong{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--font-heading);font-size:var(--type-body);font-weight:500;}
+/* Rasterize one horizontal Vietnamese label, then rotate in the face's 2D plane.
+   Avoid vertical glyph layout + 180deg transforms inside the 3D cuboid. */
+.book-spine strong{position:absolute;left:50%;top:50%;white-space:nowrap;writing-mode:horizontal-tb;transform:translate(-50%,-50%) rotate(-90deg);backface-visibility:hidden;font-family:var(--font-heading);font-size:var(--book-spine-type-size);font-weight:500;line-height:var(--line-body);}
 .book-spine>span{font-size:var(--type-xs);writing-mode:vertical-rl;}
 .book-front{left:calc((var(--spine) - var(--cover))*.5);width:var(--cover);transform:rotateY(90deg) translateZ(calc(var(--spine)*.5));background:var(--book-paper);box-shadow:var(--shadow-book);}
 .book-pages{left:0;width:var(--spine);background:repeating-linear-gradient(90deg,var(--surface-raised) 0 2px,var(--border-default) 2px 3px);transform:rotateY(180deg) translateZ(calc(var(--cover)*.5));}
 /* Complete the cuboid in the same local coordinate system as front and spine.
-   Face shadows caused translucent-looking seams; ground supplies elevation. */
+   Only the active cover supplies elevation; edge-on faces stay unshadowed. */
 .book .book-front,.book .book-spine{box-shadow:none;}
+/* Edge-on print must not bleed into adjacent spines. Keep all physical faces
+   during the turn, but cull the perpendicular face once travel settles. */
+.book:not(.is-active):not([data-pose]) .book-front,
+.book[data-pose='spine'] .book-front,
+.book.is-active:not([data-pose]) .book-spine,
+.book[data-pose='cover'] .book-spine{visibility:hidden;}
+/* Elevation belongs only to the exposed cover, never to the 3D parent (which
+   must preserve depth) or every spine seam. */
+.book.is-active .book-front{box-shadow:var(--shadow-book-active);}
 /* The button is a 3D pivot behind the faces, not the visible book surface.
    Replace its floating outline with an inset ring on the physical faces.
    Pointer focus stays unpainted; keyboard focus remains visible while turning. */
@@ -39,6 +57,8 @@
 .cover-art::after{content:'';position:absolute;inset:0;pointer-events:none;background:var(--book-cover-light);}
 .cover-label,.cover-footer{font-size:var(--type-xs);line-height:1.35;letter-spacing:.06em;}
 .cover-title{font-family:var(--font-heading);font-size:var(--type-lead);font-weight:500;line-height:1.2;}
+.cover-art.cover-art--temporary{justify-content:center;align-items:center;text-align:center;}
+.cover-art--temporary .cover-title{font-size:var(--book-placeholder-size);overflow-wrap:anywhere;}
 .cover-drawing{flex:1;min-height:0;width:100%;stroke:var(--book-accent);stroke-width:1.5;}
 .cover-image{width:100%;height:100%;object-fit:cover;user-select:none;}
 .cover-footer{border-top:var(--border-width) solid var(--book-accent);padding-top:var(--space-2);}
@@ -55,3 +75,56 @@
 .shelf-fallback{text-align:left;}.shelf-fallback article{border-top:var(--border-width) solid var(--border-default);padding-block:var(--space-4);}
 .bookshelf-wrap[data-ready='false'] .bookshelf,.bookshelf-wrap[data-ready='false'] .shelf-controls,.bookshelf-wrap[data-ready='false'] .caption-actions,.bookshelf-wrap[data-ready='false'] .drag-hint{display:none;}
 @media(max-width:767px){.template-dialog{padding:var(--space-4);}.dialog-grid{grid-template-columns:1fr;}.book-spine strong{font-size:var(--type-small);}.book-spine>span{display:none;}.cover-art{padding:var(--space-2);}.cover-label,.cover-footer{font-size:var(--type-cover-small);}.cover-title{font-size:var(--type-body);}.shelf-caption{min-height:11rem;}}
+/* Album-only presentation: full-width row and edge arrows, like the supplied reference. */
+.album-page .bookshelf-wrap{position:relative;}
+.album-page .shelf-caption .caption-line h1{font-size:var(--album-title-size);color:var(--accent);}
+.album-page .bookshelf-wrap .shelf-caption{margin-block:var(--space-2);}
+/* Scope the outlined CTA to the shelf; other shared buttons retain their fill. */
+.album-page .shelf-primary{position:relative;margin-top:var(--space-6);border-radius:var(--shelf-cta-radius);padding:var(--shelf-cta-padding-block) var(--shelf-cta-padding-inline);background:var(--shelf-cta-bg);color:var(--shelf-cta-ink);border-color:var(--shelf-cta-border);font-size:var(--shelf-cta-type-size);font-weight:var(--shelf-cta-weight);letter-spacing:var(--shelf-cta-tracking);cursor:pointer;}
+.album-page .shelf-primary:focus-visible{background:var(--shelf-cta-active-bg);color:var(--shelf-cta-active-ink);}
+@media(hover:hover) and (pointer:fine){.album-page .shelf-primary:hover{background:var(--shelf-cta-active-bg);color:var(--shelf-cta-active-ink);}}
+.album-page .shelf-controls{position:absolute;top:calc(var(--shelf-display-height)*var(--shelf-stage-ratio) + var(--space-2));left:var(--page-gutter);right:var(--page-gutter);justify-content:space-between;margin:0;pointer-events:none;}
+.album-page .shelf-controls button{pointer-events:auto;}
+.album-page .shelf-controls span{position:absolute;top:var(--control-min);left:0;right:0;font-size:var(--type-xs);}
+.album-page .shelf-controls button{position:relative;isolation:isolate;width:var(--control-min);height:var(--control-min);padding:0;border:0;border-radius:var(--shelf-arrow-radius);background:transparent;cursor:pointer;}
+/* Gallery-only glow stays behind the icon and never enlarges the hit target.
+   Keep the shared focus outline; a glow is not a keyboard-focus replacement. */
+.album-page .shelf-controls button::before{content:'';position:absolute;inset:calc(-1 * var(--shelf-arrow-glow-outset));z-index:-1;background:var(--shelf-arrow-glow);opacity:var(--shelf-arrow-glow-idle);pointer-events:none;transition:opacity var(--duration-fast) var(--ease-editorial);}
+.album-page .shelf-controls button:focus-visible{color:var(--shelf-arrow-highlight-ink);}
+.album-page .shelf-controls button:focus-visible::before{opacity:var(--shelf-arrow-glow-active);}
+@media(hover:hover) and (pointer:fine){.album-page .shelf-controls button:hover::before{opacity:var(--shelf-arrow-glow-active);}}
+.album-page .drag-hint{display:none;}
+/* Full-screen paper sheet. Native modal top layer owns focus/inertness; only this
+   component uses viewport clipping and the oversized SVG artwork coordinate system. */
+.detail{position:fixed;inset:0;z-index:var(--z-dialog);width:100%;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--detail-sheet);color:var(--text-primary);overflow:auto;text-align:left;overscroll-behavior:contain;visibility:hidden;}
+.detail[open]{visibility:visible;}
+.detail::backdrop{background:transparent;}
+.detail-brand{position:absolute;top:0;left:0;right:0;height:var(--detail-brand-height);display:grid;place-items:center;font:500 var(--type-lead)/var(--line-body) var(--font-heading);letter-spacing:var(--tracking-print);pointer-events:none;}
+.detail .detail-close{position:absolute;top:var(--detail-close-top);left:var(--detail-close-left);z-index:1;margin:0;background:transparent;border-color:var(--accent);color:var(--accent);font-size:var(--type-xs);cursor:pointer;}
+.detail-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--detail-gap);min-height:100%;padding:var(--detail-padding);align-items:center;}
+.detail-copy{width:100%;max-width:var(--detail-copy-width);display:flex;flex-direction:column;gap:var(--detail-copy-gap);}
+.detail-line{overflow:hidden;padding:var(--space-1);margin:calc(-1 * var(--space-1));}
+.detail-line>*,.detail-line p{margin:0;}
+.detail-line h2{font-weight:400;font-size:var(--detail-title-size);line-height:var(--detail-title-leading);letter-spacing:var(--detail-title-tracking);}
+.detail-meta{font-size:var(--type-xs);color:var(--text-secondary);letter-spacing:var(--tracking-print);}
+.detail-description{max-width:var(--detail-description-width);font:400 var(--detail-description-size)/var(--detail-description-leading) var(--font-heading);}
+.detail-credit{font:italic var(--detail-credit-size)/var(--line-body) var(--font-heading);color:var(--text-secondary);}
+.detail .topic-templates{width:100%;margin:0;padding:0;border:0;display:grid;gap:var(--space-6);}
+.detail .topic-templates article{display:block;padding:0;}
+.detail .topic-templates h3{font-size:var(--type-lead);margin-bottom:var(--space-2);}
+.detail .topic-templates p{font-size:var(--type-small);color:var(--text-secondary);}
+.detail .topic-templates .button{margin-top:var(--detail-button-gap);padding-inline:var(--detail-button-padding);border-radius:0;border-color:var(--accent);color:var(--accent);}
+.detail-poster{height:min(var(--detail-poster-height),calc(100svh - var(--detail-brand-height) - var(--space-8)));aspect-ratio:474/900;width:auto;max-width:100%;justify-self:center;}
+.ink-poster{display:block;width:100%;height:100%;}
+.detail-cover{position:relative;width:474px;height:900px;background:var(--book-paper);color:var(--book-ink);font-size:var(--detail-cover-size);}
+.detail-cover .cover-art{padding:var(--detail-cover-padding);}
+.detail-cover .cover-label,.detail-cover .cover-footer{font-size:var(--detail-cover-label);}
+.detail-cover .cover-title{font-size:var(--detail-cover-title);}
+.detail[data-closing='true'] .detail-grid,.detail[data-closing='true'] .detail-brand{pointer-events:none;}
+@media(max-width:767px){
+  .detail-grid{grid-template-columns:minmax(0,1fr);padding:var(--detail-brand-height) var(--space-6) var(--space-8);gap:var(--space-8);}
+  .detail-copy{max-width:none;}
+  .detail .detail-close{top:var(--space-4);left:var(--space-4);font-size:var(--type-xs);padding-inline:var(--space-2);}
+  .detail-brand{justify-content:end;padding-right:var(--space-6);font-size:var(--type-body);}
+  .detail-poster{height:auto;width:min(100%,var(--detail-copy-width));max-height:none;}
+}

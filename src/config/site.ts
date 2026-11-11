@@ -1,1 +1,1 @@
-export const site = { brand:'Gửi Một Chút', contactUrl:null as string | null, contactLabel:'Chưa có kênh liên hệ được cấu hình', deliveryPolicy:null as string | null, retentionPolicy:null as string | null };
+export const site = { brand:'Trao', contactUrl:null as string | null, contactLabel:'Chưa có kênh liên hệ được cấu hình', deliveryPolicy:null as string | null, retentionPolicy:null as string | null };

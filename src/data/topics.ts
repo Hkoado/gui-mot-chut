@@ -1,24 +1,26 @@
 import type { TemplateRecord } from './templates';
 
-export type BookVisual = Pick<TemplateRecord, 'id' | 'title' | 'occasion' | 'description' | 'themeKey' | 'coverSrc' | 'spineSrc'>;
+export type BookVisual = Pick<TemplateRecord, 'id' | 'title' | 'occasion' | 'description' | 'themeKey' | 'coverSrc' | 'spineSrc'> & { coverTitle?: string; spineTitle?: string };
 export interface TopicRecord extends BookVisual { templateIds: string[] }
 
 // Topics are navigation categories, not additional product/template records.
-const definitions: { id: string; vi: string; en: string; theme: TemplateRecord['themeKey']; templateIds: string[] }[] = [
-  { id: 'birthday', vi: 'Thiệp sinh nhật', en: 'Birthday cards', theme: 'yellow', templateIds: ['hom-nay-la-ngay-cua-cau'] },
-  { id: 'wedding', vi: 'Thiệp cưới', en: 'Wedding invitations', theme: 'rose', templateIds: [] },
-  { id: 'date', vi: 'Thiệp Date', en: 'Date invitations', theme: 'default', templateIds: ['hen-cau-mot-ngay'] },
-  { id: 'party', vi: 'Thiệp private party', en: 'Private party invitations', theme: 'sage', templateIds: [] },
-  { id: 'womens-day', vi: "Thiệp chúc mừng Women's Day", en: "Women's Day cards", theme: 'rose', templateIds: [] },
-  { id: 'christmas', vi: 'Thiệp Giáng sinh', en: 'Christmas cards', theme: 'sage', templateIds: [] },
-  { id: 'custom', vi: 'Thiệp Custom', en: 'Custom cards', theme: 'default', templateIds: [] },
-  { id: 'love', vi: 'Thư tỏ tình', en: 'Love letters', theme: 'rose', templateIds: ['co-dieu-muon-noi'] },
-  { id: 'new-year', vi: 'Thiệp năm mới', en: 'New Year cards', theme: 'yellow', templateIds: [] },
-  { id: 'yearbook', vi: 'Thiệp kỉ yếu', en: 'Yearbook cards', theme: 'default', templateIds: [] },
+const definitions: { id: string; title: string; shortTitle: string; theme: TemplateRecord['themeKey']; templateIds: string[] }[] = [
+  { id: 'birthday', title: 'Thiệp sinh nhật', shortTitle: 'Sinh nhật', theme: 'birthday', templateIds: ['hom-nay-la-ngay-cua-cau'] },
+  { id: 'boys-day', title: 'Thiệp Boy’s day', shortTitle: 'Boy’s day', theme: 'boys-day', templateIds: [] },
+  { id: 'wedding', title: 'Thiệp cưới', shortTitle: 'Cưới', theme: 'wedding', templateIds: [] },
+  { id: 'date', title: 'Thiệp hẹn hò', shortTitle: 'Hẹn hò', theme: 'date', templateIds: ['hen-cau-mot-ngay'] },
+  { id: 'party', title: 'Thiệp tiệc riêng', shortTitle: 'Tiệc riêng', theme: 'party', templateIds: [] },
+  { id: 'womens-day', title: 'Thiệp chúc mừng ngày Phụ nữ', shortTitle: 'Ngày Phụ nữ', theme: 'womens-day', templateIds: [] },
+  { id: 'christmas', title: 'Thiệp Giáng sinh', shortTitle: 'Giáng sinh', theme: 'christmas', templateIds: [] },
+  { id: 'custom', title: 'Thiệp thiết kế riêng', shortTitle: 'Thiết kế riêng', theme: 'custom', templateIds: [] },
+  { id: 'love', title: 'Thư tỏ tình', shortTitle: 'Tỏ tình', theme: 'love', templateIds: ['co-dieu-muon-noi'] },
+  { id: 'new-year', title: 'Thiệp năm mới', shortTitle: 'Năm mới', theme: 'new-year', templateIds: [] },
+  { id: 'yearbook', title: 'Thiệp kỉ yếu', shortTitle: 'Kỉ yếu', theme: 'yearbook', templateIds: [] },
 ];
 
-export function getTopics(language: 'vi' | 'en'): TopicRecord[] {
-  return definitions.map(topic => ({ id: topic.id, title: language === 'vi' ? topic.vi : topic.en,
-    occasion: language === 'vi' ? 'BỘ SƯU TẬP' : 'COLLECTION', description: '', themeKey: topic.theme,
+export function getTopics(): TopicRecord[] {
+  return definitions.map(topic => ({ id: topic.id, title: topic.title, coverTitle: topic.shortTitle,
+    spineTitle: topic.shortTitle,
+    occasion: 'BỘ SƯU TẬP', description: '', themeKey: topic.theme,
     coverSrc: null, spineSrc: null, templateIds: topic.templateIds }));
 }

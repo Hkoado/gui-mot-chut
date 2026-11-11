@@ -1,0 +1,13 @@
+diff --git a/src/styles/site.css b/src/styles/site.css
+index ef2d2a1..b18c786 100644
+--- a/src/styles/site.css
++++ b/src/styles/site.css
+@@ -2,7 +2,7 @@
+ .site-header{position:sticky;top:0;z-index:var(--z-header);background:color-mix(in srgb,var(--surface-page) 94%,transparent);border-bottom:1px solid var(--border-default);backdrop-filter:blur(8px)}
+ .header-inner{min-height:4.5rem;display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+ .brand{display:flex;align-items:center;gap:.55rem;font-family:var(--font-heading);font-weight:600;text-decoration:none;white-space:nowrap}.brand-mark{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--accent);color:var(--surface-strong);font-family:var(--font-heading);font-size:1.15rem}
+-.main-nav{display:flex;align-items:center;gap:clamp(1rem,3vw,2.5rem);font-size:var(--type-small)}.main-nav a{text-decoration:none}.header-contact{min-height:2.75rem;padding-inline:.9rem}
++.main-nav{display:flex;align-items:center;gap:clamp(1rem,3vw,2.5rem);font-size:calc(var(--type-small) * .8)}.main-nav a{text-decoration:none}.header-contact{min-height:2.75rem;padding-inline:.9rem}
+ .site-footer{border-top:1px solid var(--border-default);padding-block:var(--space-8)}.footer-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-3)}.footer-inner p{margin:0;font-size:var(--type-small)}.footer-inner small{color:var(--text-secondary)}
+ .bespoke-offer{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:var(--space-12);align-items:center;padding-block:var(--section-gap);border-bottom:var(--border-width) solid var(--border-default)}
+ .bespoke-art{aspect-ratio:4/5;max-width:24rem;width:100%;justify-self:center;background:var(--bespoke-paper);color:var(--bespoke-ink);padding:var(--space-8);border:var(--border-width) solid var(--border-default);box-shadow:var(--shadow-book);transform:rotate(-4deg);display:flex;flex-direction:column;justify-content:space-between;font-size:var(--type-small);letter-spacing:.1em}

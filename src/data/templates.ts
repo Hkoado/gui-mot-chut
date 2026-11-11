@@ -1,4 +1,6 @@
-export type BookTheme = 'default' | 'rose' | 'sage' | 'yellow';
+export type BookTheme = 'default' | 'rose' | 'sage' | 'yellow'
+  | 'birthday' | 'boys-day' | 'wedding' | 'date' | 'party' | 'womens-day'
+  | 'christmas' | 'custom' | 'love' | 'new-year' | 'yearbook';
 export interface TemplateRecord {
   id: string; title: string; occasion: string; description: string; themeKey: BookTheme;
   /** Optional portrait artwork for the physical front-cover face; public asset path. */

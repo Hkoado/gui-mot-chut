@@ -1,0 +1,17 @@
+/* Hide the native pointer only after the custom pointer is actually available.
+   The explicit readiness scope also preserves a no-JS/unsupported-browser fallback. */
+@media (pointer:fine) {
+  html[data-custom-cursor='true'],html[data-custom-cursor='true'] body,
+  html[data-custom-cursor='true'] body * {cursor:none;}
+}
+.pointer-cursor{display:none;position:fixed;inset:auto;left:0;top:0;width:var(--cursor-size);height:var(--cursor-size);margin:var(--cursor-half);padding:0;border:0;overflow:visible;background:transparent;color:var(--cursor-ink);z-index:var(--z-cursor);pointer-events:none;}
+@media(pointer:fine){.pointer-cursor:popover-open{display:grid;place-items:center;}}
+.pointer-cursor::backdrop{display:none;}
+.pointer-cursor-ring{position:absolute;inset:0;border:var(--cursor-border) solid var(--cursor-ink);border-radius:var(--cursor-radius);transform:scale(1);transition:transform var(--cursor-ring-duration) var(--ease-editorial),background-color var(--cursor-color-duration) var(--ease-editorial),border-color var(--cursor-color-duration) var(--ease-editorial);}
+.pointer-cursor-dot{width:var(--cursor-dot-size);height:var(--cursor-dot-size);border-radius:var(--cursor-radius);background:var(--cursor-ink);transform:scale(1);transition:transform var(--cursor-dot-duration) var(--ease-editorial);}
+.pointer-cursor-label{position:absolute;text-align:center;color:var(--cursor-label);font:600 var(--cursor-label-size)/var(--cursor-label-leading) var(--cursor-font);letter-spacing:var(--cursor-label-tracking);transform:scale(0);transition:transform var(--cursor-label-duration) var(--ease-editorial);}
+.pointer-cursor.spine .pointer-cursor-ring{transform:scale(var(--cursor-spine-scale));}
+.pointer-cursor.btn .pointer-cursor-ring{transform:scale(var(--cursor-button-scale));}
+.pointer-cursor.btn .pointer-cursor-dot,.pointer-cursor.open .pointer-cursor-dot{transform:scale(0);}
+.pointer-cursor.open .pointer-cursor-ring{transform:scale(var(--cursor-open-scale));background:var(--cursor-open);border-color:var(--cursor-open);}
+.pointer-cursor.open .pointer-cursor-label{transform:scale(1);}

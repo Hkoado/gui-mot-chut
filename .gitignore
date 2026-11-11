@@ -7,8 +7,11 @@ coverage/
 
 # Local browser automation profiles and caches
 .browser-test/
+.browser-album-test/
 .chrome-loop-verified/
+.chrome-shelf-test/
 .edge-test/
+.cursor-chrome/
 
 # Local build, type-check, and browser logs/screenshots
 *.log
