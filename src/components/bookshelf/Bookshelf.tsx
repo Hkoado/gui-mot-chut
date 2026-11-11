@@ -2,19 +2,22 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties, PointerEvent } from 'react';
+import dynamic from 'next/dynamic';
 import type { TemplateRecord } from '../../data/templates';
 import type { TopicRecord } from '../../data/topics';
 import Book from './Book';
-import TemplateDialog from './TemplateDialog';
-import AlbumDialog from './AlbumDialog';
 import { fitShelfHeight } from './shelf-geometry';
 import './bookshelf.css';
+
+const AlbumDialog = dynamic(() => import('./AlbumDialog'), { ssr: false });
+const TemplateDialog = dynamic(() => import('./TemplateDialog'), { ssr: false });
 
 export default function Bookshelf({ books, templates }: { books: TopicRecord[]; templates: TemplateRecord[] }) {
   const cycleLength = Math.max(1, books.length);
   const [active, setActive] = useState(0);
   const [height, setHeight] = useState<number | null>(null);
-  const [radius, setRadius] = useState(2);
+  const [radius, setRadius] = useState(1);
+  const [lite, setLite] = useState(false);
   const instanceCount = cycleLength * (radius * 2 + 1);
   const loopOffset = (value: number) => ((value + instanceCount / 2) % instanceCount + instanceCount) % instanceCount - instanceCount / 2;
   const [selected, setSelected] = useState<TemplateRecord | null>(null);
@@ -29,41 +32,82 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
   const drag = useRef<{ id: number; x: number; y: number; lastX: number; target: number; moved: boolean } | null>(null);
   const motion = useRef({ target: 0, position: 0, mx: 0, my: 0, pointer: false, tiltX: 0, tiltY: 0 });
   const detailOpen = useRef(false);
+  const wakeMotion = useRef<() => void>(() => {});
   detailOpen.current = albumOpen || !!selected;
   const select = (index: number) => {
     direction.current = index >= active ? 1 : -1;
     const next = index;
     motion.current.target = next;
+    wakeMotion.current();
     setActive(next);
   };
+  useEffect(() => {
+    const forced = new URLSearchParams(location.search).get('perf');
+    const device = navigator as Navigator & {
+      deviceMemory?: number;
+      connection?: { saveData?: boolean; effectiveType?: string };
+    };
+    const limited = (device.hardwareConcurrency > 0 && device.hardwareConcurrency <= 4)
+      || (device.deviceMemory !== undefined && device.deviceMemory <= 4)
+      || !!device.connection?.saveData || /^(slow-2g|2g|3g)$/.test(device.connection?.effectiveType ?? '');
+    const apply = (value: boolean) => {
+      document.documentElement.dataset.perf = value ? 'lite' : 'full';
+      setLite(value);
+    };
+    apply(forced === 'lite' || (forced !== 'full' && limited));
+    // Sample the shared shelf loop, not a second rAF. Hidden/offscreen time
+    // cannot classify the device; explicit query overrides always win.
+    const sample = (event: Event) => {
+      if (forced !== 'full' && forced !== 'lite' && (event as CustomEvent<number>).detail < 40) apply(true);
+    };
+    window.addEventListener('trao:shelf-fps', sample);
+    return () => window.removeEventListener('trao:shelf-fps', sample);
+  }, []);
   useEffect(() => {
     const element = shelf.current;
     if (!element) return;
     const style = getComputedStyle(element);
-    const number = (name: string) => parseFloat(style.getPropertyValue(name));
+    // Resolve live CSS tokens once before any frame writes. Reading the live
+    // declaration inside the cuboid loop otherwise forces repeated style work.
+    const values = new Map<string, number>();
+    const names = ['--book-spine-ratio', '--book-gap-ratio', '--book-cover-ratio',
+      '--shelf-wheel-delay', '--shelf-drag-rate', '--shelf-spring-rate',
+      '--shelf-tilt-rate', '--shelf-lift-rate', '--shelf-lift-ratio'];
+    const readTokens = () => names.forEach(name => values.set(name, parseFloat(style.getPropertyValue(name))));
+    readTokens();
+    const number = (name: string) => values.get(name) ?? 0;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-    const fine = matchMedia('(pointer: fine)');
+    const fine = matchMedia('(hover: hover) and (pointer: fine)');
     const nodes = [...element.querySelectorAll<HTMLElement>('.book')];
     const lifts = nodes.map(() => 0);
     let hovered = -1, frame = 0, previous = 0;
+    let sampleStart = 0, sampleFrames = 0, sampled = lite;
+    let visible = true;
+    let bounds = element.getBoundingClientRect();
+    const wake = () => {
+      if (!frame && visible && !document.hidden) frame = requestAnimationFrame(tick);
+    };
+    wakeMotion.current = wake;
     let wheelTimer: ReturnType<typeof setTimeout> | undefined;
     const handlers = nodes.map((node, index) => {
-      const enter = (event: globalThis.PointerEvent) => { if (event.pointerType === 'mouse') hovered = index; };
-      const leave = () => { if (hovered === index) hovered = -1; };
+      const enter = (event: globalThis.PointerEvent) => { if (event.pointerType === 'mouse') { hovered = index; wake(); } };
+      const leave = () => { if (hovered === index) { hovered = -1; wake(); } };
       node.addEventListener('pointerenter', enter); node.addEventListener('pointerleave', leave);
       return () => { node.removeEventListener('pointerenter', enter); node.removeEventListener('pointerleave', leave); };
     });
     const track = (event: globalThis.PointerEvent) => {
       const state = motion.current;
       state.mx = event.clientX; state.my = event.clientY;
-      state.pointer = fine.matches && event.pointerType === 'mouse';
+      state.pointer = !lite && fine.matches && event.pointerType === 'mouse';
+      wake();
     };
-    const leave = () => { motion.current.pointer = false; };
+    const leave = () => { motion.current.pointer = false; wake(); };
     const step = () => (height ?? 1) * (number('--book-spine-ratio') + number('--book-gap-ratio'));
     const snap = () => {
       const state = motion.current;
       state.target = Math.round(state.target);
       setActive(state.target);
+      wake();
     };
     const wheel = (event: WheelEvent) => {
       if (detailOpen.current || event.ctrlKey) return;
@@ -75,11 +119,23 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       event.preventDefault();
       direction.current = next >= state.target ? 1 : -1;
       state.target = next;
+      wake();
       setActive(Math.round(next));
       clearTimeout(wheelTimer);
       wheelTimer = setTimeout(snap, number('--shelf-wheel-delay'));
     };
     const tick = (now: number) => {
+      frame = 0;
+      if (!visible || document.hidden) { previous = 0; return; }
+      readTokens();
+      if (!sampled) {
+        if (!sampleStart) sampleStart = now;
+        sampleFrames++;
+        if (now - sampleStart >= 2000) {
+          sampled = true;
+          window.dispatchEvent(new CustomEvent('trao:shelf-fps', { detail: (sampleFrames - 1) * 1000 / (now - sampleStart) }));
+        }
+      }
       const dt = previous ? Math.min((now - previous) / 1000, .05) : 1 / 60;
       previous = now;
       const ease = (rate: number) => reduced.matches ? 1 : 1 - Math.exp(-rate * dt);
@@ -89,9 +145,8 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       if (Math.abs(state.target - state.position) < .001) state.position = state.target;
       const h = height ?? 0, d = h * number('--book-cover-ratio');
       const ws = h * number('--book-spine-ratio'), gap = h * number('--book-gap-ratio');
-      const bounds = element.getBoundingClientRect();
       const cy = bounds.top + bounds.height * .5;
-      const available = state.pointer && !detailOpen.current && !drag.current?.moved;
+      const available = !lite && state.pointer && !detailOpen.current && !drag.current?.moved;
       const onCover = available && Math.abs(state.mx - innerWidth / 2) < .55 * d
         && Math.abs(state.my - cy) < .55 * h && Math.abs(state.target - state.position) < .3;
       element.dataset.cursorOpen = String(onCover);
@@ -101,6 +156,8 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       state.tiltY += (ty - state.tiltY) * ease(number('--shelf-tilt-rate'));
       element.style.setProperty('--tilt-x', `${state.tiltX}deg`);
       element.style.setProperty('--tilt-y', `${state.tiltY}deg`);
+      let unsettled = Math.abs(state.target - state.position) > .001
+        || Math.abs(tx - state.tiltX) > .001 || Math.abs(ty - state.tiltY) > .001;
       nodes.forEach((node, index) => {
         const sequence = Number(node.dataset.sequence);
         const r = ((sequence - state.position + instanceCount / 2) % instanceCount + instanceCount) % instanceCount - instanceCount / 2, a = Math.abs(r);
@@ -109,14 +166,40 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
         if (node.dataset.pose !== pose) node.dataset.pose = pose;
         const blend = a < 1 ? (r + Math.sin(Math.PI * r) / Math.PI) / 2 : Math.sign(r) / 2;
         const x = r * (ws + gap) + (d - ws + gap * 1.6) * blend;
+        // Keep stable loop keys and accessible originals, but do not paint
+        // cuboids outside the viewport plus a complete cover-width buffer.
+        const hidden = Math.abs(x) > bounds.width / 2 + d;
+        if (node.hidden !== hidden) node.hidden = hidden;
+        if (hidden) { lifts[index] = 0; return; }
         // A small CSS-controlled left yaw fades out into the central cover turn.
         const leftTurn = Math.min(1, Math.max(0, -r));
         const lift = available && hovered === index && a > .5 ? 1 : 0;
         lifts[index] += (lift - lifts[index]) * ease(number('--shelf-lift-rate'));
+        if (Math.abs(lift - lifts[index]) < .001) lifts[index] = lift;
+        else unsettled = true;
         node.style.transform = `translate3d(${x}px,${-o * .025 * h - lifts[index] * number('--shelf-lift-ratio') * h}px,${o * .2 * h}px) rotateZ(${-o * 4.5}deg) rotateY(calc(var(--book-left-yaw) * ${leftTurn} - ${o * 90}deg))`;
       });
-      frame = requestAnimationFrame(tick);
+      if (unsettled || !sampled) wake();
+      else previous = 0;
     };
+    const refreshBounds = () => { bounds = element.getBoundingClientRect(); wake(); };
+    const resize = new ResizeObserver(refreshBounds);
+    resize.observe(element);
+    const intersection = new IntersectionObserver(entries => {
+      visible = entries[0].isIntersecting;
+      if (visible) refreshBounds();
+      else { cancelAnimationFrame(frame); frame = 0; previous = 0; sampleStart = 0; sampleFrames = 0; }
+    });
+    intersection.observe(element);
+    const visibility = () => {
+      if (document.hidden) { cancelAnimationFrame(frame); frame = 0; previous = 0; sampleStart = 0; sampleFrames = 0; }
+      else refreshBounds();
+    };
+    document.addEventListener('visibilitychange', visibility);
+    window.addEventListener('scroll', refreshBounds, { passive: true });
+    window.addEventListener('resize', refreshBounds, { passive: true });
+    reduced.addEventListener('change', wake);
+    fine.addEventListener('change', leave);
     element.dataset.motion = 'continuous';
     element.addEventListener('wheel', wheel, { passive: false });
     window.addEventListener('pointermove', track, { passive: true });
@@ -126,11 +209,16 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame); clearTimeout(wheelTimer); handlers.forEach(cleanup => cleanup());
+      resize.disconnect(); intersection.disconnect();
+      document.removeEventListener('visibilitychange', visibility);
+      window.removeEventListener('scroll', refreshBounds); window.removeEventListener('resize', refreshBounds);
+      reduced.removeEventListener('change', wake); fine.removeEventListener('change', leave);
+      wakeMotion.current = () => {};
       element.removeEventListener('wheel', wheel); window.removeEventListener('pointermove', track);
       window.removeEventListener('blur', leave); window.removeEventListener('pointerout', out);
       delete element.dataset.cursorOpen; delete element.dataset.motion;
     };
-  }, [cycleLength, height, instanceCount, books.length]);
+  }, [cycleLength, height, instanceCount, books.length, lite]);
   useEffect(() => {
     const element = shelf.current;
     if (!element) return;
@@ -151,7 +239,7 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       });
       setHeight(fitted);
       const step = fitted * (number('--book-spine-ratio') + number('--book-gap-ratio'));
-      setRadius(Math.max(2, Math.ceil(element.clientWidth / (2 * step * cycleLength)) + 1));
+      setRadius(Math.max(1, Math.ceil(element.clientWidth / (2 * step * cycleLength))));
     };
     const observer = new ResizeObserver(resize);
     observer.observe(element);
@@ -194,6 +282,7 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
         const style = getComputedStyle(event.currentTarget);
         const step = (height ?? 1) * (parseFloat(style.getPropertyValue('--book-spine-ratio')) + parseFloat(style.getPropertyValue('--book-gap-ratio')));
       motion.current.target = current.target - (event.clientX - current.x) / step;
+        wakeMotion.current();
         setActive(Math.round(motion.current.target));
       }
       return;
@@ -204,6 +293,7 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
     if (!current || current.id !== event.pointerId) return;
     if (current.moved) {
       motion.current.target = Math.round(cancelled ? current.target : motion.current.target);
+      wakeMotion.current();
       setActive(motion.current.target);
     }
     drag.current = null;

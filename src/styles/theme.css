@@ -151,4 +151,16 @@
 [data-book-theme='new-year'] { --spine-paper: #ebd2bc; --book-paper: #b8232b; --book-ink: #ffd772; --book-accent: var(--book-ink); }
 [data-book-theme='yearbook'] { --spine-paper: #c8cfd8; --book-paper: #3e4a5c; --book-ink: #f5cc6e; --book-accent: var(--book-ink); }
 @media(max-width:767px){:root{--shelf-height:clamp(12.6rem,36svh,21.6rem);--header-height:9rem;--shelf-mist-clear:14%;--shelf-mist-hidden:2%;}}
-@media (prefers-reduced-motion: reduce) { :root { --duration-nav: 1ms; --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; --duration-sheet-open: 1ms; --duration-sheet-close: 1ms; --duration-sheet-text: 1ms; } }
+/* Lite changes material cost, never the shared perspective or cuboid geometry.
+   Reduced-motion rules remain last so accessibility overrides this preset. */
+:root[data-perf='lite'] {
+  --book-cloth: linear-gradient(transparent, transparent);
+  --header-blur: 0px;
+  --shadow-spine-ground: 0 .125rem .25rem #0b3c1b24;
+  --shadow-book-active: 0 .25rem .4rem #0b3c1b3d;
+  --duration-caption: 180ms;
+  --duration-sheet-open: 180ms; --duration-sheet-close: 180ms;
+  --duration-sheet-text: 180ms; --delay-sheet-text: 0ms; --delay-sheet-line: 0ms;
+  --shelf-spring-rate: 18; --shelf-drag-rate: 24;
+}
+@media (prefers-reduced-motion: reduce) { :root, :root[data-perf] { --duration-nav: 1ms; --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; --duration-sheet-open: 1ms; --duration-sheet-close: 1ms; --duration-sheet-text: 1ms; } }
