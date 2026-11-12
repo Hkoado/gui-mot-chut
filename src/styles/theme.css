@@ -20,6 +20,10 @@
   --nav-type-size: calc(var(--type-body) * 1.3);
   --nav-gap: clamp(1rem, 3vw, 2.5rem); --nav-mobile-gap: var(--space-4);
   --duration-nav: 420ms; --nav-hover-opacity: .75;
+  /* Shared, compositor-friendly entrance for route content and future modules. */
+  --duration-module-enter: 360ms; --delay-module-detail: 80ms;
+  --module-enter-offset: .35rem;
+  --ease-module-enter: cubic-bezier(.2, .65, .25, 1);
   --search-width: 61rem; --search-icon-size: 1.5rem;
   --header-utility-icon: var(--search-icon-size);
   --header-utility-gap: var(--space-1);
@@ -184,4 +188,4 @@
   backdrop-filter: none;
   background: var(--surface-page);
 }
-@media (prefers-reduced-motion: reduce) { :root, :root[data-perf] { --duration-nav: 1ms; --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; --duration-sheet-open: 1ms; --duration-sheet-close: 1ms; --duration-sheet-text: 1ms; } }
+@media (prefers-reduced-motion: reduce) { :root, :root[data-perf] { --duration-nav: 1ms; --duration-fast: 1ms; --duration-shelf: 1ms; --duration-dialog: 1ms; --duration-caption: 1ms; --duration-tilt: 1ms; --duration-sheet-open: 1ms; --duration-sheet-close: 1ms; --duration-sheet-text: 1ms; --duration-module-enter: 1ms; --delay-module-detail: 0ms; } }

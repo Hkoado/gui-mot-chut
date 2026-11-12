@@ -1,0 +1,22 @@
+[
+  [
+    "[project]/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.production.js",
+    203369
+  ],
+  [
+    "[project]/node_modules/next/dist/build/polyfills/polyfill-nomodule.js",
+    112594
+  ],
+  [
+    "[project]/node_modules/next/dist/compiled/react-server-dom-turbopack/cjs/react-server-dom-turbopack-client.browser.production.js",
+    24066
+  ],
+  [
+    "[project]/node_modules/next/dist/client/components/segment-cache/cache.js",
+    20261
+  ],
+  [
+    "[project]/node_modules/next/dist/client/components/segment-cache/scheduler.js",
+    14022
+  ]
+]

@@ -1,0 +1,705 @@
+{
+  "results": [
+    {
+      "long": [
+        {
+          "start": 4517.5,
+          "duration": 152
+        },
+        {
+          "start": 4696.399999999907,
+          "duration": 155
+        },
+        {
+          "start": 34670.19999999972,
+          "duration": 306
+        },
+        {
+          "start": 37276.89999999991,
+          "duration": 54
+        },
+        {
+          "start": 37593.60000000009,
+          "duration": 56
+        },
+        {
+          "start": 37915.19999999972,
+          "duration": 51
+        },
+        {
+          "start": 38228.10000000009,
+          "duration": 54
+        },
+        {
+          "start": 38544.799999999814,
+          "duration": 57
+        },
+        {
+          "start": 38843.19999999972,
+          "duration": 55
+        },
+        {
+          "start": 39160.19999999972,
+          "duration": 60
+        },
+        {
+          "start": 39477.299999999814,
+          "duration": 50
+        },
+        {
+          "start": 39794.60000000009,
+          "duration": 53
+        },
+        {
+          "start": 40117.10000000009,
+          "duration": 67
+        }
+      ],
+      "lcp": 1268,
+      "cls": 0.03855242313489414,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 37276.89999999991,
+          "duration": 54
+        },
+        {
+          "start": 37593.60000000009,
+          "duration": 56
+        },
+        {
+          "start": 37915.19999999972,
+          "duration": 51
+        },
+        {
+          "start": 38228.10000000009,
+          "duration": 54
+        },
+        {
+          "start": 38544.799999999814,
+          "duration": 57
+        },
+        {
+          "start": 38843.19999999972,
+          "duration": 55
+        },
+        {
+          "start": 39160.19999999972,
+          "duration": 60
+        },
+        {
+          "start": 39477.299999999814,
+          "duration": 50
+        },
+        {
+          "start": 39794.60000000009,
+          "duration": 53
+        },
+        {
+          "start": 40117.10000000009,
+          "duration": 67
+        }
+      ],
+      "perfMode": "full",
+      "jsGzip": 148318,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-rg6myqukob4.js",
+          "gzip": 8557
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "final",
+      "mode": "full",
+      "cpu": 4,
+      "idleFps": 60.45465900574283,
+      "movingFps": 51.820356098858895,
+      "layers": 4,
+      "maxEventDuration": 0
+    },
+    {
+      "long": [
+        {
+          "start": 4382,
+          "duration": 60
+        },
+        {
+          "start": 4534,
+          "duration": 78
+        },
+        {
+          "start": 4612.199999999721,
+          "duration": 247
+        },
+        {
+          "start": 4898.0999999996275,
+          "duration": 248
+        },
+        {
+          "start": 5214.5,
+          "duration": 53
+        },
+        {
+          "start": 34684.89999999991,
+          "duration": 491
+        },
+        {
+          "start": 37438.5,
+          "duration": 107
+        },
+        {
+          "start": 37698,
+          "duration": 52
+        },
+        {
+          "start": 37799.39999999991,
+          "duration": 157
+        },
+        {
+          "start": 38112.09999999963,
+          "duration": 114
+        },
+        {
+          "start": 38433.5,
+          "duration": 113
+        },
+        {
+          "start": 38547.299999999814,
+          "duration": 51
+        },
+        {
+          "start": 38600.59999999963,
+          "duration": 64
+        },
+        {
+          "start": 38703.69999999972,
+          "duration": 78
+        },
+        {
+          "start": 38785,
+          "duration": 133
+        },
+        {
+          "start": 38926,
+          "duration": 51
+        },
+        {
+          "start": 39127.09999999963,
+          "duration": 129
+        },
+        {
+          "start": 39261.799999999814,
+          "duration": 69
+        },
+        {
+          "start": 39461.299999999814,
+          "duration": 173
+        },
+        {
+          "start": 39681.5,
+          "duration": 114
+        },
+        {
+          "start": 39796.299999999814,
+          "duration": 273
+        },
+        {
+          "start": 40071.799999999814,
+          "duration": 55
+        },
+        {
+          "start": 40128.5,
+          "duration": 271
+        },
+        {
+          "start": 40445.69999999972,
+          "duration": 149
+        },
+        {
+          "start": 40919.69999999972,
+          "duration": 60
+        }
+      ],
+      "lcp": 1332,
+      "cls": 0.03855242313489414,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 37438.5,
+          "duration": 107
+        },
+        {
+          "start": 37698,
+          "duration": 52
+        },
+        {
+          "start": 37799.39999999991,
+          "duration": 157
+        },
+        {
+          "start": 38112.09999999963,
+          "duration": 114
+        },
+        {
+          "start": 38433.5,
+          "duration": 113
+        },
+        {
+          "start": 38547.299999999814,
+          "duration": 51
+        },
+        {
+          "start": 38600.59999999963,
+          "duration": 64
+        },
+        {
+          "start": 38703.69999999972,
+          "duration": 78
+        },
+        {
+          "start": 38785,
+          "duration": 133
+        },
+        {
+          "start": 38926,
+          "duration": 51
+        },
+        {
+          "start": 39127.09999999963,
+          "duration": 129
+        },
+        {
+          "start": 39261.799999999814,
+          "duration": 69
+        },
+        {
+          "start": 39461.299999999814,
+          "duration": 173
+        },
+        {
+          "start": 39681.5,
+          "duration": 114
+        },
+        {
+          "start": 39796.299999999814,
+          "duration": 273
+        },
+        {
+          "start": 40071.799999999814,
+          "duration": 55
+        },
+        {
+          "start": 40128.5,
+          "duration": 271
+        },
+        {
+          "start": 40445.69999999972,
+          "duration": 149
+        },
+        {
+          "start": 40919.69999999972,
+          "duration": 60
+        }
+      ],
+      "perfMode": "full",
+      "jsGzip": 148318,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-rg6myqukob4.js",
+          "gzip": 8557
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "final",
+      "mode": "full",
+      "cpu": 6,
+      "idleFps": 60.62413039156103,
+      "movingFps": 14.308055768142067,
+      "layers": 4,
+      "maxEventDuration": 0
+    },
+    {
+      "long": [
+        {
+          "start": 4447.199999999721,
+          "duration": 160
+        },
+        {
+          "start": 4608.0999999996275,
+          "duration": 130
+        },
+        {
+          "start": 4779.5,
+          "duration": 129
+        },
+        {
+          "start": 34620.5,
+          "duration": 336
+        },
+        {
+          "start": 37193.69999999972,
+          "duration": 130
+        },
+        {
+          "start": 37762.5,
+          "duration": 86
+        },
+        {
+          "start": 38403.19999999972,
+          "duration": 68
+        },
+        {
+          "start": 38721.19999999972,
+          "duration": 65
+        },
+        {
+          "start": 39026.5,
+          "duration": 67
+        },
+        {
+          "start": 39343.09999999963,
+          "duration": 73
+        },
+        {
+          "start": 39974.799999999814,
+          "duration": 89
+        }
+      ],
+      "lcp": 1240,
+      "cls": 0.03853178416253725,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 37193.69999999972,
+          "duration": 130
+        },
+        {
+          "start": 37762.5,
+          "duration": 86
+        },
+        {
+          "start": 38403.19999999972,
+          "duration": 68
+        },
+        {
+          "start": 38721.19999999972,
+          "duration": 65
+        },
+        {
+          "start": 39026.5,
+          "duration": 67
+        },
+        {
+          "start": 39343.09999999963,
+          "duration": 73
+        },
+        {
+          "start": 39974.799999999814,
+          "duration": 89
+        }
+      ],
+      "perfMode": "lite",
+      "jsGzip": 148318,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-rg6myqukob4.js",
+          "gzip": 8557
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "final",
+      "mode": "lite",
+      "cpu": 4,
+      "idleFps": 60.42446941322775,
+      "movingFps": 39.844606036454095,
+      "layers": 4,
+      "maxEventDuration": 0
+    },
+    {
+      "long": [
+        {
+          "start": 4407.200000000186,
+          "duration": 81
+        },
+        {
+          "start": 4630.100000000093,
+          "duration": 259
+        },
+        {
+          "start": 4890.100000000093,
+          "duration": 255
+        },
+        {
+          "start": 5212,
+          "duration": 293
+        },
+        {
+          "start": 5507,
+          "duration": 55
+        },
+        {
+          "start": 5576.200000000186,
+          "duration": 64
+        },
+        {
+          "start": 34611.89999999991,
+          "duration": 730
+        },
+        {
+          "start": 37496.60000000009,
+          "duration": 128
+        },
+        {
+          "start": 37823.30000000028,
+          "duration": 150
+        },
+        {
+          "start": 37975.30000000028,
+          "duration": 64
+        },
+        {
+          "start": 38138.700000000186,
+          "duration": 101
+        },
+        {
+          "start": 38483.80000000028,
+          "duration": 125
+        },
+        {
+          "start": 38609.39999999991,
+          "duration": 61
+        },
+        {
+          "start": 38814.10000000009,
+          "duration": 165
+        },
+        {
+          "start": 38980.39999999991,
+          "duration": 81
+        },
+        {
+          "start": 39062.89999999991,
+          "duration": 50
+        },
+        {
+          "start": 39146.30000000028,
+          "duration": 144
+        },
+        {
+          "start": 39445.30000000028,
+          "duration": 63
+        },
+        {
+          "start": 39511.89999999991,
+          "duration": 121
+        },
+        {
+          "start": 39744.89999999991,
+          "duration": 82
+        },
+        {
+          "start": 39827.5,
+          "duration": 144
+        },
+        {
+          "start": 40171.60000000009,
+          "duration": 201
+        },
+        {
+          "start": 40374.39999999991,
+          "duration": 107
+        },
+        {
+          "start": 40500.30000000028,
+          "duration": 193
+        },
+        {
+          "start": 40706.39999999991,
+          "duration": 51
+        },
+        {
+          "start": 40762.700000000186,
+          "duration": 61
+        },
+        {
+          "start": 40862.60000000009,
+          "duration": 65
+        },
+        {
+          "start": 40929,
+          "duration": 81
+        }
+      ],
+      "lcp": 1428,
+      "cls": 0.03853178416253725,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 37496.60000000009,
+          "duration": 128
+        },
+        {
+          "start": 37823.30000000028,
+          "duration": 150
+        },
+        {
+          "start": 37975.30000000028,
+          "duration": 64
+        },
+        {
+          "start": 38138.700000000186,
+          "duration": 101
+        },
+        {
+          "start": 38483.80000000028,
+          "duration": 125
+        },
+        {
+          "start": 38609.39999999991,
+          "duration": 61
+        },
+        {
+          "start": 38814.10000000009,
+          "duration": 165
+        },
+        {
+          "start": 38980.39999999991,
+          "duration": 81
+        },
+        {
+          "start": 39062.89999999991,
+          "duration": 50
+        },
+        {
+          "start": 39146.30000000028,
+          "duration": 144
+        },
+        {
+          "start": 39445.30000000028,
+          "duration": 63
+        },
+        {
+          "start": 39511.89999999991,
+          "duration": 121
+        },
+        {
+          "start": 39744.89999999991,
+          "duration": 82
+        },
+        {
+          "start": 39827.5,
+          "duration": 144
+        },
+        {
+          "start": 40171.60000000009,
+          "duration": 201
+        },
+        {
+          "start": 40374.39999999991,
+          "duration": 107
+        },
+        {
+          "start": 40500.30000000028,
+          "duration": 193
+        },
+        {
+          "start": 40706.39999999991,
+          "duration": 51
+        },
+        {
+          "start": 40762.700000000186,
+          "duration": 61
+        },
+        {
+          "start": 40862.60000000009,
+          "duration": 65
+        },
+        {
+          "start": 40929,
+          "duration": 81
+        }
+      ],
+      "perfMode": "lite",
+      "jsGzip": 148318,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-rg6myqukob4.js",
+          "gzip": 8557
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "final",
+      "mode": "lite",
+      "cpu": 6,
+      "idleFps": 60.80239222526502,
+      "movingFps": 17.574140906952724,
+      "layers": 4,
+      "maxEventDuration": 0
+    }
+  ],
+  "errors": []
+}

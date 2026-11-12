@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, PointerEvent } from 'react';
 import dynamic from 'next/dynamic';
 import type { TemplateRecord } from '../../data/templates';
@@ -31,8 +31,38 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
   const suppressClick = useRef(false);
   const drag = useRef<{ id: number; x: number; y: number; lastX: number; target: number; moved: boolean } | null>(null);
   const motion = useRef({ target: 0, position: 0, mx: 0, my: 0, pointer: false, tiltX: 0, tiltY: 0 });
+  const restoredTopic = useRef(false);
+  const pendingRestore = useRef(false);
   const detailOpen = useRef(false);
   const wakeMotion = useRef<() => void>(() => {});
+  useLayoutEffect(() => {
+    if (restoredTopic.current) return;
+    restoredTopic.current = true;
+    try {
+      const savedId = sessionStorage.getItem('trao:bookshelf-topic');
+      const savedIndex = books.findIndex(item => item.id === savedId);
+      if (savedIndex >= 0) {
+        pendingRestore.current = true;
+        motion.current.target = savedIndex;
+        motion.current.position = savedIndex;
+        setActive(savedIndex);
+      }
+    } catch {
+      // Keep the shelf usable when browser storage is unavailable.
+    }
+  }, [books]);
+  useEffect(() => {
+    if (!restoredTopic.current) return;
+    if (pendingRestore.current) {
+      pendingRestore.current = false;
+      return;
+    }
+    try {
+      sessionStorage.setItem('trao:bookshelf-topic', books[activeIndex]?.id ?? '');
+    } catch {
+      // Shelf selection remains available without browser storage.
+    }
+  }, [activeIndex, books]);
   detailOpen.current = albumOpen || !!selected;
   const select = (index: number) => {
     direction.current = index >= active ? 1 : -1;

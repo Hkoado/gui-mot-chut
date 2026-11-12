@@ -1,0 +1,23 @@
+[
+  {
+    "width": 1440,
+    "changed": 95,
+    "over8": 0,
+    "meanAbsoluteError": 0.000027083333333333332,
+    "max": 1
+  },
+  {
+    "width": 1024,
+    "changed": 6664,
+    "over8": 1028,
+    "meanAbsoluteError": 0.024831705729166667,
+    "max": 40
+  },
+  {
+    "width": 390,
+    "changed": 31,
+    "over8": 0,
+    "meanAbsoluteError": 0.00004557054320087495,
+    "max": 2
+  }
+]

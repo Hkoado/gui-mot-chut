@@ -1,0 +1,553 @@
+{
+  "results": [
+    {
+      "long": [
+        {
+          "start": 4516.700000000186,
+          "duration": 64
+        },
+        {
+          "start": 4610.5999999996275,
+          "duration": 102
+        },
+        {
+          "start": 34400.90000000037,
+          "duration": 346
+        },
+        {
+          "start": 37112.799999999814,
+          "duration": 51
+        },
+        {
+          "start": 37434.700000000186,
+          "duration": 68
+        },
+        {
+          "start": 37748.09999999963,
+          "duration": 50
+        },
+        {
+          "start": 38063.90000000037,
+          "duration": 89
+        },
+        {
+          "start": 38381.200000000186,
+          "duration": 66
+        },
+        {
+          "start": 38683,
+          "duration": 63
+        },
+        {
+          "start": 38997.09999999963,
+          "duration": 62
+        },
+        {
+          "start": 39312.799999999814,
+          "duration": 54
+        }
+      ],
+      "lcp": 1088,
+      "cls": 0.03855242313489414,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 37112.799999999814,
+          "duration": 51
+        },
+        {
+          "start": 37434.700000000186,
+          "duration": 68
+        },
+        {
+          "start": 37748.09999999963,
+          "duration": 50
+        },
+        {
+          "start": 38063.90000000037,
+          "duration": 89
+        },
+        {
+          "start": 38381.200000000186,
+          "duration": 66
+        },
+        {
+          "start": 38683,
+          "duration": 63
+        },
+        {
+          "start": 38997.09999999963,
+          "duration": 62
+        },
+        {
+          "start": 39312.799999999814,
+          "duration": 54
+        }
+      ],
+      "perfMode": "full",
+      "jsGzip": 148410,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-cubvnkgez1s.js",
+          "gzip": 8649
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "scoped",
+      "mode": "full",
+      "cpu": 4,
+      "idleFps": 60.66331858187066,
+      "movingFps": 49.77765978629102,
+      "layers": 4,
+      "maxEventDuration": 0
+    },
+    {
+      "long": [
+        {
+          "start": 4360.800000000745,
+          "duration": 90
+        },
+        {
+          "start": 4609.200000000186,
+          "duration": 109
+        },
+        {
+          "start": 4759.5,
+          "duration": 250
+        },
+        {
+          "start": 34408.40000000037,
+          "duration": 544
+        },
+        {
+          "start": 37138.700000000186,
+          "duration": 105
+        },
+        {
+          "start": 37459.700000000186,
+          "duration": 122
+        },
+        {
+          "start": 37775.800000000745,
+          "duration": 79
+        },
+        {
+          "start": 38104.300000000745,
+          "duration": 89
+        },
+        {
+          "start": 38432.800000000745,
+          "duration": 107
+        },
+        {
+          "start": 38740.200000000186,
+          "duration": 115
+        },
+        {
+          "start": 39055.800000000745,
+          "duration": 96
+        },
+        {
+          "start": 39393.60000000056,
+          "duration": 96
+        },
+        {
+          "start": 39720.800000000745,
+          "duration": 88
+        },
+        {
+          "start": 40045.10000000056,
+          "duration": 103
+        },
+        {
+          "start": 40176.200000000186,
+          "duration": 54
+        }
+      ],
+      "lcp": 1272,
+      "cls": 0.03855242313489414,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 37138.700000000186,
+          "duration": 105
+        },
+        {
+          "start": 37459.700000000186,
+          "duration": 122
+        },
+        {
+          "start": 37775.800000000745,
+          "duration": 79
+        },
+        {
+          "start": 38104.300000000745,
+          "duration": 89
+        },
+        {
+          "start": 38432.800000000745,
+          "duration": 107
+        },
+        {
+          "start": 38740.200000000186,
+          "duration": 115
+        },
+        {
+          "start": 39055.800000000745,
+          "duration": 96
+        },
+        {
+          "start": 39393.60000000056,
+          "duration": 96
+        },
+        {
+          "start": 39720.800000000745,
+          "duration": 88
+        },
+        {
+          "start": 40045.10000000056,
+          "duration": 103
+        },
+        {
+          "start": 40176.200000000186,
+          "duration": 54
+        }
+      ],
+      "perfMode": "full",
+      "jsGzip": 148410,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-cubvnkgez1s.js",
+          "gzip": 8649
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "scoped",
+      "mode": "full",
+      "cpu": 6,
+      "idleFps": 60.20499552196485,
+      "movingFps": 31.65287348742711,
+      "layers": 4,
+      "maxEventDuration": 0
+    },
+    {
+      "long": [
+        {
+          "start": 4486.5,
+          "duration": 181
+        },
+        {
+          "start": 4667.800000000745,
+          "duration": 63
+        },
+        {
+          "start": 4753.9000000003725,
+          "duration": 145
+        },
+        {
+          "start": 34413.40000000037,
+          "duration": 301
+        },
+        {
+          "start": 36962,
+          "duration": 73
+        },
+        {
+          "start": 37279.300000000745,
+          "duration": 59
+        },
+        {
+          "start": 37596.60000000056,
+          "duration": 51
+        },
+        {
+          "start": 37911.10000000056,
+          "duration": 59
+        },
+        {
+          "start": 38211.60000000056,
+          "duration": 70
+        },
+        {
+          "start": 38530.700000000186,
+          "duration": 51
+        },
+        {
+          "start": 39162.200000000186,
+          "duration": 64
+        },
+        {
+          "start": 39479.60000000056,
+          "duration": 54
+        },
+        {
+          "start": 39800.300000000745,
+          "duration": 53
+        }
+      ],
+      "lcp": 1196,
+      "cls": 0.03853178416253725,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 36962,
+          "duration": 73
+        },
+        {
+          "start": 37279.300000000745,
+          "duration": 59
+        },
+        {
+          "start": 37596.60000000056,
+          "duration": 51
+        },
+        {
+          "start": 37911.10000000056,
+          "duration": 59
+        },
+        {
+          "start": 38211.60000000056,
+          "duration": 70
+        },
+        {
+          "start": 38530.700000000186,
+          "duration": 51
+        },
+        {
+          "start": 39162.200000000186,
+          "duration": 64
+        },
+        {
+          "start": 39479.60000000056,
+          "duration": 54
+        },
+        {
+          "start": 39800.300000000745,
+          "duration": 53
+        }
+      ],
+      "perfMode": "lite",
+      "jsGzip": 148410,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-cubvnkgez1s.js",
+          "gzip": 8649
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "scoped",
+      "mode": "lite",
+      "cpu": 4,
+      "idleFps": 60.127211290001945,
+      "movingFps": 50.471510160718154,
+      "layers": 4,
+      "maxEventDuration": 0
+    },
+    {
+      "long": [
+        {
+          "start": 4405.299999999814,
+          "duration": 53
+        },
+        {
+          "start": 4592.5999999996275,
+          "duration": 317
+        },
+        {
+          "start": 4910.5999999996275,
+          "duration": 102
+        },
+        {
+          "start": 5081,
+          "duration": 299
+        },
+        {
+          "start": 34452.299999999814,
+          "duration": 577
+        },
+        {
+          "start": 37223.59999999963,
+          "duration": 91
+        },
+        {
+          "start": 37567.199999999255,
+          "duration": 113
+        },
+        {
+          "start": 37875.59999999963,
+          "duration": 80
+        },
+        {
+          "start": 38259.89999999944,
+          "duration": 142
+        },
+        {
+          "start": 38585.299999999814,
+          "duration": 96
+        },
+        {
+          "start": 38894.5,
+          "duration": 88
+        },
+        {
+          "start": 39225.199999999255,
+          "duration": 136
+        },
+        {
+          "start": 39366.199999999255,
+          "duration": 59
+        },
+        {
+          "start": 39545.699999999255,
+          "duration": 110
+        },
+        {
+          "start": 39881.699999999255,
+          "duration": 113
+        },
+        {
+          "start": 40210.199999999255,
+          "duration": 103
+        },
+        {
+          "start": 40314.699999999255,
+          "duration": 58
+        }
+      ],
+      "lcp": 1460,
+      "cls": 0.03853178416253725,
+      "events": [],
+      "books": 33,
+      "motionLong": [
+        {
+          "start": 37223.59999999963,
+          "duration": 91
+        },
+        {
+          "start": 37567.199999999255,
+          "duration": 113
+        },
+        {
+          "start": 37875.59999999963,
+          "duration": 80
+        },
+        {
+          "start": 38259.89999999944,
+          "duration": 142
+        },
+        {
+          "start": 38585.299999999814,
+          "duration": 96
+        },
+        {
+          "start": 38894.5,
+          "duration": 88
+        },
+        {
+          "start": 39225.199999999255,
+          "duration": 136
+        },
+        {
+          "start": 39366.199999999255,
+          "duration": 59
+        },
+        {
+          "start": 39545.699999999255,
+          "duration": 110
+        },
+        {
+          "start": 39881.699999999255,
+          "duration": 113
+        },
+        {
+          "start": 40210.199999999255,
+          "duration": 103
+        },
+        {
+          "start": 40314.699999999255,
+          "duration": 58
+        }
+      ],
+      "perfMode": "lite",
+      "jsGzip": 148410,
+      "top5": [
+        {
+          "file": "/_next/static/chunks/23e6jep2anmtk.js",
+          "gzip": 71752
+        },
+        {
+          "file": "/_next/static/chunks/1wt7al7iiuzbs.js",
+          "gzip": 45596
+        },
+        {
+          "file": "/_next/static/chunks/2whg2n5r_t_s1.js",
+          "gzip": 8859
+        },
+        {
+          "file": "/_next/static/chunks/1-cubvnkgez1s.js",
+          "gzip": 8649
+        },
+        {
+          "file": "/_next/static/chunks/1s69t9mpc0_dq.js",
+          "gzip": 8438
+        }
+      ],
+      "stage": "scoped",
+      "mode": "lite",
+      "cpu": 6,
+      "idleFps": 60.829676904644245,
+      "movingFps": 24.901364724144646,
+      "layers": 4,
+      "maxEventDuration": 0
+    }
+  ],
+  "errors": []
+}

@@ -31,7 +31,7 @@ Build tạo `out/`. Helper `node album-test-server.mjs` phục vụ static outpu
 
 ## Kệ và dialog
 
-Bookshelf dùng các chu kỳ bản sao có key ổn định, offset vòng lặp và lớp tilt riêng. ResizeObserver/geometry helper tính chiều cao theo viewport. Motion đọc token; reduced motion giảm thời lượng và nội suy.
+Bookshelf dùng các chu kỳ bản sao có key ổn định, offset vòng lặp và lớp tilt riêng. Chủ đề đang chọn lưu bằng ID trong `sessionStorage` theo phiên tab, được khôi phục khi mount lại; storage lỗi/không khả dụng không chặn kệ. ResizeObserver/geometry helper tính chiều cao theo viewport. Motion đọc token; reduced motion giảm thời lượng và nội suy.
 
 Click capture kiểm tra rect chiếu của bìa active để nhận chuột/chạm trên toàn bìa 3D. Drag suppression phân biệt kéo/click; keyboard không kế thừa click suppression. Wheel/drag chỉ xử lý trong kệ, không chiếm cuộn dọc hoặc Ctrl-wheel.
 

@@ -7,6 +7,8 @@
 .trao-search__dialog::backdrop{background:var(--surface-page);}
 .trao-search__dialog[open]{animation:trao-search-enter var(--duration-fast) var(--ease-editorial);}
 .trao-search__content{width:min(calc(100% - 2 * var(--page-gutter)),var(--search-width));margin-inline:auto;padding-block:var(--search-top-space) var(--space-12);}
+.trao-search__dialog[open] .trao-search__content{animation:trao-search-content-enter var(--duration-module-enter) var(--ease-module-enter) both;}
+.trao-search__dialog[open] .trao-search__suggestions{animation:trao-search-content-enter var(--duration-module-enter) var(--ease-module-enter) var(--delay-module-detail) both;}
 .trao-search__icon.trao-search__close{position:absolute;top:max(var(--space-4),env(safe-area-inset-top));right:max(var(--space-6),env(safe-area-inset-right));}
 .trao-search__label{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 .trao-search__field{display:flex;align-items:center;border-bottom:var(--search-rule-width) solid var(--text-primary);gap:var(--space-3);padding-bottom:var(--space-2);}
@@ -39,3 +41,4 @@
 .trao-search__status:empty{display:none;}
 @media(hover:hover) and (pointer:fine){.trao-search__icon:not(:disabled):hover::before,.trao-search__toggle:hover::before{opacity:1;}.trao-search__suggestions a:hover{text-decoration:underline;}}
 @keyframes trao-search-enter{from{opacity:0;}to{opacity:1;}}
+@keyframes trao-search-content-enter{from{opacity:0;transform:translateY(var(--module-enter-offset));}to{opacity:1;transform:translateY(0);}}
