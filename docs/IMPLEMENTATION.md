@@ -14,6 +14,7 @@ Next.js App Router, React, TypeScript, CSS thuần và CSS 3D. Dependency/versio
 | `src/config/` | Site, pricing, campaign, bespoke và trường nullable. |
 | `public/fonts/` | Font local và giấy phép được cung cấp. |
 | `src/modules/auth/`, `src/modules/editor/` | Tài liệu hợp đồng mở rộng. |
+| `src/modules/search/` | Search độc lập: native dialog, CSS scoped, catalog local từ 11 topic + route thật, normalize tiếng Việt và phân nhóm folder. Không cần backend. |
 
 ## Lệnh Windows
 
@@ -36,6 +37,8 @@ Click capture kiểm tra rect chiếu của bìa active để nhận chuột/ch�
 
 Native dialog quản lý modal/focus; sheet và ink artwork có animation hữu hạn. Video thiếu có empty state; đóng dialog dừng/unmount media. Artwork minh họa không chứng minh demo sẵn sàng.
 
+Album đóng bằng clip trong tọa độ viewport, không xoay thêm bounding rect đã gồm phối cảnh của bìa. Sheet giảm opacity để lộ bìa 3D thật, giữ frame cuối trong suốt qua một lần paint rồi mới teardown modal/focus; cleanup ẩn sheet trước khi hủy fill effects để tránh flash toàn màn hình. Đóng giữa animation mở giữ transform origin và pose hiện tại. Regression tại `perf-artifacts/album-close-diagnosis.mjs` kiểm tra 360/390/768/1440px, nút Đóng/Escape/đóng sớm/reduced motion, frame cuối trong suốt, focus và scroll; cấu hình bằng `BROWSER_PORT` và `TEST_URL`, kết quả ghi `perf-artifacts/album-close-fixed.json`.
+
 ## Kiểm tra
 
 Đọc script trước chạy. Helper browser dùng Node WebSocket và Chromium CDP, cần static server và browser remote debugging port tương ứng:
@@ -54,9 +57,11 @@ Script geometry kiểm tra hình học. Không dùng screenshot cũ làm bằng 
 
 Script shelf-pose kiểm tra bên trái yaw 9deg/bên phải 0deg, đổi góc CSS trực tiếp, hình chiếu đối xứng tại offset 1/2/3 khi tắt góc riêng, cập nhật trực tiếp khi sửa token, wrap hai chiều, chỉ một bìa có bóng, khoảng thoát bóng và overflow tại 360/390/768/1440px, cả normal/reduced motion; ghi ảnh mới `shelf-after-*.png` để review.
 
-Script navigation kiểm tra underline dùng chung và nội suy liên tục, route/history/reload, resize 360/390/768/1440px, search focus/Enter/Escape/outside click, reduced motion, button radius và asset lỗi. Search hiện chỉ có UI/unavailable state, chưa có backend hoặc kết quả tìm kiếm.
+Script navigation kiểm tra underline dùng chung và nội suy liên tục, route/history/reload, resize 360/390/768/1440px, search fullscreen/focus/Enter/Escape/Đóng, focus không thoát ra nền, gợi ý điều hướng thật, reduced motion, button radius và asset lỗi. Search local tìm chủ đề và navigation, không tìm nội dung demo/video. `Album` Enter về `/#xem-mau`; `Thiệp cưới` hoặc `thiep cuoi` Enter mở `/#album/wedding` qua hashchange trong Bookshelf, hỗ trợ tải trực tiếp/reload. Đóng album deeplink thay hash về kệ; nhiều kết quả yêu cầu chọn, không khớp có empty state. Click khoảng trống trong module không đóng modal.
 
 ### Checklist bàn giao
+
+Search dùng `details/summary` thu gọn cho cả gợi ý và kết quả. Test navigation bao gồm mở/đóng Album bằng bàn phím, mặc định thu gọn khi mở lại, clear SVG đồng bộ nút đóng và focus sau khi xóa. Ảnh `ui-search-collapsed-360.png` / `ui-search-collapsed-1440.png` ghi trạng thái thu gọn; ảnh `ui-navigation-search-*.png` ghi trạng thái mở nhóm.
 
 - Build, TypeScript, whitespace diff.
 - 360/390/768/1440px: không cắt chữ/tràn trang, target ít nhất 44px.

@@ -278,8 +278,39 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
     setAlbumOpen(true);
   };
   const getCoverRect = useCallback(() => shelf.current?.querySelector('.book.is-active .book-front')?.getBoundingClientRect() ?? null, []);
-  const closeAlbum = useCallback(() => { setAlbumOpen(false); setAlbumOrigin(null); }, []);
+  const closeAlbum = useCallback(() => {
+    setAlbumOpen(false); setAlbumOrigin(null);
+    if (location.hash.startsWith('#album/')) history.replaceState(history.state, '', `${location.pathname}${location.search}#xem-mau`);
+  }, []);
   const close = useCallback(() => { setOrigin(null); setSelected(null); }, []);
+  useEffect(() => {
+    let frame = 0;
+    const navigateAlbum = () => {
+      cancelAnimationFrame(frame);
+      const id = location.hash.startsWith('#album/') ? location.hash.slice(7) : '';
+      const index = books.findIndex(item => item.id === id);
+      setSelected(null); setOrigin(null); setAlbumOpen(false); setAlbumOrigin(null);
+      if (index < 0) return;
+      // Snap the actual shelf to the deep-linked topic before measuring its cover.
+      motion.current.target = index;
+      motion.current.position = index;
+      setActive(index);
+      wakeMotion.current();
+      frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => {
+          const cover = shelf.current?.querySelector('.book.is-active .book-front');
+          if (!cover) return;
+          (cover.closest('button') as HTMLButtonElement)?.focus({ preventScroll: true });
+          setAlbumOrigin(cover.getBoundingClientRect());
+          setAlbumOpen(true);
+        });
+      });
+    };
+    navigateAlbum();
+    window.addEventListener('hashchange', navigateAlbum);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('hashchange', navigateAlbum); };
+    // Topic records are immutable; the homepage recreates the array on render.
+  }, [books.length]);
   const move = (event: PointerEvent<HTMLDivElement>) => {
     const current = drag.current;
     if (current && current.id === event.pointerId) {
@@ -349,7 +380,7 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       }))}</div>
     </div>
     <div ref={caption} className="shelf-caption" aria-live="polite" aria-atomic="true"><div className="caption-line"><h1>{book.title}</h1></div></div>
-    <button type="button" className="button shelf-primary" onClick={open} aria-label={`Xem album ${book.title}`}>Xem album</button>
+    <button type="button" className="button shelf-primary" onClick={open} aria-label={`Xem album ${book.title}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg><span>Xem</span></button>
     <div className="shelf-controls"><button type="button" onClick={() => select(active - 1)} aria-label={'Chủ đề trước'}>←</button><span>{String(activeIndex + 1).padStart(2, '0')} / {String(books.length).padStart(2, '0')}</span><button type="button" onClick={() => select(active + 1)} aria-label={'Chủ đề sau'}>→</button></div>
     <p className="drag-hint">{'Kéo để chọn · Bấm để mở'}</p>
     {albumOpen && albumOrigin && <AlbumDialog album={book} origin={albumOrigin} getCoverRect={getCoverRect} templates={templates} onClose={closeAlbum} onChoose={(item, rect) => { setSelected(item); setOrigin(rect); }} />}

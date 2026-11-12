@@ -24,11 +24,11 @@ const evaluate = async expression => {
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const assert = (condition, message) => { if (!condition) throw new Error(message); console.log('PASS', message); };
 const palettes = {
-  birthday: ['#fff1b8', '#d6246e'], 'boys-day': ['#2f5da8', '#ffb347'], wedding: ['#f5ebdd', '#8a5a0b'],
-  date: ['#f7b6b0', '#8b1a33'], party: ['#1c1c1e', '#e8c872'],
-  'womens-day': ['#f2a7c3', '#5e1259'], christmas: ['#124a2c', '#ff7a6b'],
-  custom: ['#ffffff', '#1f2a5c'], love: ['#d6404b', '#fff1ee'],
-  'new-year': ['#b8232b', '#ffd772'], yearbook: ['#3e4a5c', '#f5cc6e'],
+  birthday: ['#fff1b8', '#d6246e'], 'boys-day': ['#cfe0f5', '#bf520c'], wedding: ['#f5ebdd', '#8a5a0b'],
+  date: ['#f7b6b0', '#8b1a33'], party: ['#dcdbda', '#8f6a12'],
+  'womens-day': ['#f2cbdd', '#b5155a'], christmas: ['#cde5d3', '#b8282b'],
+  custom: ['#ffffff', '#1f2a5c'], love: ['#fad0be', '#c8203c'],
+  'new-year': ['#d4605f', '#ffe9a6'], yearbook: ['#d5dbea', '#a5660a'],
 };
 const rgb = hex => `rgb(${hex.slice(1).match(/../g).map(value => parseInt(value, 16)).join(', ')})`;
 await send('Runtime.enable');

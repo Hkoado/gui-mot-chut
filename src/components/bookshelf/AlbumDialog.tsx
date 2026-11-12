@@ -18,6 +18,7 @@ function coverClip(rect: DOMRect) {
 export default function AlbumDialog({ album, origin, getCoverRect, templates, onChoose, onClose }: { album: TopicRecord; origin: DOMRect; getCoverRect: () => DOMRect | null; templates: TemplateRecord[]; onChoose: (template: TemplateRecord, origin: DOMRect) => void; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const stopInk = useRef<() => void>(() => {});
+  const closeFrame = useRef(0);
   const closing = useRef(false);
   const id = useId().replace(/:/g, '');
   const items = templates.filter(item => album.templateIds.includes(item.id) && item.enabled);
@@ -25,6 +26,8 @@ export default function AlbumDialog({ album, origin, getCoverRect, templates, on
     const dialog = ref.current!;
     const previous = document.activeElement as HTMLElement | null;
     const overflow = document.body.style.overflow;
+    closing.current = false;
+    dialog.style.removeProperty('opacity');
     dialog.showModal();
     document.body.style.overflow = 'hidden';
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -62,9 +65,14 @@ export default function AlbumDialog({ album, origin, getCoverRect, templates, on
     const motionChanged = () => { if (reduced.matches) { stopInk.current(); revealAll(); animations.forEach(animation => animation.finish()); } };
     reduced.addEventListener('change', motionChanged);
     return () => {
+      cancelAnimationFrame(closeFrame.current);
       stopInk.current(); reduced.removeEventListener('change', motionChanged);
+      // Hide before cancelling fill effects: cancellation must never expose a
+      // full-screen sheet during the native modal/focus teardown.
+      dialog.style.opacity = '0';
+      dialog.close();
       dialog.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
-      dialog.close(); document.body.style.overflow = overflow; previous?.focus({ preventScroll: true });
+      document.body.style.overflow = overflow; previous?.focus({ preventScroll: true });
     };
   }, [origin]);
   const close = () => {
@@ -74,13 +82,29 @@ export default function AlbumDialog({ album, origin, getCoverRect, templates, on
     const dialog = ref.current!;
     const rect = getCoverRect() ?? origin;
     const style = getComputedStyle(dialog);
-    const current = { clipPath: style.clipPath, transform: style.transform };
+    const current = { clipPath: style.clipPath, transform: style.transform, opacity: style.opacity };
+    const duration = milliseconds(style, '--duration-sheet-close');
+    const easing = style.getPropertyValue('--ease-paper').trim();
+    // Persist the sampled opening pose before cancelling it (also handles an
+    // immediate close). Keep its transform origin to avoid a mid-open jump.
+    Object.assign(dialog.style, current);
     dialog.getAnimations().forEach(animation => animation.cancel());
-    dialog.style.transformOrigin = `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
     dialog.dataset.closing = 'true';
-    dialog.animate([current, { clipPath: coverClip(rect), transform: 'rotate(-4.5deg)' }], {
-      duration: milliseconds(style, '--duration-sheet-close'), easing: style.getPropertyValue('--ease-paper').trim(), fill: 'both',
-    }).finished.then(onClose, () => {});
+    // getBoundingClientRect already includes the cover's rotation/perspective.
+    // Do not rotate that screen-space bounding box a second time. Reveal the
+    // actual 3D book beneath the sheet before removing the modal, rather than
+    // abruptly replacing cropped album text with a different cover image.
+    const animation = dialog.animate([
+      { ...current, offset: 0 },
+      { clipPath: coverClip(rect), transform: 'none', opacity: 0, offset: 1 },
+    ], { duration, easing, fill: 'both' });
+    animation.finished.then(() => {
+      dialog.style.opacity = '0';
+      // Present the transparent final frame before React/native-dialog cleanup.
+      closeFrame.current = requestAnimationFrame(() => {
+        closeFrame.current = requestAnimationFrame(onClose);
+      });
+    }, () => {});
   };
   return <dialog ref={ref} className="detail album-dialog" aria-labelledby="album-title" onCancel={event => { event.preventDefault(); close(); }}>
     <div className="detail-brand" aria-hidden="true"><BrandWordmark /></div>

@@ -9,7 +9,7 @@
   --font-brand: 'Ribel Noise', var(--font-heading);
   --brand-size: clamp(2.75rem, 5vw, 3.5rem); --brand-weight: 400;
   --brand-leading: 1.1; --brand-tracking: 0em;
-  --palette-brand-forest: #0f3d1f;
+  --palette-brand-forest: #1D5B3A;
   --brand-color: var(--palette-brand-forest);
   --brand-glow: none;
   /* One broad overhead light, symmetric across the paper canvas. */
@@ -20,8 +20,20 @@
   --nav-type-size: calc(var(--type-body) * 1.3);
   --nav-gap: clamp(1rem, 3vw, 2.5rem); --nav-mobile-gap: var(--space-4);
   --duration-nav: 420ms; --nav-hover-opacity: .75;
-  --search-width: 43rem; --search-icon-size: 1.5rem;
-  --search-offset: var(--space-2); --search-travel: var(--space-2);
+  --search-width: 61rem; --search-icon-size: 1.5rem;
+  --header-utility-icon: var(--search-icon-size);
+  --header-utility-gap: var(--space-1);
+  --header-status-width: 15rem;
+  --header-status-shadow: var(--shadow-book);
+  --search-top-space: clamp(4.5rem, 7vh, 6rem);
+  --search-input-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  --search-suggestion-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  --search-folder-size: var(--type-subtitle);
+  --search-caption-size: var(--type-lead);
+  --search-status-size: var(--type-lead);
+  --search-icon-glow: var(--shelf-arrow-glow);
+  --search-icon-glow-outset: var(--space-3);
+  --search-rule-width: var(--nav-underline-height);
   --radius-control: var(--radius-small);
   /* Gallery arrows: soft purple interaction glow with forest-green icons. */
   --shelf-arrow-radius: var(--radius-small);
@@ -70,13 +82,16 @@
   --shelf-min-scale: .78; --shelf-fit-clearance: .35;
   --album-title-size: clamp(1.35rem, 2.2vw, 2rem);
   --album-nav-size: .75rem;
-  /* Shelf album CTA: outlined at rest, filled on hover or keyboard focus. */
+  /* Shelf view action: eye + label, transparent with the shared purple glow. */
   --shelf-cta-bg: transparent; --shelf-cta-ink: var(--accent);
-  --shelf-cta-border: var(--accent); --shelf-cta-active-bg: var(--accent-hover);
-  --shelf-cta-active-ink: var(--button-text);
+  --shelf-cta-border: transparent; --shelf-cta-active-bg: transparent;
+  --shelf-cta-active-ink: var(--accent);
+  --shelf-cta-icon-size: var(--search-icon-size);
+  --shelf-cta-glow: var(--shelf-arrow-glow);
+  --shelf-cta-glow-outset: var(--shelf-arrow-glow-outset);
   --shelf-cta-type-size: var(--type-body); --shelf-cta-tracking: .08em;
   --shelf-cta-weight: 400; --shelf-cta-radius: 0;
-  /* Compact frame: 15% less padding, preserving the shared minimum hit target. */
+  /* Compact action spacing, preserving the shared minimum hit target. */
   --shelf-cta-padding-inline: calc(var(--space-6) * .85);
   --shelf-cta-padding-block: calc(.7rem * .85);
   --album-dialog-width: 43rem;
@@ -105,7 +120,7 @@
   --detail-button-gap: 10px; --detail-cover-size: 28px;
   --detail-cover-padding: 32px; --detail-cover-label: 20px; --detail-cover-title: 38px;
   /* Paper Cream + Forest Green. One parent green drives ink, actions and material tint. */
-  --palette-forest: #0b3c1b;
+  --palette-forest: #1D5B3A;
   --palette-paper: #f8f6f0; --palette-sheet: #eeeee4; --palette-ink: var(--palette-forest); --palette-muted: #626e5b;
   --palette-matcha: var(--palette-forest); --palette-matcha-hover: color-mix(in srgb, var(--palette-forest) 85%, black); --palette-rose: #e7d8cf;
   --palette-sage: #d4ddcb; --palette-yellow: #eae1c5; --palette-line: #ccd2c2;
@@ -137,19 +152,19 @@
 [data-book-theme='sage'] { --book-paper: var(--palette-sage); --book-accent: var(--accent); }
 [data-book-theme='yellow'] { --book-paper: var(--palette-yellow); --book-accent: var(--accent); }
 [data-book-theme='default'] { --book-paper: var(--surface-raised); --book-accent: var(--accent); }
-/* Album-only print palettes from the supplied swatches. These aliases also flow
+/* Album-only print palettes from "Bảng màu pastel – Kệ sách Trao.html". These aliases also flow
    into AlbumDialog's poster; page surfaces, controls and legacy template presets stay unchanged. */
-[data-book-theme='birthday'] { --spine-paper: #f1e8c0; --book-paper: #fff1b8; --book-ink: #d6246e; --book-accent: var(--book-ink); }
-[data-book-theme='boys-day'] { --spine-paper: #c9d5e6; --book-paper: #2f5da8; --book-ink: #ffb347; --book-accent: var(--book-ink); }
-[data-book-theme='wedding'] { --spine-paper: #f1ebe0; --book-paper: #f5ebdd; --book-ink: #8a5a0b; --book-accent: var(--book-ink); }
-[data-book-theme='date'] { --spine-paper: #ebcfca; --book-paper: #f7b6b0; --book-ink: #8b1a33; --book-accent: var(--book-ink); }
-[data-book-theme='party'] { --spine-paper: #c9c9c7; --book-paper: #1c1c1e; --book-ink: #e8c872; --book-accent: var(--book-ink); }
-[data-book-theme='womens-day'] { --spine-paper: #e8cbd8; --book-paper: #f2a7c3; --book-ink: #5e1259; --book-accent: var(--book-ink); }
-[data-book-theme='christmas'] { --spine-paper: #c7d8cc; --book-paper: #124a2c; --book-ink: #ff7a6b; --book-accent: var(--book-ink); }
-[data-book-theme='custom'] { --spine-paper: #f6f5f0; --book-paper: #ffffff; --book-ink: #1f2a5c; --book-accent: var(--book-ink); }
-[data-book-theme='love'] { --spine-paper: #e8c6c9; --book-paper: #d6404b; --book-ink: #fff1ee; --book-accent: var(--book-ink); }
-[data-book-theme='new-year'] { --spine-paper: #ebd2bc; --book-paper: #b8232b; --book-ink: #ffd772; --book-accent: var(--book-ink); }
-[data-book-theme='yearbook'] { --spine-paper: #c8cfd8; --book-paper: #3e4a5c; --book-ink: #f5cc6e; --book-accent: var(--book-ink); }
+[data-book-theme='birthday'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #fff1b8; --book-ink: #d6246e; --book-accent: var(--book-ink); }
+[data-book-theme='boys-day'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #cfe0f5; --book-ink: #bf520c; --book-accent: var(--book-ink); }
+[data-book-theme='wedding'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #f5ebdd; --book-ink: #8a5a0b; --book-accent: var(--book-ink); }
+[data-book-theme='date'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #f7b6b0; --book-ink: #8b1a33; --book-accent: var(--book-ink); }
+[data-book-theme='party'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #dcdbda; --book-ink: #8f6a12; --book-accent: var(--book-ink); }
+[data-book-theme='womens-day'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #f2cbdd; --book-ink: #b5155a; --book-accent: var(--book-ink); }
+[data-book-theme='christmas'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #cde5d3; --book-ink: #b8282b; --book-accent: var(--book-ink); }
+[data-book-theme='custom'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #ffffff; --book-ink: #1f2a5c; --book-accent: var(--book-ink); }
+[data-book-theme='love'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #fad0be; --book-ink: #c8203c; --book-accent: var(--book-ink); }
+[data-book-theme='new-year'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #d4605f; --book-ink: #ffe9a6; --book-accent: var(--book-ink); }
+[data-book-theme='yearbook'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #d5dbea; --book-ink: #a5660a; --book-accent: var(--book-ink); }
 @media(max-width:767px){:root{--shelf-height:clamp(12.6rem,36svh,21.6rem);--header-height:9rem;--shelf-mist-clear:14%;--shelf-mist-hidden:2%;}}
 /* Lite changes material cost, never the shared perspective or cuboid geometry.
    Reduced-motion rules remain last so accessibility overrides this preset. */

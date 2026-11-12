@@ -13,6 +13,7 @@ Read `docs/MASTER_PROMPT.md`, `docs/DESIGN_SYSTEM.md`, `docs/PRODUCT.md`, and `d
 - No functioning login, editor, uploads, payment, database, or admin in phase 1. Reserve extension boundaries in code and documentation; do not show broken or fake controls.
 - Never invent customer reviews, popularity, scarcity, campaign balances, video URLs, contact accounts, delivery deadlines, or hosting guarantees.
 - Preserve normal page scrolling. Support touch, keyboard, reduced motion, focus handling, and stable layouts.
+- Keep UI copy minimal. Do not add unsolicited helper paragraphs, usage tutorials, explanatory subtitles, or repeated instructions when controls already communicate the action. Add instructional copy only when explicitly requested or essential to prevent a material error; preserve necessary error/empty/unavailable states and accessible labels. Do not replace removed visible guidance with hidden duplicate prose.
 - Keep structured business data separate from UI. Business/contact placeholders must produce explicit unavailable states.
 - Verify build, types, desktop/mobile layout, drag versus click, dialog focus, missing assets, and direct loading of `/bang-gia/`.
 - Report completed work, validation performed, and actual limitations. Do not claim visual checks that were not performed.

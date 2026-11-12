@@ -29,9 +29,9 @@
 /* Complete the cuboid in the same local coordinate system as front and spine.
    Only the active cover supplies elevation; edge-on faces stay unshadowed. */
 .book .book-front,.book .book-spine{box-shadow:none;}
-/* Pale shelf-only stock retains a top glint and local contact/soft ground shadows.
+/* Shared cover/spine stock retains a top glint and local contact/soft ground shadows.
    Do not apply these face effects to the preserve-3d pivot or album poster. */
-.book .book-spine{--spine-ink:color-mix(in srgb,var(--palette-forest) 80%,var(--spine-paper));box-shadow:var(--book-spine-top-light),var(--shadow-spine-ground);}
+.book .book-spine{box-shadow:var(--book-spine-top-light),var(--shadow-spine-ground);}
 /* Edge-on print must not bleed into adjacent spines. Keep all physical faces
    during the turn, but cull the perpendicular face once travel settles. */
 .book:not(.is-active):not([data-pose]) .book-front,
@@ -48,6 +48,10 @@
 .bookshelf .book:focus-visible .book-front::after,
 .bookshelf .book:focus-visible .book-spine::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:var(--book-focus-ring);}
 .book-back{position:absolute;top:0;left:calc((var(--spine) - var(--cover))*.5);width:var(--cover);height:var(--h);background:var(--book-paper);transform:rotateY(-90deg) translateZ(calc(var(--spine)*.5));backface-visibility:hidden;border:var(--border-width) solid var(--border-default);}
+/* The cuboid's cloth joins use the book stock, not the page's pale UI border.
+   Keep borders inside the existing face geometry so no contrasting seam opens
+   between the spine and either cover as perspective or yaw changes. */
+.book .book-spine,.book .book-front,.book .book-back{border-color:var(--book-paper);}
 .book-top,.book-bottom{position:absolute;left:0;top:calc((var(--h) - var(--cover))*.5);width:var(--spine);height:var(--cover);background:var(--book-edge);backface-visibility:hidden;}
 .book-top{transform:rotateX(90deg) translateZ(calc(var(--h)*.5));}
 .book-bottom{transform:rotateX(-90deg) translateZ(calc(var(--h)*.5));}
@@ -82,9 +86,14 @@
 .album-page .bookshelf-wrap{position:relative;}
 .album-page .shelf-caption .caption-line h1{font-size:var(--album-title-size);color:var(--accent);}
 .album-page .bookshelf-wrap .shelf-caption{margin-block:var(--space-2);}
-/* Scope the outlined CTA to the shelf; other shared buttons retain their fill. */
+/* Scope the transparent eye action to the shelf; other shared buttons retain their fill. */
 .album-page .shelf-primary{position:relative;margin-top:var(--space-6);border-radius:var(--shelf-cta-radius);padding:var(--shelf-cta-padding-block) var(--shelf-cta-padding-inline);background:var(--shelf-cta-bg);color:var(--shelf-cta-ink);border-color:var(--shelf-cta-border);font-size:var(--shelf-cta-type-size);font-weight:var(--shelf-cta-weight);letter-spacing:var(--shelf-cta-tracking);cursor:pointer;}
 .album-page .shelf-primary:focus-visible{background:var(--shelf-cta-active-bg);color:var(--shelf-cta-active-ink);}
+.album-page .shelf-primary{isolation:isolate;}
+.album-page .shelf-primary svg{width:var(--shelf-cta-icon-size);height:var(--shelf-cta-icon-size);flex-shrink:0;}
+.album-page .shelf-primary::before{content:'';position:absolute;inset:calc(-1 * var(--shelf-cta-glow-outset));z-index:-1;background:var(--shelf-cta-glow);opacity:var(--shelf-arrow-glow-idle);pointer-events:none;transition:opacity var(--duration-fast) var(--ease-editorial);}
+.album-page .shelf-primary:focus-visible::before{opacity:var(--shelf-arrow-glow-active);}
+@media(hover:hover) and (pointer:fine){.album-page .shelf-primary:hover::before{opacity:var(--shelf-arrow-glow-active);}}
 @media(hover:hover) and (pointer:fine){.album-page .shelf-primary:hover{background:var(--shelf-cta-active-bg);color:var(--shelf-cta-active-ink);}}
 .album-page .shelf-controls{position:absolute;top:calc(var(--shelf-display-height)*var(--shelf-stage-ratio) + var(--space-2));left:var(--page-gutter);right:var(--page-gutter);justify-content:space-between;margin:0;pointer-events:none;}
 .album-page .shelf-controls button{pointer-events:auto;}
