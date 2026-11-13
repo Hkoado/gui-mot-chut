@@ -27,9 +27,28 @@
   --search-width: 61rem; --search-icon-size: 1.5rem;
   --header-utility-icon: var(--search-icon-size);
   --header-utility-gap: var(--space-1);
+  --header-utility-glow: var(--shelf-arrow-glow);
+  --header-utility-glow-outset: var(--search-icon-glow-outset);
   --header-status-width: 15rem;
   --header-status-shadow: var(--shadow-book);
+  --header-mobile-label-size: var(--type-lead);
+  --header-mobile-panel-width: 15rem;
+  /* Account disclosure: paper panel anchored below the profile icon. */
+  --account-panel-width: 18rem;
+  --account-panel-surface: var(--surface-page);
+  --account-panel-shadow: var(--shadow-panel);
+  --account-item-size: var(--type-lead);
+  --account-item-height: calc(var(--control-min) + var(--space-3));
+  /* Cart editorial columns and scoped product illustrations. */
+  --cart-column-gap: clamp(1.5rem, 5vw, 5rem);
+  --cart-heading-size: clamp(2rem, 3.5vw, 3rem);
+  --cart-summary-title-size: clamp(1.5rem, 2.3vw, 2rem);
+  --cart-item-title-size: clamp(1.25rem, 1.8vw, 1.6rem);
+  --cart-empty-height: 19rem; --cart-empty-icon: 3rem;
+  --cart-drawing-min: 3rem;
+  --cart-art-width: 36%; --cart-art-width-compact: 32%; --cart-art-width-mobile: 30%;
   --search-top-space: clamp(4.5rem, 7vh, 6rem);
+  --search-close-layer: 1;
   --search-input-size: clamp(1.5rem, 2.4vw, 2.1rem);
   --search-suggestion-size: clamp(1.125rem, 1.6vw, 1.375rem);
   --search-folder-size: var(--type-subtitle);
@@ -41,6 +60,9 @@
   --radius-control: var(--radius-small);
   /* Gallery arrows: soft purple interaction glow with forest-green icons. */
   --shelf-arrow-radius: var(--radius-small);
+  --shelf-arrow-mobile-scale: 1.2;
+  --shelf-arrow-mobile-size: calc(var(--control-min) * var(--shelf-arrow-mobile-scale));
+  --shelf-arrow-mobile-type-size: calc(var(--type-lead) * var(--shelf-arrow-mobile-scale));
   --shelf-arrow-highlight: var(--highlight-soft);
   --shelf-arrow-highlight-ink: var(--text-primary);
   --shelf-arrow-glow: radial-gradient(ellipse at center, var(--shelf-arrow-highlight), var(--highlight-faint) 45%, transparent 72%);
@@ -169,7 +191,7 @@
 [data-book-theme='love'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #fad0be; --book-ink: #c8203c; --book-accent: var(--book-ink); }
 [data-book-theme='new-year'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #d4605f; --book-ink: #ffe9a6; --book-accent: var(--book-ink); }
 [data-book-theme='yearbook'] { --spine-paper: var(--book-paper); --spine-ink: var(--book-ink); --book-paper: #d5dbea; --book-ink: #a5660a; --book-accent: var(--book-ink); }
-@media(max-width:767px){:root{--shelf-height:clamp(12.6rem,36svh,21.6rem);--header-height:9rem;--shelf-mist-clear:14%;--shelf-mist-hidden:2%;}}
+@media(max-width:767px){:root{--shelf-height:clamp(12.6rem,36svh,21.6rem);--header-height:5rem;--shelf-mist-clear:14%;--shelf-mist-hidden:2%;}}
 /* Lite changes material cost, never the shared perspective or cuboid geometry.
    Reduced-motion rules remain last so accessibility overrides this preset. */
 :root[data-perf='lite'] {

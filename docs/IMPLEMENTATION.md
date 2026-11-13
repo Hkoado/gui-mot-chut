@@ -31,6 +31,8 @@ Build tạo `out/`. Helper `node album-test-server.mjs` phục vụ static outpu
 
 ## Kệ và dialog
 
+Giỏ lựa chọn tại `src/modules/cart/`, route `/gio-hang/`, truy cập từ icon giỏ hàng. Catalog/giá lấy từ dữ liệu hiện có; localStorage chỉ giữ ID hợp lệ. Script `cart-browser-test.mjs` kiểm tra trạng thái trống, thêm/xóa, đổi gói/tổng tiền, reload, dữ liệu lỗi, link header, 360/390/768/1440px và asset/runtime; ảnh mới `cart-*.png`. Thanh toán chưa tích hợp.
+
 Bookshelf dùng các chu kỳ bản sao có key ổn định, offset vòng lặp và lớp tilt riêng. Chủ đề đang chọn lưu bằng ID trong `sessionStorage` theo phiên tab, được khôi phục khi mount lại; storage lỗi/không khả dụng không chặn kệ. ResizeObserver/geometry helper tính chiều cao theo viewport. Motion đọc token; reduced motion giảm thời lượng và nội suy.
 
 Click capture kiểm tra rect chiếu của bìa active để nhận chuột/chạm trên toàn bìa 3D. Drag suppression phân biệt kéo/click; keyboard không kế thừa click suppression. Wheel/drag chỉ xử lý trong kệ, không chiếm cuộn dọc hoặc Ctrl-wheel.
@@ -51,15 +53,25 @@ node album-pointer-test.mjs
 node shelf-geometry-test.mjs
 node shelf-pose-browser-test.mjs
 node navigation-browser-test.mjs
+node account-browser-test.mjs
+node cart-browser-test.mjs
 ```
 
 Script geometry kiểm tra hình học. Không dùng screenshot cũ làm bằng chứng cho code đang kiểm tra.
+
+Script account kiểm tra dropdown profile tại 360/390/768/1440px: danh sách đúng bốn mục chưa khả dụng, vị trí/overflow/target, Space, Escape và focus, click ngoài, Tab rời nhóm, tải trực tiếp trang giá và reduced motion. Ảnh mới ghi `account-dropdown-*.png`; favicon thiếu được báo riêng, không bỏ qua lỗi asset ứng dụng.
 
 Script shelf-pose kiểm tra bên trái yaw 9deg/bên phải 0deg, đổi góc CSS trực tiếp, hình chiếu đối xứng tại offset 1/2/3 khi tắt góc riêng, cập nhật trực tiếp khi sửa token, wrap hai chiều, chỉ một bìa có bóng, khoảng thoát bóng và overflow tại 360/390/768/1440px, cả normal/reduced motion; ghi ảnh mới `shelf-after-*.png` để review.
 
 Script navigation kiểm tra underline dùng chung và nội suy liên tục, route/history/reload, resize 360/390/768/1440px, search fullscreen/focus/Enter/Escape/Đóng, focus không thoát ra nền, gợi ý điều hướng thật, reduced motion, button radius và asset lỗi. Search local tìm chủ đề và navigation, không tìm nội dung demo/video. `Album` Enter về `/#xem-mau`; `Thiệp cưới` hoặc `thiep cuoi` Enter mở `/#album/wedding` qua hashchange trong Bookshelf, hỗ trợ tải trực tiếp/reload. Đóng album deeplink thay hash về kệ; nhiều kết quả yêu cầu chọn, không khớp có empty state. Click khoảng trống trong module không đóng modal.
 
 ### Checklist bàn giao
+
+Header mobile có icon Giỏ hàng riêng bên phải; Liên hệ mở rộng bên trong menu ba gạch, tái sử dụng `HeaderCart` với desktop; menu ba gạch không lặp link giỏ. `mobile-header-browser-test.mjs` kiểm tra vị trí/target của icon và click thực tế đến `/gio-hang/` ở 320/360/390/767px, đồng thời giữ logo giữa và desktop không đổi.
+
+Search close regression: `node search-close-browser-test.mjs` kiểm tra hit-test và chạm/chuột thực tế tại tâm và góc nút đóng ở 320/393/768/1440px, normal/reduced motion, khôi phục focus/cuộn và nút × xóa query. Lớp animation của content từng che hit target nút đóng; `.trao-search__close` dùng token `--search-close-layer` để nằm trên content trong native dialog, không tăng z-index toàn trang. Ảnh `search-close-*.png` ghi module sau sửa.
+
+Header mobile: chạy `node mobile-header-browser-test.mjs` với static server/CDP như trên. Script kiểm tra 320/360/390/767/768/1440px: một hàng, logo giữa, target 44px, không overflow, menu route thật, ba icon/nhãn liên hệ và trạng thái thiếu URL, Space/Escape/focus/click ngoài, search modal và khôi phục focus, tải trực tiếp bảng giá, reduced motion và asset/runtime. Ảnh `mobile-header-*.png` ghi layout, hai dropdown và desktop. Script account cũ thao tác trực tiếp icon desktop nên không còn phù hợp ở viewport dưới 768px.
 
 Search dùng `details/summary` thu gọn cho cả gợi ý và kết quả. Test navigation bao gồm mở/đóng Album bằng bàn phím, mặc định thu gọn khi mở lại, clear SVG đồng bộ nút đóng và focus sau khi xóa. Ảnh `ui-search-collapsed-360.png` / `ui-search-collapsed-1440.png` ghi trạng thái thu gọn; ảnh `ui-navigation-search-*.png` ghi trạng thái mở nhóm.
 

@@ -5,7 +5,8 @@ import { useLayoutEffect, useRef } from 'react';
 import { site } from '../../config/site';
 import BrandWordmark from '../BrandWordmark';
 import Search from '../../modules/search/Search';
-import { HeaderContact, HeaderAccount } from './HeaderUtilities';
+import { HeaderContact, HeaderAccount, HeaderCart, HeaderMobileContact } from './HeaderUtilities';
+import HeaderDisclosure from './HeaderDisclosure';
 
 const tabs = [['/', 'Bộ sưu tập'], ['/cach-dat/', 'Cách đặt'], ['/thiet-ke-rieng/', 'Thiết kế riêng'], ['/hoi-dap/', 'Hỏi đáp'], ['/bang-gia/', 'Bảng giá']];
 
@@ -56,8 +57,15 @@ export default function Header() {
 
   return <header className="site-header" data-ui="album-gallery"><div className="container header-inner">
     <HeaderContact />
+    <HeaderDisclosure name="navigation" label={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg>}>
+      <nav className="mobile-nav" aria-label="Điều hướng mobile">
+        {tabs.map(([href, label]) => <Link key={href} href={href} aria-current={pathname.replace(/\/$/, '') === href.replace(/\/$/, '') ? 'page' : undefined}>{label}</Link>)}
+        <HeaderMobileContact />
+      </nav>
+    </HeaderDisclosure>
+    <div className="header-mobile-actions"><HeaderCart /></div>
     <Link className="brand" href="/" aria-label={`${site.brand} — về trang chủ`}><BrandWordmark /></Link>
-    <div className="header-actions" role="group" aria-label="Tìm kiếm và tài khoản"><Search /><HeaderAccount /></div>
+    <div className="header-actions" role="group" aria-label="Tiện ích"><Search /><div className="header-desktop-account"><HeaderAccount /></div></div>
     <nav ref={navRef} className="main-nav" aria-label="Điều hướng chính"><div ref={trackRef} className="main-nav-track">
       {tabs.map(([href, label]) => <Link key={href} href={href} aria-current={pathname.replace(/\/$/, '') === href.replace(/\/$/, '') ? 'page' : undefined}><span>{label}</span></Link>)}
       <span ref={underlineRef} className="main-nav-underline" aria-hidden="true" hidden />

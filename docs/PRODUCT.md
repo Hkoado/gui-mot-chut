@@ -37,4 +37,6 @@ Giữ null khi chưa có dữ liệu thật. Không bịa đánh giá, doanh s�
 
 ## Phase 1
 
+`/gio-hang/` là giỏ lựa chọn cục bộ, không phải hệ thống nhận đơn. Giỏ bắt đầu trống, thêm/xóa các mẫu trong catalog và đổi giữa hai gói niêm yết; mỗi mẫu xuất hiện một lần. Chỉ templateId/packageId được lưu trong localStorage, giá đọc lại từ config; không lưu dữ liệu cá nhân. Không tự áp dụng chiến dịch, phí giao hàng, thuế hoặc phương thức thanh toán chưa xác nhận. Thanh toán disabled với trạng thái chưa khả dụng. Đây không phải xác nhận đặt hàng hay giỏ đồng bộ tài khoản.
+
 Studio chỉnh nội dung. Không có login, editor, upload, payment, database/admin hoạt động. `src/modules/auth/README.md` và `src/modules/editor/README.md` xác định ranh giới mở rộng, không phải tính năng bán kèm.
