@@ -17,7 +17,7 @@ Trao là website tiếng Việt giới thiệu thiệp mời và quà tặng tư
 
 Trang chủ có logo Trao xanh rêu ở giữa, navigation tối giản với một underline trượt theo route, icon tìm kiếm, kệ sách 3D ngang, tên chủ đề, icon mắt kèm chữ “Xem” (mở album), glow tím hover/focus, chỉ số lựa chọn và hai mũi tên. Kệ có gáy, bìa, cạnh giấy, chất liệu nhẹ và mask hai mép. Cuốn active ở giữa xoay lộ bìa. Giữ bố cục editorial ấm, khoảng thở và tỷ lệ responsive; không dùng card phẳng làm kệ.
 
-Màu tuân theo `docs/DESIGN_SYSTEM.md`. Thương hiệu lấy từ `src/config/site.ts`. Giao diện dùng tiếng Việt và con trỏ hệ thống.
+Màu tuân theo `docs/DESIGN_SYSTEM.md`. Thương hiệu lấy từ `src/config/site.ts`. Giao diện mặc định tiếng Việt và con trỏ hệ thống. Khách có IP ngoài Việt Nam thấy toàn bộ giao diện tiếng Anh (xem `docs/IMPLEMENTATION.md`, mục Ngôn ngữ); không có nút đổi ngôn ngữ thủ công.
 
 Nội dung UI tối giản: không tự thêm đoạn hướng dẫn thao tác, phụ đề giải thích hoặc lời nhắc lặp lại khi control đã rõ nghĩa. Chỉ thêm hướng dẫn khi người dùng yêu cầu hoặc thực sự cần tránh sai sót quan trọng. Giữ nhãn accessible và trạng thái lỗi/trống/chưa sẵn sàng cần thiết; không chuyển đoạn hướng dẫn đã bỏ thành nội dung ẩn tương đương.
 

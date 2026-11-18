@@ -7,12 +7,14 @@ import type { TemplateRecord } from '../../data/templates';
 import type { TopicRecord } from '../../data/topics';
 import Book from './Book';
 import { fitShelfHeight } from './shelf-geometry';
+import { useMessages } from '../../i18n/LocaleProvider';
 import './bookshelf.css';
 
 const AlbumDialog = dynamic(() => import('./AlbumDialog'), { ssr: false });
 const TemplateDialog = dynamic(() => import('./TemplateDialog'), { ssr: false });
 
 export default function Bookshelf({ books, templates }: { books: TopicRecord[]; templates: TemplateRecord[] }) {
+  const t = useMessages().shelf;
   const cycleLength = Math.max(1, books.length);
   const [active, setActive] = useState(0);
   const [height, setHeight] = useState<number | null>(null);
@@ -374,7 +376,7 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
   const book = books[activeIndex] ?? books[0];
   if (!book) return null;
   return <div className="bookshelf-wrap" style={height === null ? undefined : { '--shelf-fitted-height': `${height}px` } as CSSProperties}>
-    <div className="bookshelf" ref={shelf} tabIndex={0} role="group" aria-label={'Album. Phím trái phải để chọn, Enter để mở.'}
+    <div className="bookshelf" ref={shelf} tabIndex={0} role="group" aria-label={t.group}
       onClickCapture={event => {
         // Native 3D hit testing can miss the projected face outside its narrow
         // button pivot. Resolve pointer clicks against the visible cover instead.
@@ -410,9 +412,9 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       }))}</div>
     </div>
     <div ref={caption} className="shelf-caption" aria-live="polite" aria-atomic="true"><div className="caption-line"><h1>{book.title}</h1></div></div>
-    <button type="button" className="button shelf-primary" onClick={open} aria-label={`Xem album ${book.title}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg><span>Xem</span></button>
-    <div className="shelf-controls"><button type="button" onClick={() => select(active - 1)} aria-label={'Chủ đề trước'}>←</button><span>{String(activeIndex + 1).padStart(2, '0')} / {String(books.length).padStart(2, '0')}</span><button type="button" onClick={() => select(active + 1)} aria-label={'Chủ đề sau'}>→</button></div>
-    <p className="drag-hint">{'Kéo để chọn · Bấm để mở'}</p>
+    <button type="button" className="button shelf-primary" onClick={open} aria-label={t.viewAlbum(book.title)}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg><span>{t.view}</span></button>
+    <div className="shelf-controls"><button type="button" onClick={() => select(active - 1)} aria-label={t.previous}>←</button><span>{String(activeIndex + 1).padStart(2, '0')} / {String(books.length).padStart(2, '0')}</span><button type="button" onClick={() => select(active + 1)} aria-label={t.next}>→</button></div>
+    <p className="drag-hint">{t.hint}</p>
     {albumOpen && albumOrigin && <AlbumDialog album={book} origin={albumOrigin} getCoverRect={getCoverRect} templates={templates} onClose={closeAlbum} onChoose={(item, rect) => { setSelected(item); setOrigin(rect); }} />}
     {origin && selected && <TemplateDialog book={selected} origin={origin} onClose={close} />}
   </div>;

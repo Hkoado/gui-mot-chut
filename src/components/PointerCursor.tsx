@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import '../styles/cursor.css';
+import { useMessages } from '../i18n/LocaleProvider';
 
 export default function PointerCursor() {
+  const t = useMessages().shelf;
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const cursor = ref.current!;
@@ -69,6 +71,6 @@ export default function PointerCursor() {
   }, []);
   return <div ref={ref} className="pointer-cursor" popover="manual" aria-hidden="true">
     <span className="pointer-cursor-ring" /><span className="pointer-cursor-dot" />
-    <span className="pointer-cursor-label">MỞ</span>
+    <span className="pointer-cursor-label">{t.cursorOpen}</span>
   </div>;
 }

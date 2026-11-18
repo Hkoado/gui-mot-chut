@@ -4,6 +4,7 @@ import type { TemplateRecord } from '../../data/templates';
 import { CoverArt } from './Book';
 import BrandWordmark from '../BrandWordmark';
 import { site } from '../../config/site';
+import { useMessages } from '../../i18n/LocaleProvider';
 
 const blots = [[150, 330, 0], [340, 600, 120], [250, 120, 220], [90, 760, 300], [400, 250, 360], [260, 860, 420], [230, 470, 180]];
 const fullSheet = 'inset(0px 0px 0px 0px round 0px)';
@@ -16,6 +17,7 @@ function coverClip(rect: DOMRect) {
 }
 
 export default function AlbumDialog({ album, origin, getCoverRect, templates, onChoose, onClose }: { album: TopicRecord; origin: DOMRect; getCoverRect: () => DOMRect | null; templates: TemplateRecord[]; onChoose: (template: TemplateRecord, origin: DOMRect) => void; onClose: () => void }) {
+  const t = useMessages().album;
   const ref = useRef<HTMLDialogElement>(null);
   const stopInk = useRef<() => void>(() => {});
   const closeFrame = useRef(0);
@@ -108,14 +110,14 @@ export default function AlbumDialog({ album, origin, getCoverRect, templates, on
   };
   return <dialog ref={ref} className="detail album-dialog" aria-labelledby="album-title" onCancel={event => { event.preventDefault(); close(); }}>
     <div className="detail-brand" aria-hidden="true"><BrandWordmark /></div>
-    <button className="dialog-close detail-close" type="button" onClick={close} autoFocus>{'ĐÓNG / ALBUM'} ×</button>
+    <button className="dialog-close detail-close" type="button" onClick={close} autoFocus>{t.close} ×</button>
     <div className="detail-grid"><div className="detail-copy">
-      <div className="detail-line"><p className="eyebrow">{'ALBUM / BỘ SƯU TẬP'}</p></div>
+      <div className="detail-line"><p className="eyebrow">{t.eyebrow}</p></div>
       <div className="detail-line"><h2 id="album-title">{album.title}</h2></div>
-      <div className="detail-line"><p className="detail-meta">{items.length} {'MẪU / CÁ NHÂN HÓA NỘI DUNG'}</p></div>
-      <div className="detail-line"><p className="detail-description">{items.length ? 'Chọn một mẫu để xem nội dung và các lựa chọn cá nhân hóa.' : 'Album này chưa có mẫu. Video và demo sẽ được bổ sung khi sẵn sàng.'}</p></div>
-      <div className="detail-line"><p className="detail-credit">{'Bìa minh họa'} · {site.brand}</p></div>
-      <div className="topic-templates">{items.map(item => <div className="detail-line" key={item.id}><article><div><h3>{item.title}</h3><p>{item.description}</p></div><button className="button button--quiet" type="button" onClick={event => onChoose(item, event.currentTarget.getBoundingClientRect())}>{'Xem chi tiết'} ↗</button></article></div>)}</div>
+      <div className="detail-line"><p className="detail-meta">{t.count(items.length)}</p></div>
+      <div className="detail-line"><p className="detail-description">{items.length ? t.withTemplates : t.empty}</p></div>
+      <div className="detail-line"><p className="detail-credit">{t.credit} · {site.brand}</p></div>
+      <div className="topic-templates">{items.map(item => <div className="detail-line" key={item.id}><article><div><h3>{item.title}</h3><p>{item.description}</p></div><button className="button button--quiet" type="button" onClick={event => onChoose(item, event.currentTarget.getBoundingClientRect())}>{t.details} ↗</button></article></div>)}</div>
     </div><div className="detail-poster" data-book-theme={album.themeKey} aria-hidden="true">
       <svg viewBox="0 0 474 900" className="ink-poster">
         <defs><filter id={`${id}-ink`} x="-200" y="-200" width="874" height="1300" filterUnits="userSpaceOnUse"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="3" seed="7" result="noise" /><feDisplacementMap in="SourceGraphic" in2="noise" scale="120" xChannelSelector="R" yChannelSelector="G" /></filter>

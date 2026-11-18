@@ -6,7 +6,7 @@
 - `src/data/topics.ts`: 11 chủ đề chứa templateIds. Boy’s day nằm sau Sinh nhật và chưa có mẫu. Chủ đề không đồng nghĩa mẫu hoàn thành; bản sao thị giác không được tính thêm.
 - Sách active mở album chủ đề. Album cho chọn mẫu/video quay màn hình; Visit page mở demo thật, host độc lập.
 - Chủ đề trống, video/URL/contact thiếu có unavailable state trung thực.
-- Thương hiệu Trao lấy từ `src/config/site.ts`, giao diện tiếng Việt.
+- Thương hiệu Trao lấy từ `src/config/site.ts`, giao diện tiếng Việt; khách có IP ngoài Việt Nam thấy tiếng Anh. Bản tiếng Anh của dữ liệu nghiệp vụ nằm cạnh bản tiếng Việt (`en` trong topics, templates, pricing, bespoke, site). Giá vẫn tính bằng VND.
 - Giá/chiến dịch ở `/bang-gia/`, truy cập qua nav; không có link giá dưới kệ trang chủ. Thông tin hỗ trợ ở `/cach-dat/`, `/thiet-ke-rieng/`, `/hoi-dap/`.
 
 ## Giá và quyền lợi

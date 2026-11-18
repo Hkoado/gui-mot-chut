@@ -1,24 +1,32 @@
 import { templates } from '../../data/templates';
-import { getTopics } from '../../data/topics';
+import { getTopicTitles, getTopics } from '../../data/topics';
+import type { Locale } from '../../i18n/detect';
+import { messages } from '../../i18n/messages';
 import { topicSearchTags } from './tags';
 
 export interface SearchEntry { label: string; href: string; aliases: string[] }
 export interface SearchFolder { id: string; label: string; href?: string; aliases: string[]; children: SearchEntry[] }
 
-const templateAliases = (ids: string[]) => templates.filter(item => ids.includes(item.id)).flatMap(item => [item.title, item.occasion]);
+// Aliases cover both languages so either can be typed whatever the UI locale.
+const templateAliases = (ids: string[]) => templates.filter(item => ids.includes(item.id)).flatMap(item => [item.title, item.occasion, item.en.title, item.en.occasion]);
 
-export const searchFolders: SearchFolder[] = [
-  { id: 'albums', label: 'Album', href: '/#xem-mau', aliases: ['album', 'albums', 'bộ sưu tập', 'chủ đề', 'thiệp'], children: getTopics().map(topic => ({
-    label: topic.title, href: `/#album/${topic.id}`,
-    aliases: [topic.coverTitle ?? '', topic.id, ...(topicSearchTags[topic.id] ?? []), ...templateAliases(topic.templateIds)],
-  })) },
-  { id: 'navigation', label: 'Điều hướng', aliases: ['điều hướng', 'navigation', 'module', 'trang'], children: [
-    { label: 'Cách đặt', href: '/cach-dat/', aliases: ['đặt thiệp', 'đặt hàng', 'hướng dẫn', 'quy trình', 'order', 'mua'] },
-    { label: 'Thiết kế riêng', href: '/thiet-ke-rieng/', aliases: ['thiết kế', 'theo yêu cầu', 'độc bản', 'custom', 'bespoke'] },
-    { label: 'Hỏi đáp', href: '/hoi-dap/', aliases: ['faq', 'câu hỏi', 'thắc mắc', 'hỗ trợ', 'help'] },
-    { label: 'Bảng giá', href: '/bang-gia/', aliases: ['giá', 'gói', 'chi phí', 'bao nhiêu tiền', 'ưu đãi', 'pricing', 'price'] },
-  ] },
-];
+// Site pages are not search results; the bespoke flow has its own shortcut in Search.tsx.
+function buildFolders(locale: Locale): SearchFolder[] {
+  const t = messages[locale];
+  return [
+    { id: 'albums', label: t.search.folderAlbums, href: '/#xem-mau', aliases: ['album', 'albums', 'bộ sưu tập', 'chủ đề', 'thiệp', 'collection', 'cards'], children: getTopics(locale).map(topic => ({
+      label: topic.title, href: `/#album/${topic.id}`,
+      aliases: [...getTopicTitles(topic.id), topic.id, ...(topicSearchTags[topic.id] ?? []), ...templateAliases(topic.templateIds)],
+    })) },
+  ];
+}
+
+const folderCache = new Map<Locale, SearchFolder[]>();
+export function getSearchFolders(locale: Locale = 'vi'): SearchFolder[] {
+  let folders = folderCache.get(locale);
+  if (!folders) { folders = buildFolders(locale); folderCache.set(locale, folders); }
+  return folders;
+}
 
 export function normalizeSearch(value: string) {
   return value.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -93,7 +101,8 @@ function scoreEntry(text: string, entry: { label: string; aliases: string[] }) {
   return total;
 }
 
-export function findFolders(query: string): SearchFolder[] {
+export function findFolders(query: string, locale: Locale = 'vi'): SearchFolder[] {
+  const searchFolders = getSearchFolders(locale);
   const text = normalizeSearch(query);
   if (!text) return searchFolders;
   return searchFolders.flatMap(folder => {
@@ -107,13 +116,14 @@ export function findFolders(query: string): SearchFolder[] {
   });
 }
 
-export function resolveSearch(query: string): string | null {
+export function resolveSearch(query: string, locale: Locale = 'vi'): string | null {
+  const searchFolders = getSearchFolders(locale);
   const text = normalizeSearch(query);
   if (!text) return null;
   const folder = searchFolders.find(item => item.href && indexOf(item).terms.includes(text));
   if (folder?.href) return folder.href;
   const exact = searchFolders.flatMap(item => item.children).filter(item => indexOf(item).terms.includes(text));
   if (exact.length === 1) return exact[0].href;
-  const matches = findFolders(query).flatMap(item => item.children);
+  const matches = findFolders(query, locale).flatMap(item => item.children);
   return matches.length === 1 ? matches[0].href : null;
 }

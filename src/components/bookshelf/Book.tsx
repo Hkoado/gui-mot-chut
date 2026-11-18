@@ -2,9 +2,11 @@ import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { BookVisual } from '../../data/topics';
 import { site } from '../../config/site';
+import { useMessages } from '../../i18n/LocaleProvider';
 
 export function CoverArt({ book }: { book: BookVisual }) {
   const [imageFailed, setImageFailed] = useState(false);
+  const t = useMessages();
   if (book.coverSrc && !imageFailed) return <img className="cover-image" src={book.coverSrc} alt="" draggable={false} onError={() => setImageFailed(true)} />;
   if (book.coverTitle) return <span className="cover-art cover-art--temporary"><strong className="cover-title">{book.coverTitle}</strong></span>;
   return <span className="cover-art">
@@ -28,16 +30,17 @@ export function CoverArt({ book }: { book: BookVisual }) {
       {book.id === 'ho-so-hoi-ban' && <><path d="M20 45h55l12 12h73v93H20ZM38 82h85M38 98h65M38 114h45"/><circle cx="131" cy="125" r="25"/><path d="m117 125 10 9 18-21"/></>}
       {book.id === 'co-dieu-muon-noi' && <><path d="M15 45h150v100H15ZM15 45l75 62 75-62M15 145l55-55M165 145l-55-55"/><circle cx="90" cy="106" r="10"/></>}
     </svg>
-    <span className="cover-footer">{'MỘT CÂU CHUYỆN NHỎ'}<br/>{'DÀNH RIÊNG CHO MỘT NGƯỜI'}</span>
+    <span className="cover-footer">{t.cover.footer[0]}<br/>{t.cover.footer[1]}</span>
   </span>;
 }
 
 export default function Book({ book, offset, sequence, duplicate = false, onChoose }: { book: BookVisual; offset: number; sequence: number; duplicate?: boolean; onChoose: () => void }) {
   const [spineFailed, setSpineFailed] = useState(false);
+  const t = useMessages().shelf;
   return <button type="button" className={`book${offset === 0 ? ' is-active' : ''}`} data-sequence={sequence} data-book-theme={book.themeKey} data-topic-id={book.id}
     aria-hidden={duplicate || undefined} tabIndex={duplicate ? -1 : undefined}
     style={{ '--offset': offset, '--side': Math.sign(offset) } as CSSProperties}
-    aria-label={`${book.title} — ${offset === 0 ? 'Xem các mẫu' : 'Chọn chủ đề'}`} aria-pressed={offset === 0} onClick={onChoose}>
+    aria-label={`${book.title} — ${offset === 0 ? t.bookOpen : t.bookSelect}`} aria-pressed={offset === 0} onClick={onChoose}>
     <span className="book-tilt"><span className="book-spine">{book.spineSrc && !spineFailed ? <img className="spine-image" src={book.spineSrc} alt="" draggable={false} onError={() => setSpineFailed(true)} /> : <strong>{book.spineTitle ?? book.title}</strong>}</span>
     <span className="book-front"><CoverArt book={book} /></span>
     <span className="book-pages" aria-hidden="true" />

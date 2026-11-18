@@ -31,14 +31,16 @@
 .trao-search__folder{margin-top:var(--space-6);}
 .trao-search__folder summary{display:flex;align-items:center;gap:var(--space-3);width:fit-content;max-width:100%;min-height:var(--control-min);padding-block:var(--space-2);cursor:pointer;list-style:none;}
 .trao-search__folder summary::-webkit-details-marker{display:none;}
-.trao-search__folder summary h3{margin:0;}
+.trao-search__folder summary h3,.trao-search__suggestions .trao-search__shortcut h3{margin:0;}
 .trao-search__folder summary svg{transition:transform var(--duration-fast) var(--ease-editorial);}
 .trao-search__folder[open] summary svg{transform:rotate(180deg);}
-.trao-search__folder h3{margin:0 0 var(--space-2);font-family:var(--font-heading);font-size:var(--search-folder-size);font-weight:inherit;letter-spacing:normal;}
+.trao-search__folder h3,.trao-search__shortcut h3{margin:0 0 var(--space-2);font-family:var(--font-heading);font-size:var(--search-folder-size);font-weight:inherit;letter-spacing:normal;}
 .trao-search__folder h3 a{font-size:inherit;}
 .trao-search__folder ul{padding-left:var(--space-6);border-left:var(--border-width) solid var(--border-default);}
 .trao-search__status{margin:var(--space-8) 0 0;color:var(--text-secondary);font-size:var(--search-status-size);}
 .trao-search__status:empty{display:none;}
+/* Search shortcut (e.g. Thiết kế riêng): identical look to a folder summary such as Album. */
+.trao-search__suggestions a.trao-search__shortcut,.trao-search__suggestions a.trao-search__shortcut:hover{display:flex;align-items:center;gap:var(--space-3);width:fit-content;max-width:100%;min-height:var(--control-min);margin-top:var(--space-6);padding-block:var(--space-2);color:inherit;text-decoration:none;}
 @media(hover:hover) and (pointer:fine){.trao-search__icon:not(:disabled):hover::before,.trao-search__toggle:hover::before{opacity:1;}.trao-search__suggestions a:hover{text-decoration:underline;}}
 @keyframes trao-search-enter{from{opacity:0;}to{opacity:1;}}
 @keyframes trao-search-content-enter{from{opacity:0;transform:translateY(var(--module-enter-offset));}to{opacity:1;transform:translateY(0);}}
