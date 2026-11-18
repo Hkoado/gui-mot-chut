@@ -67,7 +67,8 @@ export default function Search() {
         </form>
         <section className="trao-search__suggestions" aria-labelledby="trao-search-suggestions">
           <h2 id="trao-search-suggestions">{query.trim() ? 'Kết quả tìm kiếm' : 'Gợi ý khám phá'}</h2>
-          {folders.map(folder => <details className="trao-search__folder" key={`${open}:${folder.id}`}>
+          {/* Results are expanded while typing; idle suggestions stay collapsed. */}
+          {folders.map(folder => <details className="trao-search__folder" key={`${open}:${folder.id}:${!!query.trim()}`} open={!!query.trim() || undefined}>
             <summary><h3>{folder.label}</h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="m8 10 4 4 4-4" /></svg></summary>
             <ul>{folder.children.map(item => <li key={item.href}><a href={item.href} onClick={() => setOpen(false)}>{item.label}</a></li>)}</ul>
           </details>)}

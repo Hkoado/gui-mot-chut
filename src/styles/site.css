@@ -2,6 +2,9 @@
 /* Album route: a viewport-sized shelf, with supporting sections on independent routes. */
 .album-page{min-height:var(--album-screen-height);display:grid;align-items:center;}
 .route-content{animation:route-content-enter var(--duration-module-enter) var(--ease-module-enter) both;}
+/* Client navigations: RouteTransition holds the entrance until the new route has painted (see component). */
+.route-content[data-enter='pending']{animation:none;opacity:0;transform:translateY(var(--module-enter-offset));}
+.route-content[data-enter='run']{animation:route-content-enter var(--duration-module-enter) var(--ease-module-enter) both;}
 @keyframes route-content-enter{from{opacity:0;transform:translateY(var(--module-enter-offset));}to{opacity:1;transform:translateY(0);}}
 .album-page .hero{padding-block:var(--space-4);width:100%;min-width:0;}
 .album-price{margin-top:var(--space-4);font-size:var(--type-xs);color:var(--text-secondary);}
