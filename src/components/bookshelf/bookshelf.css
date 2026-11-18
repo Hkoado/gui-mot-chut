@@ -23,7 +23,7 @@
 /* Rasterize one horizontal Vietnamese label, then rotate in the face's 2D plane.
    Avoid vertical glyph layout + 180deg transforms inside the 3D cuboid. */
 .book-spine strong{position:absolute;left:50%;top:50%;white-space:nowrap;writing-mode:horizontal-tb;transform:translate(-50%,-50%) rotate(-90deg);backface-visibility:hidden;font-family:var(--font-heading);font-size:var(--book-spine-type-size);font-weight:500;line-height:var(--line-body);}
-.book-spine>span{font-size:var(--type-xs);writing-mode:vertical-rl;}
+.book-spine>span{font-size:var(--book-face-xs);writing-mode:vertical-rl;}
 .book-front{left:calc((var(--spine) - var(--cover))*.5);width:var(--cover);transform:rotateY(90deg) translateZ(calc(var(--spine)*.5));background:var(--book-paper);box-shadow:var(--shadow-book);}
 .book-pages{left:0;width:var(--spine);background:repeating-linear-gradient(90deg,var(--surface-raised) 0 2px,var(--border-default) 2px 3px);transform:rotateY(180deg) translateZ(calc(var(--cover)*.5));}
 /* Complete the cuboid in the same local coordinate system as front and spine.
@@ -62,8 +62,8 @@
 .bookshelf-wrap .shelf-caption{min-height:0;padding-inline:var(--space-4);margin:var(--space-2) auto var(--space-4);}
 .cover-art{display:flex;position:relative;flex-direction:column;justify-content:space-between;gap:var(--space-2);width:100%;height:100%;padding:var(--space-4);text-align:left;overflow:hidden;color:var(--book-ink);background:var(--book-cloth),var(--book-paper);box-shadow:var(--book-print-inset);}
 .cover-art::after{content:'';position:absolute;inset:0;pointer-events:none;background:var(--book-cover-light);}
-.cover-label,.cover-footer{font-size:var(--type-xs);line-height:1.35;letter-spacing:.06em;}
-.cover-title{font-family:var(--font-heading);font-size:var(--type-lead);font-weight:500;line-height:1.2;}
+.cover-label,.cover-footer{font-size:var(--book-face-xs);line-height:1.35;letter-spacing:.06em;}
+.cover-title{font-family:var(--font-heading);font-size:var(--book-face-lead);font-weight:500;line-height:1.2;}
 .cover-art.cover-art--temporary{justify-content:center;align-items:center;text-align:center;}
 .cover-art--temporary .cover-title{font-size:var(--book-placeholder-size);overflow-wrap:anywhere;}
 .cover-drawing{flex:1;min-height:0;width:100%;stroke:var(--book-accent);stroke-width:1.5;}
@@ -81,7 +81,7 @@
 .dialog-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);align-items:center;}.dialog-preview video{width:100%;aspect-ratio:4/3;object-fit:contain;background:var(--surface-raised);}.dialog-poster{width:min(100%,17rem);aspect-ratio:474/900;margin:auto;box-shadow:var(--shadow-book);}.dialog-preview>p{font-size:var(--type-small);margin-top:var(--space-4);}.dialog-copy{text-align:left;}.dialog-copy h2{font-size:var(--type-subtitle);}.dialog-copy h3{font-size:var(--type-lead);}.dialog-copy ul{padding-left:var(--space-6);}.dialog-copy .button{margin-bottom:var(--space-4);}
 .shelf-fallback{text-align:left;}.shelf-fallback article{border-top:var(--border-width) solid var(--border-default);padding-block:var(--space-4);}
 .bookshelf-wrap[data-ready='false'] .bookshelf,.bookshelf-wrap[data-ready='false'] .shelf-controls,.bookshelf-wrap[data-ready='false'] .caption-actions,.bookshelf-wrap[data-ready='false'] .drag-hint{display:none;}
-@media(max-width:767px){.template-dialog{padding:var(--space-4);}.dialog-grid{grid-template-columns:1fr;}.book-spine strong{font-size:var(--type-small);}.book-spine>span{display:none;}.cover-art{padding:var(--space-2);}.cover-label,.cover-footer{font-size:var(--type-cover-small);}.cover-title{font-size:var(--type-body);}.shelf-caption{min-height:11rem;}}
+@media(max-width:767px){.template-dialog{padding:var(--space-4);}.dialog-grid{grid-template-columns:1fr;}.book-spine strong{font-size:var(--book-face-small);}.book-spine>span{display:none;}.cover-art{padding:var(--space-2);}.cover-label,.cover-footer{font-size:var(--type-cover-small);}.cover-title{font-size:var(--book-face-body);}.shelf-caption{min-height:11rem;}}
 /* Album-only presentation: full-width row and edge arrows, like the supplied reference. */
 .album-page .bookshelf-wrap{position:relative;}
 .album-page .shelf-caption .caption-line h1{font-size:var(--album-title-size);color:var(--accent);}
