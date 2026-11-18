@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { findFolders, resolveSearch } from './catalog';
 import { site } from '../../config/site';
 import { useLocale, useMessages } from '../../i18n/LocaleProvider';
+import { useGentleClose } from '../../lib/useGentleClose';
 import './search.css';
 
 function SearchIcon() {
@@ -30,6 +31,8 @@ export default function Search() {
   const inputRef = useRef<HTMLInputElement>(null);
   const folders = findFolders(query, locale);
   const resultCount = folders.reduce((count, folder) => count + folder.children.length, 0);
+  // × / Escape close gently; navigating away closes at once so the route entrance leads.
+  const { close, reset } = useGentleClose(dialogRef, () => setOpen(false));
 
   useEffect(() => { setOpen(false); setSubmitted(false); }, [pathname]);
 
@@ -37,15 +40,17 @@ export default function Search() {
     if (!open) return;
     const dialog = dialogRef.current!;
     const overflow = document.body.style.overflow;
+    reset();
     dialog.showModal();
     document.body.style.overflow = 'hidden';
     inputRef.current?.focus({ preventScroll: true });
     return () => {
       dialog.close();
+      reset();
       document.body.style.overflow = overflow;
       triggerRef.current?.focus({ preventScroll: true });
     };
-  }, [open]);
+  }, [open, reset]);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,8 +65,8 @@ export default function Search() {
 
   return <div className="trao-search">
     <button ref={triggerRef} type="button" className="trao-search__toggle" aria-label={t.open} aria-haspopup="dialog" aria-expanded={open} aria-controls="trao-search-dialog" onClick={() => { setQuery(''); setOpen(true); setSubmitted(false); }}><SearchIcon /></button>
-    <dialog ref={dialogRef} id="trao-search-dialog" className="trao-search__dialog" aria-label={t.dialog(site.brand)} onKeyDownCapture={event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); setOpen(false); } }} onCancel={event => { event.preventDefault(); setOpen(false); }} onClose={() => setOpen(false)}>
-      <button className="trao-search__icon trao-search__close" type="button" aria-label={t.close} onClick={() => setOpen(false)}><CloseIcon /></button>
+    <dialog ref={dialogRef} id="trao-search-dialog" className="trao-search__dialog dialog-exit" aria-label={t.dialog(site.brand)} onKeyDownCapture={event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(); } }} onCancel={event => { event.preventDefault(); close(); }} onClose={() => setOpen(false)}>
+      <button className="trao-search__icon trao-search__close" type="button" aria-label={t.close} onClick={close}><CloseIcon /></button>
       <div className="trao-search__content">
         <form role="search" aria-label={t.dialog(site.brand)} onSubmit={submit}>
           <label className="trao-search__label" htmlFor="trao-search-input">{t.label}</label>

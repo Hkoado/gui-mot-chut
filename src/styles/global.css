@@ -21,3 +21,10 @@ h1,h2,h3,p { margin-top: 0; } h1,h2,h3 { font-family: var(--font-heading); font-
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
 /* i18n boot: hide until English copy is committed for likely non-Vietnam visitors (see src/i18n/detect.ts). */
 html[data-locale-pending] body { visibility: hidden; }
+/* Shared gentle dialog exit: add class "dialog-exit" to a <dialog> and close it through
+   useGentleClose (src/lib/useGentleClose.ts). Opacity + small transform only, so it stays on
+   the compositor. Dialogs with a bespoke close (album sheet, template card) keep their own. */
+dialog.dialog-exit[open][data-closing] { animation: dialog-exit var(--duration-dialog-exit) var(--ease-dialog-exit) both; pointer-events: none; }
+dialog.dialog-exit[open][data-closing]::backdrop { animation: dialog-exit-backdrop var(--duration-dialog-exit) var(--ease-dialog-exit) both; }
+@keyframes dialog-exit { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(var(--dialog-exit-offset)); } }
+@keyframes dialog-exit-backdrop { from { opacity: 1; } to { opacity: 0; } }

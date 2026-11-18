@@ -35,6 +35,8 @@ Bookshelf dùng các chu kỳ bản sao có key ổn định, offset vòng lặp
 
 Click capture kiểm tra rect chiếu của bìa active để nhận chuột/chạm trên toàn bìa 3D. Drag suppression phân biệt kéo/click; keyboard không kế thừa click suppression. Wheel/drag chỉ xử lý trong kệ, không chiếm cuộn dọc hoặc Ctrl-wheel.
 
+Chuẩn đóng (×) chung: dialog không có hiệu ứng đóng riêng dùng class `dialog-exit` (`src/styles/global.css`) và hook `useGentleClose` (`src/lib/useGentleClose.ts`) — mờ dần + trượt nhẹ theo token `--duration-dialog-exit`/`--ease-dialog-exit`/`--dialog-exit-offset`; × và Escape gọi `close`, gọi `reset` trước `showModal()`. Album sheet và template card giữ hiệu ứng đóng riêng. Điều hướng khỏi dialog đóng ngay để entrance route dẫn dắt.
+
 Native dialog quản lý modal/focus; sheet và ink artwork có animation hữu hạn. Video thiếu có empty state; đóng dialog dừng/unmount media. Artwork minh họa không chứng minh demo sẵn sàng.
 
 Album đóng bằng clip trong tọa độ viewport, không xoay thêm bounding rect đã gồm phối cảnh của bìa. Sheet giảm opacity để lộ bìa 3D thật, giữ frame cuối trong suốt qua một lần paint rồi mới teardown modal/focus; cleanup ẩn sheet trước khi hủy fill effects để tránh flash toàn màn hình. Đóng giữa animation mở giữ transform origin và pose hiện tại. Regression tại `perf-artifacts/album-close-diagnosis.mjs` kiểm tra 360/390/768/1440px, nút Đóng/Escape/đóng sớm/reduced motion, frame cuối trong suốt, focus và scroll; cấu hình bằng `BROWSER_PORT` và `TEST_URL`, kết quả ghi `perf-artifacts/album-close-fixed.json`.
