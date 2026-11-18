@@ -67,7 +67,7 @@ Script navigation kiểm tra underline dùng chung và nội suy liên tục, ro
 
 ### Checklist bàn giao
 
-Search dùng `details/summary`: gợi ý thu gọn khi chưa gõ; khi có từ khóa, các nhóm kết quả tự mở. Từ khóa mỗi chủ đề ở `src/modules/search/tags.ts` (Việt/Anh); so khớp bỏ dấu, tiền tố cho từ đang gõ và chịu lỗi gõ nhẹ cho từ từ 5 ký tự. Test navigation bao gồm mở/đóng Album bằng bàn phím, mặc định thu gọn khi mở lại, clear SVG đồng bộ nút đóng và focus sau khi xóa. Ảnh `ui-search-collapsed-360.png` / `ui-search-collapsed-1440.png` ghi trạng thái thu gọn; ảnh `ui-navigation-search-*.png` ghi trạng thái mở nhóm.
+Search chia hai cột dưới ô nhập: trái “Highlights” liệt kê thẳng tên thiệp (6 chủ đề đầu khi chưa gõ, mọi kết quả khớp khi gõ); phải là thẻ dọc “Thiết kế riêng” (18–24rem; giấy `--bespoke-paper`, viền, bóng, chữ ký và nút mũi tên tròn; cả thẻ là một link `next/link`; hover/focus nâng nhẹ + glow tím mềm), mép trên thẳng với tiêu đề Highlights, mép phải thẳng với ô nhập. Thẻ là phần tử nổi bật duy nhất và dùng ngôn ngữ của trang thiết kế riêng để không bị coi là quảng cáo; thẻ đứng trước trong DOM nên dưới 768px xếp lên trên Highlights. Từ khóa mỗi chủ đề ở `src/modules/search/tags.ts` (Việt/Anh); so khớp bỏ dấu, tiền tố cho từ đang gõ và chịu lỗi gõ nhẹ cho từ từ 5 ký tự. Test navigation bao gồm mở/đóng Album bằng bàn phím, mặc định thu gọn khi mở lại, clear SVG đồng bộ nút đóng và focus sau khi xóa. Ảnh chụp search cũ (`ui-search-collapsed-*`, `ui-navigation-search-*`) mô tả bố cục thu gọn trước đây, cần chụp lại.
 
 - Build, TypeScript, whitespace diff.
 - 360/390/768/1440px: không cắt chữ/tràn trang, target ít nhất 44px.

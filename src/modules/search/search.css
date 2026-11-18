@@ -24,23 +24,36 @@
 .trao-search__toggle{position:relative;isolation:isolate;}
 .trao-search__icon:focus-visible::before,.trao-search__toggle:focus-visible::before{opacity:1;}
 .trao-search__icon:disabled{color:var(--text-secondary);cursor:not-allowed;}
-.trao-search__suggestions{margin-top:var(--space-8);}
-.trao-search__suggestions h2{margin:0 0 var(--space-6);font:inherit;font-size:var(--search-caption-size);letter-spacing:normal;}
-.trao-search__suggestions ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-2);}
+/* Highlights on the left, the bespoke offer card on the right; tops aligned. The card is first in
+   the DOM so it leads when the columns stack on small screens. */
+.trao-search__suggestions{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,24rem);column-gap:var(--space-12);row-gap:var(--space-8);align-items:start;margin-top:var(--space-12);}
+.trao-search__cards{grid-column:1;grid-row:1;}
+.trao-search__suggestions a.trao-search__bespoke{grid-column:2;grid-row:1;}
+.trao-search__cards h2{margin:0;font-family:var(--font-heading);font-size:var(--search-folder-size);font-weight:inherit;line-height:1.2;letter-spacing:normal;}
+.trao-search__cards ul{list-style:none;margin:var(--space-4) 0 0;padding:0;display:grid;gap:0;}
 .trao-search__suggestions a{display:flex;align-items:center;width:fit-content;max-width:100%;min-height:var(--control-min);padding-block:var(--space-2);font-size:var(--search-suggestion-size);font-weight:inherit;line-height:var(--line-body);text-decoration:none;overflow-wrap:anywhere;}
-.trao-search__folder{margin-top:var(--space-6);}
-.trao-search__folder summary{display:flex;align-items:center;gap:var(--space-3);width:fit-content;max-width:100%;min-height:var(--control-min);padding-block:var(--space-2);cursor:pointer;list-style:none;}
-.trao-search__folder summary::-webkit-details-marker{display:none;}
-.trao-search__folder summary h3,.trao-search__suggestions .trao-search__shortcut h3{margin:0;}
-.trao-search__folder summary svg{transition:transform var(--duration-fast) var(--ease-editorial);}
-.trao-search__folder[open] summary svg{transform:rotate(180deg);}
-.trao-search__folder h3,.trao-search__shortcut h3{margin:0 0 var(--space-2);font-family:var(--font-heading);font-size:var(--search-folder-size);font-weight:inherit;letter-spacing:normal;}
-.trao-search__folder h3 a{font-size:inherit;}
-.trao-search__folder ul{padding-left:var(--space-6);border-left:var(--border-width) solid var(--border-default);}
 .trao-search__status{margin:var(--space-8) 0 0;color:var(--text-secondary);font-size:var(--search-status-size);}
 .trao-search__status:empty{display:none;}
-/* Search shortcut (e.g. Thiết kế riêng): identical look to a folder summary such as Album. */
-.trao-search__suggestions a.trao-search__shortcut,.trao-search__suggestions a.trao-search__shortcut:hover{display:flex;align-items:center;gap:var(--space-3);width:fit-content;max-width:100%;min-height:var(--control-min);margin-top:var(--space-6);padding-block:var(--space-2);color:inherit;text-decoration:none;}
-@media(hover:hover) and (pointer:fine){.trao-search__icon:not(:disabled):hover::before,.trao-search__toggle:hover::before{opacity:1;}.trao-search__suggestions a:hover{text-decoration:underline;}}
+/* Compact card list: touch keeps exactly the 44px target (no extra padding); fine pointers go tighter. */
+.trao-search__cards a{padding-block:0;line-height:1.4;}
+/* Bespoke offer card (search scope only). Local aliases map to the commission stationery tokens
+   used on /thiet-ke-rieng/, so the card reads as site content rather than an advert. */
+.trao-search__suggestions a.trao-search__bespoke{--search-bespoke-surface:var(--bespoke-paper);--search-bespoke-ink:var(--bespoke-ink);--search-bespoke-ring:var(--highlight-soft);
+  display:flex;flex-direction:column;align-items:stretch;gap:var(--space-8);width:100%;min-height:0;padding:var(--space-8);
+  background:var(--search-bespoke-surface);color:var(--search-bespoke-ink);border:var(--border-width) solid var(--border-default);border-radius:var(--radius-panel);box-shadow:var(--shadow-book);
+  font-size:inherit;line-height:1.2;text-decoration:none;
+  transition:transform var(--duration-fast) var(--ease-editorial),box-shadow var(--duration-fast) var(--ease-editorial);}
+.trao-search__suggestions a.trao-search__bespoke:focus-visible{transform:translateY(-.125rem);box-shadow:var(--shadow-book-active),0 0 1.75rem .35rem var(--search-bespoke-ring);}
+.trao-search__bespoke-copy{display:grid;gap:var(--space-3);min-width:0;}
+.trao-search__bespoke-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-4);}
+.trao-search__bespoke .eyebrow{margin:0;text-wrap:balance;}
+.trao-search__bespoke-title{font-family:var(--font-heading);font-size:var(--search-folder-size);line-height:1.15;}
+.trao-search__bespoke-line{font-family:var(--font-heading);font-size:var(--search-suggestion-size);}
+.trao-search .trao-search__bespoke-sign{width:8.5rem;height:auto;opacity:.8;}
+.trao-search__bespoke-go{display:grid;place-items:center;width:3.25rem;height:3.25rem;border:var(--border-width) solid currentColor;border-radius:var(--radius-pill);transition:background var(--duration-fast) var(--ease-editorial),color var(--duration-fast) var(--ease-editorial),transform var(--duration-fast) var(--ease-editorial);}
+.trao-search__suggestions a.trao-search__bespoke:focus-visible .trao-search__bespoke-go{background:var(--accent);color:var(--button-text);border-color:var(--accent);}
+@media(max-width:767px){.trao-search__suggestions{grid-template-columns:minmax(0,1fr);margin-top:var(--space-8);}.trao-search__cards,.trao-search__suggestions a.trao-search__bespoke{grid-column:1;grid-row:auto;}.trao-search__suggestions a.trao-search__bespoke{gap:var(--space-4);padding:var(--space-6);}.trao-search .trao-search__bespoke-sign{width:6.5rem;}.trao-search__bespoke-go{width:2.75rem;height:2.75rem;}}
+@media(hover:hover) and (pointer:fine){.trao-search__cards a{min-height:0;padding-block:var(--space-1);}}
+@media(hover:hover) and (pointer:fine){.trao-search__icon:not(:disabled):hover::before,.trao-search__toggle:hover::before{opacity:1;}.trao-search__suggestions a:hover{text-decoration:underline;}.trao-search__suggestions a.trao-search__bespoke:hover{text-decoration:none;transform:translateY(-.125rem);box-shadow:var(--shadow-book-active),0 0 1.75rem .35rem var(--search-bespoke-ring);}.trao-search__suggestions a.trao-search__bespoke:hover .trao-search__bespoke-go{background:var(--accent);color:var(--button-text);border-color:var(--accent);transform:translateX(.125rem);}}
 @keyframes trao-search-enter{from{opacity:0;}to{opacity:1;}}
 @keyframes trao-search-content-enter{from{opacity:0;transform:translateY(var(--module-enter-offset));}to{opacity:1;transform:translateY(0);}}

@@ -14,10 +14,10 @@
 Nguồn là `src/config/pricing.ts`:
 
 - **Theo mẫu — 97.000đ:** chọn mẫu, thay tên/nội dung/nhạc, tối đa 5 ảnh, giữ giao diện/tương tác sẵn có, 1 lần chỉnh sửa nhỏ.
-- **Câu chuyện riêng — 214.000đ:** tối đa 10 ảnh, màu/font trong bộ lựa chọn, hỗ trợ lời dẫn, tối đa 2 chi tiết có sẵn tùy mẫu, 2 lần sửa nhỏ.
+- **Câu chuyện riêng — 214.000đ:** tối đa 10 ảnh, màu/font trong bộ lựa chọn, hỗ trợ lời dẫn, tối đa 2 chi tiết có sẵn tùy mẫu, 2 lần sửa nhỏ. Nút “Mình muốn làm riêng hơn” trên `/bang-gia/` dẫn thẳng sang `/thiet-ke-rieng/` (client-side).
 - **Ý tưởng của bạn — báo giá riêng:** thống nhất thiết kế, tương tác, thời gian, phạm vi trước khi làm. Nội dung và contact riêng ở `src/config/bespoke.ts`.
 
-Chỉ giới thiệu quyền lợi mẫu thực sự hỗ trợ. CTA giữ templateId/packageId sang trang giá/liên hệ. Không hiển thị xác nhận đặt hàng vì chưa có backend nhận đơn.
+Chỉ giới thiệu quyền lợi mẫu thực sự hỗ trợ. CTA gói Theo mẫu giữ templateId/packageId sang liên hệ. Trang `/bang-gia/` chỉ còn hai thẻ giá và chiến dịch; không nhúng nội dung thiết kế riêng và không có FAQ riêng (câu hỏi nằm ở `/hoi-dap/`). Không hiển thị xác nhận đặt hàng vì chưa có backend nhận đơn.
 
 ## Chiến dịch đơn đầu
 

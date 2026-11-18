@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import BespokeOffer from '../../components/static/BespokeOffer';
 import PricingContent from '../../components/static/PricingContent';
 import { site } from '../../config/site';
 
@@ -9,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function PricingPage() {
-  return <><PricingContent /><div className="container"><BespokeOffer /></div></>;
+  return <PricingContent />;
 }

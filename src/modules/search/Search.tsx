@@ -17,6 +17,8 @@ function CloseIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>;
 }
 
+const idleCardCount = 6;
+
 export default function Search() {
   const pathname = usePathname();
   const router = useRouter();
@@ -29,8 +31,10 @@ export default function Search() {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const folders = findFolders(query, locale);
-  const resultCount = folders.reduce((count, folder) => count + folder.children.length, 0);
+  // Card names are listed directly: the first few while idle, every match while typing.
+  const matches = findFolders(query, locale).flatMap(folder => folder.children);
+  const resultCount = matches.length;
+  const cards = query.trim() ? matches : matches.slice(0, idleCardCount);
   // × / Escape close gently; navigating away closes at once so the route entrance leads.
   const { close, reset } = useGentleClose(dialogRef, () => setOpen(false));
 
@@ -76,16 +80,27 @@ export default function Search() {
             <button className="trao-search__icon trao-search__submit" type="submit" aria-label={t.label} disabled={!query.trim()}><SearchIcon /></button>
           </div>
         </form>
-        <section className="trao-search__suggestions" aria-label={query.trim() ? t.results : t.suggestions}>
-          {/* Shortcut styled as a folder heading; client-side route change straight into the
-              bespoke module. Re-clicking it on that route replays the entrance (RouteTransition). */}
-          <Link className="trao-search__shortcut" href="/thiet-ke-rieng/" onClick={() => setOpen(false)}><h3>{messages.nav.custom}</h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 16 16 8M10 8h6v6" /></svg></Link>
-          {/* Results are expanded while typing; idle suggestions stay collapsed. */}
-          {folders.map(folder => <details className="trao-search__folder" key={`${open}:${folder.id}:${!!query.trim()}`} open={!!query.trim() || undefined}>
-            <summary><h3>{folder.label}</h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="m8 10 4 4 4-4" /></svg></summary>
-            <ul>{folder.children.map(item => <li key={item.href}><a href={item.href} onClick={() => setOpen(false)}>{item.label}</a></li>)}</ul>
-          </details>)}
-        </section>
+        <div className="trao-search__suggestions">
+          {/* The bespoke commission is the primary offer: the one distinct paper card, styled like
+              the bespoke page rather than an ad. It comes first in the DOM (screen readers, stacked
+              mobile layout) and sits in the right column on wider screens beside Highlights. The
+              whole card is one client-side link; re-clicking it on that route replays the entrance. */}
+          <Link className="trao-search__bespoke" href="/thiet-ke-rieng/" onClick={() => setOpen(false)} aria-labelledby="trao-search-bespoke-title" aria-describedby="trao-search-bespoke-line">
+            <span className="trao-search__bespoke-copy">
+              <span className="eyebrow">{messages.bespoke.eyebrow}</span>
+              <span className="trao-search__bespoke-title" id="trao-search-bespoke-title">{messages.nav.custom}</span>
+              <span className="trao-search__bespoke-line" id="trao-search-bespoke-line">{messages.bespoke.artLines.join(' ')}</span>
+            </span>
+            <span className="trao-search__bespoke-foot" aria-hidden="true">
+              <svg className="trao-search__bespoke-sign" viewBox="0 0 200 100" fill="none"><path d="M15 75C50 5 110 10 90 55S20 90 55 50s100-55 125-10M35 88q60-30 140-10" stroke="currentColor" strokeWidth="1.5" /></svg>
+              <span className="trao-search__bespoke-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+            </span>
+          </Link>
+          <section className="trao-search__cards" aria-labelledby="trao-search-cards">
+            <h2 id="trao-search-cards">{t.cardSuggestions}</h2>
+            {cards.length > 0 && <ul>{cards.map(item => <li key={item.href}><a href={item.href} onClick={() => setOpen(false)}>{item.label}</a></li>)}</ul>}
+          </section>
+        </div>
         <p className="trao-search__status" role="status">{query.trim() && !resultCount ? t.empty : submitted ? t.ambiguous : query.trim() ? t.count(resultCount) : ''}</p>
       </div>
     </dialog>
