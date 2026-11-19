@@ -3,16 +3,15 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, PointerEvent } from 'react';
 import dynamic from 'next/dynamic';
-import type { TemplateRecord } from '../../data/templates';
 import type { TopicRecord } from '../../data/topics';
 import Book from './Book';
+import EyeButton from './EyeButton';
 import { fitShelfHeight } from './shelf-geometry';
 import './bookshelf.css';
 
 const AlbumDialog = dynamic(() => import('./AlbumDialog'), { ssr: false });
-const TemplateDialog = dynamic(() => import('./TemplateDialog'), { ssr: false });
 
-export default function Bookshelf({ books, templates }: { books: TopicRecord[]; templates: TemplateRecord[] }) {
+export default function Bookshelf({ books }: { books: TopicRecord[] }) {
   const cycleLength = Math.max(1, books.length);
   const [active, setActive] = useState(0);
   const [height, setHeight] = useState<number | null>(null);
@@ -20,11 +19,9 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
   const [lite, setLite] = useState(false);
   const instanceCount = cycleLength * (radius * 2 + 1);
   const loopOffset = (value: number) => ((value + instanceCount / 2) % instanceCount + instanceCount) % instanceCount - instanceCount / 2;
-  const [selected, setSelected] = useState<TemplateRecord | null>(null);
   const [albumOpen, setAlbumOpen] = useState(false);
   const [albumOrigin, setAlbumOrigin] = useState<DOMRect | null>(null);
   const activeIndex = ((active % cycleLength) + cycleLength) % cycleLength;
-  const [origin, setOrigin] = useState<DOMRect | null>(null);
   const shelf = useRef<HTMLDivElement>(null);
   const caption = useRef<HTMLDivElement>(null);
   const direction = useRef(1);
@@ -63,7 +60,7 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       // Shelf selection remains available without browser storage.
     }
   }, [activeIndex, books]);
-  detailOpen.current = albumOpen || !!selected;
+  detailOpen.current = albumOpen;
   const select = (index: number) => {
     direction.current = index >= active ? 1 : -1;
     const next = index;
@@ -312,14 +309,13 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
     setAlbumOpen(false); setAlbumOrigin(null);
     if (location.hash.startsWith('#album/')) history.replaceState(history.state, '', `${location.pathname}${location.search}#xem-mau`);
   }, []);
-  const close = useCallback(() => { setOrigin(null); setSelected(null); }, []);
   useEffect(() => {
     let frame = 0;
     const navigateAlbum = () => {
       cancelAnimationFrame(frame);
       const id = location.hash.startsWith('#album/') ? location.hash.slice(7) : '';
       const index = books.findIndex(item => item.id === id);
-      setSelected(null); setOrigin(null); setAlbumOpen(false); setAlbumOrigin(null);
+      setAlbumOpen(false); setAlbumOrigin(null);
       if (index < 0) return;
       // Snap the actual shelf to the deep-linked topic before measuring its cover.
       motion.current.target = index;
@@ -410,10 +406,9 @@ export default function Bookshelf({ books, templates }: { books: TopicRecord[]; 
       }))}</div>
     </div>
     <div ref={caption} className="shelf-caption" aria-live="polite" aria-atomic="true"><div className="caption-line"><h1>{book.title}</h1></div></div>
-    <button type="button" className="button shelf-primary" onClick={open} aria-label={`Xem album ${book.title}`}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg><span>Xem</span></button>
+    <EyeButton className="shelf-primary" onClick={open} aria-label={`Xem album ${book.title}`}>Xem</EyeButton>
     <div className="shelf-controls"><button type="button" onClick={() => select(active - 1)} aria-label={'Chủ đề trước'}>←</button><span>{String(activeIndex + 1).padStart(2, '0')} / {String(books.length).padStart(2, '0')}</span><button type="button" onClick={() => select(active + 1)} aria-label={'Chủ đề sau'}>→</button></div>
     <p className="drag-hint">{'Kéo để chọn · Bấm để mở'}</p>
-    {albumOpen && albumOrigin && <AlbumDialog album={book} origin={albumOrigin} getCoverRect={getCoverRect} templates={templates} onClose={closeAlbum} onChoose={(item, rect) => { setSelected(item); setOrigin(rect); }} />}
-    {origin && selected && <TemplateDialog book={selected} origin={origin} onClose={close} />}
+    {albumOpen && albumOrigin && <AlbumDialog album={book} origin={albumOrigin} getCoverRect={getCoverRect} onClose={closeAlbum} />}
   </div>;
 }

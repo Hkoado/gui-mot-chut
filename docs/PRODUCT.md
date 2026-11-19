@@ -4,7 +4,8 @@
 
 - `src/data/templates.ts`: 5 template records.
 - `src/data/topics.ts`: 11 chủ đề chứa templateIds. Boy’s day nằm sau Sinh nhật và chưa có mẫu. Chủ đề không đồng nghĩa mẫu hoàn thành; bản sao thị giác không được tính thêm.
-- Sách active mở album chủ đề. Album cho chọn mẫu/video quay màn hình; Visit page mở demo thật, host độc lập.
+- `src/data/poem.ts`: thơ/trích dẫn và tác giả cho từng chủ đề. Sửa `text` và `author` theo ID album; dùng `\n` để xuống dòng trong thơ.
+- Sách active mở album chủ đề. Album tạm chưa nối luồng “Xem các mẫu”; dữ liệu và component xem chi tiết mẫu vẫn giữ nguyên. Video xem trước là bản quay màn hình; Visit page mở demo thật, host độc lập.
 - Chủ đề trống, video/URL/contact thiếu có unavailable state trung thực.
 - Thương hiệu Trao lấy từ `src/config/site.ts`, giao diện tiếng Việt.
 - Giá/chiến dịch ở `/bang-gia/`, truy cập qua nav; không có link giá dưới kệ trang chủ. Thông tin hỗ trợ ở `/cach-dat/`, `/thiet-ke-rieng/`, `/hoi-dap/`.

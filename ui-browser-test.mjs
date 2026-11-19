@@ -93,18 +93,13 @@ await evaluate(`document.querySelector('.book.is-active').focus(); document.quer
 await pause(300);
 assert(await evaluate(`document.querySelector('.album-dialog').open && document.activeElement.classList.contains('dialog-close')`), 'Album cover opens a focused dialog');
 assert(await evaluate(`getComputedStyle(document.querySelector('.album-dialog')).backgroundColor === 'rgb(248, 246, 240)'`), 'Album sheet inherits Paper Cream');
-assert(await evaluate(`(() => { const d=document.querySelector('.album-dialog'); const a=d.getAnimations().find(a=>a.effect.target===d); const first=a.effect.getKeyframes()[0]; return d.classList.contains('detail') && a.effect.getTiming().duration===1050 && Math.abs(parseFloat(first.clipPath.replace('inset(',''))-Math.max(0,${openingTop}))<2 && d.querySelectorAll('.ink-blob').length===7 && d.querySelectorAll('.detail-line').length>=6 && !document.querySelector('.album-open'); })()`), 'Sheet starts at projected cover, uses 1050ms opening and seven ink blobs; no bottom open button');
+assert(await evaluate(`(() => { const d=document.querySelector('.album-dialog'); const a=d.getAnimations().find(a=>a.effect.target===d); const first=a.effect.getKeyframes()[0]; return d.classList.contains('detail') && a.effect.getTiming().duration===1050 && Math.abs(parseFloat(first.clipPath.replace('inset(',''))-Math.max(0,${openingTop}))<2 && d.querySelectorAll('.ink-blob').length===7 && !document.querySelector('.album-open'); })()`), 'Sheet starts at projected cover, uses 1050ms opening and seven ink blobs; no bottom open button');
 await pause(2200);
 assert(await evaluate(`(() => { const d=document.querySelector('.detail'); const r=d.getBoundingClientRect(); return Math.abs(r.width-innerWidth)<2 && Math.abs(r.height-innerHeight)<2 && [...d.querySelectorAll('.ink-blob')].every(c=>+c.getAttribute('r')===720) && d.scrollWidth<=d.clientWidth; })()`), 'Paper fills viewport and ink fully reveals without overflow');
 const detailDesktop = await send('Page.captureScreenshot', { format:'png', captureBeyondViewport:false });
 await fs.writeFile('d:/gui-mot-chut/ui-album-detail-desktop.png', Buffer.from(detailDesktop.result.data,'base64'));
-await evaluate(`document.querySelector('.topic-templates button').focus(); document.querySelector('.topic-templates button').click()`);
-await pause(600);
-assert(await evaluate(`document.querySelector('dialog:not(.album-dialog)').open && document.activeElement.classList.contains('dialog-close') && document.querySelector('dialog:not(.album-dialog)').textContent.includes('Nội dung có thể cá nhân hóa')`), 'Vietnamese details dialog opens with focus');
-await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
-await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
-await pause(600);
-assert(await evaluate(`!document.querySelector('dialog:not(.album-dialog)') && document.activeElement === document.querySelector('.topic-templates button')`), 'Escape returns to album and restores focus');
+await evaluate(`document.querySelector('.detail-samples-toggle').click()`);
+assert(await evaluate(`document.querySelector('.detail-samples-toggle[aria-disabled="true"] svg') && !document.querySelector('.topic-templates, .template-dialog')`), 'Samples eye is marked unavailable without opening inline content');
 await evaluate(`document.querySelector('.album-dialog .dialog-close').click()`);
 await pause(1000);
 assert(await evaluate(`!document.querySelector('dialog') && document.activeElement.matches('.book.is-active')`), 'Closing album restores cover focus');
@@ -170,7 +165,7 @@ for (const [width, height] of [[1366,768],[1440,900],[1920,1080],[390,844],[360,
 }
 await evaluate(`document.querySelector('.shelf-controls button:last-child').click()`); await pause(700);
 await evaluate(`document.querySelector('.book.is-active').focus(); document.querySelector('.book.is-active').click()`); await pause(150);
-assert(await evaluate(`document.querySelector('.album-dialog').textContent.includes('chưa có mẫu')`), 'Empty album displays explicit unavailable state');
+assert(await evaluate(`document.querySelector('.album-dialog .detail-samples-toggle[aria-disabled="true"]') && !document.querySelector('.topic-templates')`), 'Empty album keeps the same unavailable samples action');
 assert(await evaluate(`getComputedStyle(document.querySelector('.detail')).getPropertyValue('--duration-sheet-open').trim()==='1ms' && [...document.querySelectorAll('.ink-blob')].every(c=>+c.getAttribute('r')===720) && document.querySelector('.detail').scrollWidth<=innerWidth`), 'Reduced motion reveals ink immediately on mobile without overflow');
 const detailMobile = await send('Page.captureScreenshot', { format:'png', captureBeyondViewport:false });
 await fs.writeFile('d:/gui-mot-chut/ui-album-detail-mobile.png', Buffer.from(detailMobile.result.data,'base64'));

@@ -1,0 +1,5 @@
+.close-button{position:relative;isolation:isolate;display:grid;place-items:center;min-width:var(--control-min);min-height:var(--control-min);padding:var(--space-2);border:0;border-radius:var(--radius-control);background:transparent;color:var(--text-primary);cursor:pointer;}
+.close-button svg{width:var(--close-icon-size);height:var(--close-icon-size);}
+.close-button::before{content:'';position:absolute;inset:calc(-1 * var(--close-glow-outset));z-index:-1;background:var(--close-glow);opacity:0;pointer-events:none;transition:opacity var(--duration-fast) var(--ease-editorial);}
+.close-button:focus-visible::before{opacity:1;}
+@media(hover:hover) and (pointer:fine){.close-button:hover::before{opacity:1;}}

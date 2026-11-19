@@ -32,7 +32,7 @@ Các sắc hỗ trợ `--palette-sheet`, `--palette-muted`, `--palette-line`, `-
 | Mũi tên | Nhóm `--shelf-arrow-*`: nền trong suốt, icon xanh, radial glow tím khi hover fine pointer/focus-visible. Pseudo-element không nhận pointer, không tăng hit area. Touch không có hover bị kẹt. |
 | Xem album | `.album-page .shelf-primary`: icon mắt SVG nét mảnh + nhãn “Xem”, nền/viền trong suốt, chữ xanh; `--shelf-cta-*` kế thừa glow tím của mũi tên khi hover fine pointer/focus-visible. Giữ outline, hit target ≥44px và aria-label chứa tên album. Ngoại lệ scoped, không đổi nút CTA ở trang khác. |
 | Focus | `--focus-color` tím. Control có outline; sách có feedback trên mặt sách. Không chỉ dựa glow hoặc màu đơn lẻ. |
-| Dialog | Nền giấy, chữ/CTA xanh, kế thừa theme và book preset. |
+| Dialog | Nền giấy, chữ/CTA xanh, kế thừa theme và book preset. Album, chi tiết mẫu và tìm kiếm dùng chung `CloseButton`: dấu X xanh không khung, glow tím khi hover fine pointer hoặc focus-visible, hit target ≥44px. Khối thơ nằm giữa theo chiều dọc, cùng trục ngang với tiêu đề và nút. Chỉ các chủ đề có `albumTitleSize: 'compact'` dùng cỡ tiêu đề thu nhỏ. “Xem các mẫu” dùng chung `EyeButton` với kệ: không khung, glow tím, không gạch chân. Tạm đánh dấu chưa khả dụng, không bung danh sách trong album. |
 
 Dẫn xuất tím lấy từ `--highlight`: `--highlight-soft` trộn 20% và `--highlight-faint` trộn 5% với transparent. Không tô tím đoạn văn dài, toàn bộ tiêu đề hoặc mọi icon.
 

@@ -2,15 +2,12 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import CloseButton, { CloseIcon } from '../../components/CloseButton';
 import { findFolders, resolveSearch } from './catalog';
 import './search.css';
 
 function SearchIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4.5 4.5" /></svg>;
-}
-
-function CloseIcon() {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>;
 }
 
 export default function Search() {
@@ -55,7 +52,7 @@ export default function Search() {
   return <div className="trao-search">
     <button ref={triggerRef} type="button" className="trao-search__toggle" aria-label="Mở tìm kiếm" aria-haspopup="dialog" aria-expanded={open} aria-controls="trao-search-dialog" onClick={() => { setQuery(''); setOpen(true); setSubmitted(false); }}><SearchIcon /></button>
     <dialog ref={dialogRef} id="trao-search-dialog" className="trao-search__dialog" aria-label="Tìm kiếm trên Trao" onKeyDownCapture={event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); setOpen(false); } }} onCancel={event => { event.preventDefault(); setOpen(false); }} onClose={() => setOpen(false)}>
-      <button className="trao-search__icon trao-search__close" type="button" aria-label="Đóng tìm kiếm" onClick={() => setOpen(false)}><CloseIcon /></button>
+      <CloseButton className="trao-search__close" label="Đóng tìm kiếm" onClick={() => setOpen(false)} />
       <div className="trao-search__content">
         <form role="search" aria-label="Tìm kiếm trên Trao" onSubmit={submit}>
           <label className="trao-search__label" htmlFor="trao-search-input">Tìm kiếm</label>

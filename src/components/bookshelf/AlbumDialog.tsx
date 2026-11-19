@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef } from 'react';
 import type { TopicRecord } from '../../data/topics';
-import type { TemplateRecord } from '../../data/templates';
+import { poems } from '../../data/poem';
+import CloseButton from '../CloseButton';
 import { CoverArt } from './Book';
-import BrandWordmark from '../BrandWordmark';
-import { site } from '../../config/site';
+import EyeButton from './EyeButton';
 
 const blots = [[150, 330, 0], [340, 600, 120], [250, 120, 220], [90, 760, 300], [400, 250, 360], [260, 860, 420], [230, 470, 180]];
 const fullSheet = 'inset(0px 0px 0px 0px round 0px)';
@@ -15,13 +15,13 @@ function coverClip(rect: DOMRect) {
   return `inset(${Math.max(0, rect.top)}px ${Math.max(0, innerWidth - rect.right)}px ${Math.max(0, innerHeight - rect.bottom)}px ${Math.max(0, rect.left)}px round 3px)`;
 }
 
-export default function AlbumDialog({ album, origin, getCoverRect, templates, onChoose, onClose }: { album: TopicRecord; origin: DOMRect; getCoverRect: () => DOMRect | null; templates: TemplateRecord[]; onChoose: (template: TemplateRecord, origin: DOMRect) => void; onClose: () => void }) {
+export default function AlbumDialog({ album, origin, getCoverRect, onClose }: { album: TopicRecord; origin: DOMRect; getCoverRect: () => DOMRect | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const stopInk = useRef<() => void>(() => {});
   const closeFrame = useRef(0);
   const closing = useRef(false);
   const id = useId().replace(/:/g, '');
-  const items = templates.filter(item => album.templateIds.includes(item.id) && item.enabled);
+  const poem = poems[album.id];
   useEffect(() => {
     const dialog = ref.current!;
     const previous = document.activeElement as HTMLElement | null;
@@ -107,15 +107,16 @@ export default function AlbumDialog({ album, origin, getCoverRect, templates, on
     }, () => {});
   };
   return <dialog ref={ref} className="detail album-dialog" aria-labelledby="album-title" onCancel={event => { event.preventDefault(); close(); }}>
-    <div className="detail-brand" aria-hidden="true"><BrandWordmark /></div>
-    <button className="dialog-close detail-close" type="button" onClick={close} autoFocus>{'ĐÓNG / ALBUM'} ×</button>
+    <div className="detail-toolbar"><CloseButton className="dialog-close detail-close" label="Đóng album" onClick={close} autoFocus /></div>
     <div className="detail-grid"><div className="detail-copy">
-      <div className="detail-line"><p className="eyebrow">{'ALBUM / BỘ SƯU TẬP'}</p></div>
-      <div className="detail-line"><h2 id="album-title">{album.title}</h2></div>
-      <div className="detail-line"><p className="detail-meta">{items.length} {'MẪU / CÁ NHÂN HÓA NỘI DUNG'}</p></div>
-      <div className="detail-line"><p className="detail-description">{items.length ? 'Chọn một mẫu để xem nội dung và các lựa chọn cá nhân hóa.' : 'Album này chưa có mẫu. Video và demo sẽ được bổ sung khi sẵn sàng.'}</p></div>
-      <div className="detail-line"><p className="detail-credit">{'Bìa minh họa'} · {site.brand}</p></div>
-      <div className="topic-templates">{items.map(item => <div className="detail-line" key={item.id}><article><div><h3>{item.title}</h3><p>{item.description}</p></div><button className="button button--quiet" type="button" onClick={event => onChoose(item, event.currentTarget.getBoundingClientRect())}>{'Xem chi tiết'} ↗</button></article></div>)}</div>
+      <div className="detail-line detail-title"><h2 id="album-title" data-title-size={album.albumTitleSize}>{album.title}</h2></div>
+      <div className="detail-line detail-verse"><figure className="detail-poem">
+        <blockquote><p>{poem.text}</p></blockquote>
+        <figcaption>{poem.author}</figcaption>
+      </figure></div>
+      <div className="detail-actions">
+        <EyeButton className="detail-samples-toggle" aria-disabled="true" title="Chưa mở xem mẫu">Xem các mẫu</EyeButton>
+      </div>
     </div><div className="detail-poster" data-book-theme={album.themeKey} aria-hidden="true">
       <svg viewBox="0 0 474 900" className="ink-poster">
         <defs><filter id={`${id}-ink`} x="-200" y="-200" width="874" height="1300" filterUnits="userSpaceOnUse"><feTurbulence type="fractalNoise" baseFrequency=".011" numOctaves="3" seed="7" result="noise" /><feDisplacementMap in="SourceGraphic" in2="noise" scale="120" xChannelSelector="R" yChannelSelector="G" /></filter>

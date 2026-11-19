@@ -10,7 +10,7 @@
 .trao-search__dialog[open] .trao-search__content{animation:trao-search-content-enter var(--duration-module-enter) var(--ease-module-enter) both;}
 .trao-search__dialog[open] .trao-search__suggestions{animation:trao-search-content-enter var(--duration-module-enter) var(--ease-module-enter) var(--delay-module-detail) both;}
 /* Content entrance creates a stacking context; keep the close hit target above it. */
-.trao-search__icon.trao-search__close{position:absolute;z-index:var(--search-close-layer);top:max(var(--space-4),env(safe-area-inset-top));right:max(var(--space-6),env(safe-area-inset-right));}
+.trao-search__dialog .trao-search__close{position:absolute;z-index:var(--search-close-layer);top:max(var(--space-4),env(safe-area-inset-top));right:max(var(--space-6),env(safe-area-inset-right));}
 .trao-search__label{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 .trao-search__field{display:flex;align-items:center;border-bottom:var(--search-rule-width) solid var(--text-primary);gap:var(--space-3);padding-bottom:var(--space-2);}
 .trao-search__field input{width:100%;min-width:0;min-height:var(--control-min);border:0;border-radius:0;background:transparent;color:var(--text-primary);padding:var(--space-2);font-family:var(--font-body);font-size:var(--search-input-size);font-weight:inherit;line-height:var(--line-body);text-align:center;}

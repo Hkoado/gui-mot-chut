@@ -56,6 +56,9 @@
   --search-status-size: var(--type-lead);
   --search-icon-glow: var(--shelf-arrow-glow);
   --search-icon-glow-outset: var(--space-3);
+  --close-icon-size: var(--search-icon-size);
+  --close-glow: var(--shelf-arrow-glow);
+  --close-glow-outset: var(--space-3);
   --search-rule-width: var(--nav-underline-height);
   --radius-control: var(--radius-small);
   /* Gallery arrows: soft purple interaction glow with forest-green icons. */
@@ -110,8 +113,6 @@
   --album-nav-size: .75rem;
   /* Shelf view action: eye + label, transparent with the shared purple glow. */
   --shelf-cta-bg: transparent; --shelf-cta-ink: var(--accent);
-  --shelf-cta-border: transparent; --shelf-cta-active-bg: transparent;
-  --shelf-cta-active-ink: var(--accent);
   --shelf-cta-icon-size: var(--search-icon-size);
   --shelf-cta-glow: var(--shelf-arrow-glow);
   --shelf-cta-glow-outset: var(--shelf-arrow-glow-outset);
@@ -135,15 +136,18 @@
   --duration-sheet-text: 900ms; --delay-sheet-text: 620ms; --delay-sheet-line: 75ms;
   --delay-sheet-ink: 520ms; --duration-sheet-ink: 1250ms; --duration-sheet-loop: 2400ms;
   --detail-sheet: var(--surface-page); --detail-gap: 4vw;
-  --detail-padding: 110px 6vw 56px 7vw;
-  --detail-brand-height: 84px; --detail-close-top: 31px; --detail-close-left: 32px;
-  --detail-copy-width: 520px; --detail-copy-gap: 18px;
+  --detail-gutter: clamp(var(--space-6), 6vw, var(--space-12));
+  --detail-vertical-space: calc(var(--control-min) + var(--space-6));
+  --detail-stage-height: calc(100dvh - 2 * var(--detail-vertical-space));
+  --detail-copy-width: 520px;
+  --detail-intro-gap: clamp(var(--space-6), 4dvh, var(--space-12));
   --detail-title-size: clamp(44px, 5.4vw, 84px);
+  --detail-title-compact-size: clamp(2rem, 4.2vw, 4rem);
   --detail-title-leading: 1; --detail-title-tracking: -.025em;
-  --detail-description-size: 17px; --detail-description-leading: 1.5;
-  --detail-credit-size: 15px; --detail-description-width: 42ch;
-  --detail-poster-height: 78svh; --detail-button-padding: 20px;
-  --detail-button-gap: 10px; --detail-cover-size: 28px;
+  --detail-poem-size: clamp(1.125rem, 1.8vw, 1.375rem);
+  --detail-poem-width: 42ch; --detail-poem-author-size: var(--type-small);
+  --detail-samples-scale: 1.3;
+  --detail-poster-height: 78svh; --detail-cover-size: 28px;
   --detail-cover-padding: 32px; --detail-cover-label: 20px; --detail-cover-title: 38px;
   /* Paper Cream + Forest Green. One parent green drives ink, actions and material tint. */
   --palette-forest: #1D5B3A;
@@ -155,6 +159,7 @@
   --text-primary: var(--palette-ink); --text-secondary: var(--palette-muted); --accent: var(--palette-matcha);
   --accent-hover: var(--palette-matcha-hover); --border-default: var(--palette-line); --focus-color: var(--highlight);
   --button-bg: var(--accent); --button-text: var(--palette-paper);
+  --button-padding-block: .7rem; --button-padding-inline: 1.15rem;
   /* Shared type families, scale, and reading rhythm. */
   --font-heading: 'Hina Mincho', Georgia, serif; --font-body: 'Hina Mincho', Georgia, serif;
   --type-xs: .8125rem; --type-small: .875rem; --type-body: 1rem; --type-lead: 1.125rem;
